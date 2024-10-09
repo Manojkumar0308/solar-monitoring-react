@@ -36,7 +36,7 @@ const Dashboard = ({ isSidebarOpen, toggleSidebar, setActiveTab }) => {
       <div className="p-8 max-w-full bg-gray-100 overflow-hidden dark:bg-gray-900">
         <h2 className="text-2xl font-bold mb-6">Welcome, Admin</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Animated Grid Items with staggered effect */}
           {gridItems.map((item, index) => (
             <motion.div
