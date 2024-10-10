@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect,useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTelegram, faWindows } from '@fortawesome/free-brands-svg-icons';
 import { faBell, faCake, faChevronDown, faGear, faLock, faSolarPanel, faStar, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
@@ -6,47 +6,43 @@ import Dropdown from './Dropdown';
 import PermissionsDropDown from './PermissionsDropdown';
 
 const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
-  const [openDropdown, setOpenDropdown] = useState(false); // State to track which dropdown is open
+  
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const buttonRef = useRef(null);
+  // // Reference for the dropdowns
 
-  const dropdownRef = useRef(); // Reference for the dropdowns
+ 
+  const toggleDropdown= (event)=> {
+    event.stopPropagation(); // Prevent the event from bubbling up
+    setOpenDropdown((prevState) => {
+      const newState = !prevState;
+      console.log('Dropdown open:', newState); // Logs the new state (true when opened, false when closed)
+      return newState;
+    });
+  }
 
-  // Toggle dropdowns based on their name
-  const toggleDropdown = () => {
-    setOpenDropdown(!openDropdown); 
-    console.log('openDropdown',openDropdown)
+  const closeDropdown = () => {
+    setOpenDropdown(false);
+    console.log('opendropdown value for closeDropdown:', openDropdown);
   };
-
-
-  // Close dropdowns when clicking outside of them
-  useEffect(() => {
-   
-    const handleClickOutside = (event) => {
-      if(openDropdown && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpenDropdown(false);
-    }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.addEventListener('mousedown', handleClickOutside);
-    };
-  }, [openDropdown]);
-
-  // Close dropdown when an option is selected
-  const handleOptionSelect = (option) => {
-    console.log(`Selected option: ${option}`);
-    setOpenDropdown(false); // Close all dropdowns after selecting an option
-  };
+  
+  
 
   return (
-    <div className={`flex flex-col sm:w-1/3 md:w-2/6 lg:w-1/4 xl:w-1/6 bg-gray-800 text-white ${isSidebarOpen ? 'block' : 'hidden'} sm:block overflow-y-auto hidden-scrollbar`}>
-      <div className='px-4 mt-2 sm:mt-6 mx-4 flex flex-row gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={toggleDropdown}>
+    <div className={`flex flex-col sm:w-1/3 md:w-2/6 lg:w-1/4 xl:w-1/6 bg-gray-800 text-white ${isSidebarOpen ? 'block' : 'hidden'} sm:block overflow-y-auto hidden-scrollbar`} >
+      <div  className='px-4 mt-2 sm:mt-6 mx-4 flex flex-row gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={toggleDropdown}>
         <FontAwesomeIcon icon={faSolarPanel} />
-        <button className="block py-2 px-1 w-full text-left text-sm font-semibold" onClick={toggleDropdown} >
+        <button className="block py-2 px-1 w-full text-left text-sm font-semibold">
           Takyon Networks
         </button>
         <FontAwesomeIcon icon={faChevronDown} className='text-xs' />
       </div>
-      <Dropdown isOpen={openDropdown} onOptionSelect={handleOptionSelect} ref={dropdownRef} />
+      
+     
+        
+          <Dropdown isOpen={openDropdown} closeDropdown={closeDropdown}  />
+       
+      
 
       <div className='h-px mt-2 sm:mt-4 bg-gray-700 sm:mb-2'></div>
       <nav className="mt-5 px-4">
@@ -77,7 +73,7 @@ const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
           </button>
           <FontAwesomeIcon icon={faChevronDown} className='text-xs' />
         </div>
-        <PermissionsDropDown isOpen={openDropdown === 'permissions'} onOptionSelect={handleOptionSelect} ref={dropdownRef} />
+        {/* <PermissionsDropDown isOpen={openDropdown === 'permissions'} onOptionSelect={handleOptionSelect} ref={dropdownRef} /> */}
 
         <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('settings')}>
           <FontAwesomeIcon icon={faUser} />
