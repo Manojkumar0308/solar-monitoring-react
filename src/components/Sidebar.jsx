@@ -37,13 +37,7 @@ const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
         </button>
         <FontAwesomeIcon icon={faChevronDown} className='text-xs' />
       </div>
-      
-     
-        
           <Dropdown isOpen={openDropdown} closeDropdown={closeDropdown}  />
-       
-      
-
       <div className='h-px mt-2 sm:mt-4 bg-gray-700 sm:mb-2'></div>
       <nav className="mt-5 px-4">
         <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('dashboard')}>
