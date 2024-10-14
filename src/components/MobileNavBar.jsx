@@ -18,7 +18,7 @@ const MobileNavbar = ({setActiveTab}) => {
   return (
     <div>
       {/* Mobile Navigation Bar */}
-      <div className='py-4 bg-gray-900 flex justify-between items-center sm:hidden m-auto'>
+      <div className='py-4 bg-gray-900 flex justify-between items-center lg:hidden m-auto'>
         {/* Icon for opening the sidebar */}
         <FontAwesomeIcon 
           icon={faBarsStaggered} 
@@ -32,7 +32,7 @@ const MobileNavbar = ({setActiveTab}) => {
       </div>
 
       {/* Sidebar for mobile screens */}
-      <div className={`w-2/3 fixed inset-0 z-50 transition-transform transform bg-gray-800 ${isSidebarOpen ? sidebarOpenClass : sidebarClosedClass} sm:hidden`}>
+      <div className={`w-2/3 sm:w-[30%] md:w-[30%]  fixed inset-0 z-50 transition-transform transform bg-gray-800 ${isSidebarOpen ? sidebarOpenClass : sidebarClosedClass} lg:hidden`}>
         {/* Close icon for the sidebar */}
         <div className='flex justify-end items-center px-4 py-2'>
           <FontAwesomeIcon icon={faClose} className='text-white text-2xl cursor-pointer' onClick={toggleSidebar} />

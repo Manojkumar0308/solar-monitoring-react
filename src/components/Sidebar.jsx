@@ -25,11 +25,34 @@ const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
     setOpenDropdown(false);
     console.log('opendropdown value for closeDropdown:', openDropdown);
   };
-  
-  
 
+
+   // Framer Motion variants for the sidebar
+   const sidebarVariant = {
+    hidden: { x: '-100%' }, // Initially hidden
+    visible: {
+      x: 0, // Slide in from the left
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 20,
+        staggerChildren: 0.2, // Delay between each item
+      },
+    },
+  };
+
+  // Variant for each item inside the sidebar
+  const itemVariant = {
+    hidden: { opacity: 0, y: -20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: 'spring', stiffness: 100 },
+    },
+  };
+  
   return (
-    <div className={`flex flex-col sm:w-1/3 md:w-2/6 lg:w-1/4 xl:w-1/6 bg-gray-800 text-white ${isSidebarOpen ? 'block' : 'hidden'} sm:block overflow-y-auto hidden-scrollbar`} >
+    <div className={` lg:w-64  bg-gray-800 text-white ${isSidebarOpen ? 'block' : 'hidden'} lg:block overflow-y-auto hidden-scrollbar`} >
       <div  className='px-4 mt-2 sm:mt-6 mx-4 flex flex-row gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={toggleDropdown}>
         <FontAwesomeIcon icon={faSolarPanel} />
         <button className="block py-2 px-1 w-full text-left text-sm font-semibold">
@@ -69,9 +92,9 @@ const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
         </div>
         {/* <PermissionsDropDown isOpen={openDropdown === 'permissions'} onOptionSelect={handleOptionSelect} ref={dropdownRef} /> */}
 
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('settings')}>
+        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('dashboard')}>
           <FontAwesomeIcon icon={faUser} />
-          <button onClick={() => setActiveTab('settings')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
+          <button onClick={() => setActiveTab('dashboard')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
             Search User
           </button>
         </div>
@@ -81,12 +104,13 @@ const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
             Sent Notification
           </button>
         </div>
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('settings')}>
+        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('pro')}>
           <FontAwesomeIcon icon={faBell} />
-          <button onClick={() => setActiveTab('settings')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
+          <button onClick={() => setActiveTab('pro')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
             Notifications
           </button>
         </div>
+ 
       </nav>
       <div className="mt-auto p-4 flex flex-col justify-end ">
         <a href="/support" className="py-2 px-4 hover:bg-gray-700 rounded-md text-sm font-semibold">
@@ -96,6 +120,16 @@ const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
           <span className='mr-2'><FontAwesomeIcon icon={faStar}></FontAwesomeIcon></span>Changelog
         </a>
       </div>
+       <div onClick={() => setActiveTab('pro')} className="mt-auto p-4 ">
+  <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md'>
+    <div className='mt-2 mb-2 flex gap-1 items-center justify-center h-8 w-12 bg-red-300 rounded-lg'>
+    </div>
+    <button className="py-2 px-1 w-full text-left text-sm font-semibold">
+      Admin Bro
+    </button>
+  </div>
+</div>
+     
     </div>
   );
 };

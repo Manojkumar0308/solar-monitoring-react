@@ -3,12 +3,14 @@ import MobNavBar from "./MobileNavBar";
 const Settings =({isSidebarOpen,toggleSidebar,setActiveTab})=>{
     
     return(
-        <div className="max-w-full bg-gray-100 dark:bg-gray-900">
+        <div className="max-w-full bg-gray-100">
                {/* Use MobileNavbar component */}
       <MobNavBar 
         isSidebarOpen={isSidebarOpen} 
         toggleSidebar={toggleSidebar} setActiveTab={setActiveTab}
       />
+
+      <h1 className="justify-center text-3xl font-bold items-center">Settings</h1>
         </div>
     );
 }
