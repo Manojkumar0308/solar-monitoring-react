@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import Users from './components/Users';
 import Settings from './components/Settings';
 import Profile from './components/Profile';
+import UserDashBoard from "./components/UserDashboard";
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('dashboard'); // Default tab
@@ -23,7 +24,8 @@ const App = () => {
             {activeTab === 'dashboard' && <Dashboard setActiveTab={setActiveTab}/>}
             {activeTab === 'users' && <Users setActiveTab={setActiveTab}  showMobNavBar={true} />}
             {activeTab === 'settings' && <Settings setActiveTab={setActiveTab}/>}
-            {activeTab === 'pro' && <Profile setActiveTab={setActiveTab}/>}
+            {activeTab === 'profile' && <Profile setActiveTab={setActiveTab}/>}
+            {activeTab === 'userDashboard' && <UserDashBoard setActiveTab={setActiveTab}/>}
           </div>
           </div>
          

@@ -13,7 +13,7 @@ const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
 
  
   const toggleDropdown= (event)=> {
-    event.stopPropagation(); // Prevent the event from bubbling up
+    event.stopprofilepagation(); // Prevent the event from bubbling up
     setOpenDropdown((prevState) => {
       const newState = !prevState;
       console.log('Dropdown open:', newState); // Logs the new state (true when opened, false when closed)
@@ -104,9 +104,9 @@ const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
             Sent Notification
           </button>
         </div>
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('pro')}>
+        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('userDashboard')}>
           <FontAwesomeIcon icon={faBell} />
-          <button onClick={() => setActiveTab('pro')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
+          <button onClick={() => setActiveTab('userDashboard')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
             Notifications
           </button>
         </div>
@@ -120,7 +120,7 @@ const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
           <span className='mr-2'><FontAwesomeIcon icon={faStar}></FontAwesomeIcon></span>Changelog
         </a>
       </div>
-       <div onClick={() => setActiveTab('pro')} className="mt-auto p-4 ">
+       <div onClick={() => setActiveTab('profile')} className="mt-auto p-4 ">
   <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md'>
     <div className='mt-2 mb-2 flex gap-1 items-center justify-center h-8 w-12 bg-red-300 rounded-lg'>
     </div>
