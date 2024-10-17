@@ -171,7 +171,11 @@ const UserDashBoard = ({ isSidebarOpen, toggleSidebar, setActiveTab,activeTab })
     </div>
    
 </div>
+<div className="w-full flex flex-row gap-4 items-center justify-center ">
 <DashboardGraphs />
+<DashboardGraphs />
+</div>
+
 
         </div>
     );
