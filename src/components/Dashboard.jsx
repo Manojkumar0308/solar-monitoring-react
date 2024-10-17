@@ -3,7 +3,7 @@ import Users from './Users';
 import MobNavBar from './MobileNavBar';
 import { motion } from 'framer-motion';
 
-const Dashboard = ({ isSidebarOpen, toggleSidebar, setActiveTab }) => {
+const Dashboard = ({ isSidebarOpen, toggleSidebar, setActiveTab ,activeTab }) => {
   // Animation settings for the grid items
   const gridItemVariants = {
     hidden: { opacity: 0, x: -100 }, // Start off-screen to the left
@@ -30,6 +30,8 @@ const Dashboard = ({ isSidebarOpen, toggleSidebar, setActiveTab }) => {
         isSidebarOpen={isSidebarOpen} 
         toggleSidebar={toggleSidebar} 
         setActiveTab={setActiveTab}
+        activeTab={activeTab}
+        
       />
 
       {/* Main content */}

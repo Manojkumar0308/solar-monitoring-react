@@ -1,16 +1,24 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import SidePanel from './SidePanel';
+import Signup from './Signup';
 
 const AuthContainer = ({ onLogin }) => {
+  const location = useLocation();
+
   return (
-    <div className="flex items-center md:flex-row justify-center h-screen">
-      {/* SidePanel appears on larger screens */}
+    <div className="h-screen relative">
+      {/* SidePanel fills the background */}
       <SidePanel />
-      
-      {/* Login Form is centered */}
-      <div className="flex items-center justify-center w-full bg-gray-100">
-        <LoginForm onLogin={onLogin} />  {/* Pass onLogin to LoginForm */}
+
+      {/* Center the LoginForm or Signup */}
+      <div className="absolute inset-0 flex justify-center items-center">
+        {location.pathname === '/signup' ? (
+          <Signup />
+        ) : (
+          <LoginForm onLogin={onLogin} />
+        )}
       </div>
     </div>
   );

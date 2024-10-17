@@ -7,12 +7,13 @@ import Sidebar from './Sidebar'; // Assuming Sidebar component is imported from 
 const sidebarOpenClass = "translate-x-0"; 
 const sidebarClosedClass = "-translate-x-full";
 
-const MobileNavbar = ({setActiveTab}) => {
+const MobileNavbar = ({setActiveTab, activeTab}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Function to toggle sidebar visibility
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+ 
   };
 
   return (
@@ -40,7 +41,7 @@ const MobileNavbar = ({setActiveTab}) => {
 
         {/* Sidebar content: Here we reuse the Sidebar component */}
         <div className='overflow-y-auto h-full hide-scrollbar'>
-          <Sidebar isSidebarOpen={isSidebarOpen} setActiveTab={setActiveTab} />
+          <Sidebar isSidebarOpen={isSidebarOpen} setActiveTab={setActiveTab} activeTab={activeTab}/>
         </div>
       </div>
     </div>

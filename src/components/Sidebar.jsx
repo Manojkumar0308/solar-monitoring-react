@@ -1,137 +1,84 @@
-import React, { useState, useRef, useEffect,useCallback } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTelegram, faWindows } from '@fortawesome/free-brands-svg-icons';
-import { faBell, faCake, faChevronDown, faGear, faLock, faSolarPanel, faStar, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import {  faTelegram, faTelegramPlane, faWindows } from '@fortawesome/free-brands-svg-icons';
+import { faBell, faCake, faChevronDown, faGear,  faSolarPanel, faStar, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './Dropdown';
-import PermissionsDropDown from './PermissionsDropdown';
 
-const Sidebar = ({ setActiveTab, isSidebarOpen }) => {
-  
+const Sidebar = ({ setActiveTab, isSidebarOpen,activeTab}) => {
   const [openDropdown, setOpenDropdown] = useState(false);
-  const buttonRef = useRef(null);
-  // // Reference for the dropdowns
-
- 
-  const toggleDropdown= (event)=> {
-    event.stopprofilepagation(); // Prevent the event from bubbling up
-    setOpenDropdown((prevState) => {
-      const newState = !prevState;
-      console.log('Dropdown open:', newState); // Logs the new state (true when opened, false when closed)
-      return newState;
-    });
-  }
-
-  const closeDropdown = () => {
-    setOpenDropdown(false);
-    console.log('opendropdown value for closeDropdown:', openDropdown);
-  };
-
-
-   // Framer Motion variants for the sidebar
-   const sidebarVariant = {
-    hidden: { x: '-100%' }, // Initially hidden
-    visible: {
-      x: 0, // Slide in from the left
-      transition: {
-        type: 'spring',
-        stiffness: 100,
-        damping: 20,
-        staggerChildren: 0.2, // Delay between each item
-      },
-    },
-  };
-
-  // Variant for each item inside the sidebar
-  const itemVariant = {
-    hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: 'spring', stiffness: 100 },
-    },
-  };
   
+  const toggleDropdown = (event) => {
+    event.stopPropagation();
+    setOpenDropdown((prevState) => !prevState);
+  };
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+   
+     // Set active tab
+  };
   return (
-    <div className={` lg:w-64  bg-gray-800 text-white ${isSidebarOpen ? 'block' : 'hidden'} lg:block overflow-y-auto hidden-scrollbar`} >
-      <div  className='px-4 mt-2 sm:mt-6 mx-4 flex flex-row gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={toggleDropdown}>
+    <div className={` lg:w-64  bg-gray-800 text-white ${isSidebarOpen ? 'block' : 'hidden'} lg:block overflow-y-auto hidden-scrollbar`}>
+      <div className="px-4 mt-2 flex flex-row gap-1 items-center justify-center hover:bg-gray-700 rounded-md" onClick={toggleDropdown}>
         <FontAwesomeIcon icon={faSolarPanel} />
-        <button className="block py-2 px-1 w-full text-left text-sm font-semibold">
-          Takyon Networks
-        </button>
+        <button className="block py-2 px-1 w-full text-left text-sm font-semibold">Takyon Networks</button>
         <FontAwesomeIcon icon={faChevronDown} className='text-xs' />
       </div>
-          <Dropdown isOpen={openDropdown} closeDropdown={closeDropdown}  />
-      <div className='h-px mt-2 sm:mt-4 bg-gray-700 sm:mb-2'></div>
+      <Dropdown isOpen={openDropdown} closeDropdown={() => setOpenDropdown(false)} />
+      
       <nav className="mt-5 px-4">
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('dashboard')}>
-          <FontAwesomeIcon icon={faWindows} />
-          <button onClick={() => setActiveTab('dashboard')} className="py-2 px-1 w-full text-left text-sm font-semibold">
-            Dashboard
-          </button>
-        </div>
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('users')}>
-          <FontAwesomeIcon icon={faUsers} />
-          <button onClick={() => setActiveTab('users')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
-            Users
-          </button>
-        </div>
-
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('settings')}>
-          <FontAwesomeIcon icon={faGear} />
-          <button onClick={() => setActiveTab('settings')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
-            Settings
-          </button>
-        </div>
-
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => toggleDropdown('permissions')}>
-          <FontAwesomeIcon icon={faLock} />
-          <button onClick={() => toggleDropdown('permissions')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
-            Permissions
-          </button>
-          <FontAwesomeIcon icon={faChevronDown} className='text-xs' />
-        </div>
-        {/* <PermissionsDropDown isOpen={openDropdown === 'permissions'} onOptionSelect={handleOptionSelect} ref={dropdownRef} /> */}
-
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('dashboard')}>
-          <FontAwesomeIcon icon={faUser} />
-          <button onClick={() => setActiveTab('dashboard')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
-            Search User
-          </button>
-        </div>
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('settings')}>
-          <FontAwesomeIcon icon={faTelegram} />
-          <button onClick={() => setActiveTab('settings')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
-            Sent Notification
-          </button>
-        </div>
-        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md' onClick={() => setActiveTab('userDashboard')}>
-          <FontAwesomeIcon icon={faBell} />
-          <button onClick={() => setActiveTab('userDashboard')} className="py-2 px-1 hover:bg-gray-700 w-full text-left text-sm font-semibold">
-            Notifications
-          </button>
-        </div>
- 
+        {['dashboard', 'users', 'settings', 'profile', 'userDashboard','sendnotification'].map((tab) => (
+          <Link
+            key={tab}
+            to={`/${tab}`} // Use Link for navigation
+            className={`px-4 mt-[6px] flex gap-1 items-center justify-center rounded-md ${tab === activeTab ? 'bg-blue-600' : 'hover:bg-gray-700'}`}
+            onClick={() => handleTabClick(tab)}
+          >
+            <FontAwesomeIcon icon={getIcon(tab)} />
+            <button className="py-2 px-1 w-full text-left text-sm font-semibold">{capitalizeFirstLetter(tab)}</button>
+          </Link>
+        ))}
       </nav>
-      <div className="mt-auto p-4 flex flex-col justify-end ">
+      <div className="mt-auto p-4 flex flex-col justify-end">
         <a href="/support" className="py-2 px-4 hover:bg-gray-700 rounded-md text-sm font-semibold">
-          <span className='mr-2'><FontAwesomeIcon icon={faCake}></FontAwesomeIcon></span>Support
+          <span className='mr-2'><FontAwesomeIcon icon={faCake} /></span>Support
         </a>
         <a href="/changelog" className="py-2 px-4 hover:bg-gray-700 rounded-md text-sm font-semibold">
-          <span className='mr-2'><FontAwesomeIcon icon={faStar}></FontAwesomeIcon></span>Changelog
+          <span className='mr-2'><FontAwesomeIcon icon={faStar} /></span>Changelog
         </a>
       </div>
-       <div onClick={() => setActiveTab('profile')} className="mt-auto p-4 ">
-  <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md'>
-    <div className='mt-2 mb-2 flex gap-1 items-center justify-center h-8 w-12 bg-red-300 rounded-lg'>
-    </div>
-    <button className="py-2 px-1 w-full text-left text-sm font-semibold">
-      Admin Bro
-    </button>
-  </div>
-</div>
-     
+      <div  className="mt-auto p-4">
+        <div className='px-4 flex gap-1 items-center justify-center hover:bg-gray-700 rounded-md'>
+          <div className='mt-2 mb-2 flex gap-1 items-center justify-center h-8 w-12 bg-red-300 rounded-lg'></div>
+          <button className="py-2 px-1 w-full text-left text-sm font-semibold">Admin Bro</button>
+        </div>
+      </div>
     </div>
   );
+};
+
+const getIcon = (tab) => {
+  switch (tab) {
+    case 'dashboard':
+      return faWindows;
+    case 'users':
+      return faUsers;
+    case 'settings':
+      return faGear;
+    case 'profile':
+      return faUser;
+    case 'userDashboard':
+      return faBell;
+      case 'sendnotification':
+        return faTelegramPlane;
+    default:
+      return null;
+  }
+};
+
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
 export default Sidebar;

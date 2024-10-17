@@ -8,10 +8,10 @@ import MobileNavbar from "./MobileNavBar";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons/faPowerOff";
 import { faMeteor } from "@fortawesome/free-solid-svg-icons/faMeteor";
 import DashboardGraphs from "./UserDashboardGraph";
-const UserDashBoard = ({ isSidebarOpen, toggleSidebar, setActiveTab }) => {
+const UserDashBoard = ({ isSidebarOpen, toggleSidebar, setActiveTab,activeTab }) => {
     return (
         <div className="min-w-full bg-white h-screen flex flex-col">
-            <MobileNavbar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} setActiveTab={setActiveTab}></MobileNavbar>
+            <MobileNavbar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} setActiveTab={setActiveTab} activeTab={activeTab}></MobileNavbar>
             <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-2 mt-4 p-4">
                 <div className="flex flex-1 flex-col gap-2 h-[32vh] ">
                     <div className="h-full object-cover  rounded-lg p-2 bg-cover"  style={{ backgroundImage: `url(${backgroundImage})` }} >
