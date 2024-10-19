@@ -48,6 +48,7 @@ const PowerVsRadiationGraph = () => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // This allows the graph to resize properly
     plugins: {
       legend: {
         position: 'top',
@@ -61,7 +62,7 @@ const PowerVsRadiationGraph = () => {
   };
 
   return (
-    <div style={{ height: '400px', position: 'relative' }}>
+    <div style={{ display: 'flex', width: '100%', minHeight: '250px', maxHeight: '400px', position: 'relative' }}>
       <Line data={data} options={options} />
     </div>
   );
@@ -70,16 +71,16 @@ const PowerVsRadiationGraph = () => {
 const DashboardGraphs = () => {
   return (
     <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
-      <div style={{ width: '100%', height: '400px' }}>
+      <div style={{ width: '100%'}}>
         <PowerVsRadiationGraph />
       </div>
     </div>
   );
 };
 
-const UserDashboard = () => {
+const UserDashboardGraphs = () => {
   return (
-    <div className="w-full bg-white h-screen flex flex-col p-4">
+    <div className="w-full bg-white  flex flex-col px-4 py-2 ">
       {/* Other components and layout here */}
       <h2 className="text-lg font-semibold mb-4">Power vs Irradiation</h2>
       <DashboardGraphs />
@@ -88,4 +89,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default UserDashboardGraphs;

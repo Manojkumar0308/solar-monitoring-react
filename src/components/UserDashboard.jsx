@@ -171,10 +171,22 @@ const UserDashBoard = ({ isSidebarOpen, toggleSidebar, setActiveTab,activeTab })
     </div>
    
 </div>
-<div className="w-full flex flex-row gap-4 items-center justify-center ">
-<DashboardGraphs />
-<DashboardGraphs />
+<div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center justify-center  rounded-lg mx-4 mt-4 ">
+  <div className="w-full md:w-1/2 border border-gray-200 rounded-lg py-2 px-2 ">
+    <div className=" w-full "> {/* Set height here */}
+      <DashboardGraphs />
+    </div>
+  </div>
+  <div className="w-full md:w-1/2 border border-gray-200 rounded-lg py-2 px-2">
+    <div className=" w-full "> {/* Set height here */}
+      <DashboardGraphs />
+    </div>
+  </div>
 </div>
+
+
+
+
 
 
         </div>
