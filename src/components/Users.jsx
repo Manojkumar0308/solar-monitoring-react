@@ -11,7 +11,7 @@ const Users = ({isSidebarOpen,toggleSidebar,setActiveTab,showMobNavBar,activeTab
   ];
 
   return (
-    <div className="flex-1 bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <div className="flex-1  dark:bg-gray-900 min-h-screen">
          {showMobNavBar && (
         <MobNavBar 
           isSidebarOpen={isSidebarOpen} 

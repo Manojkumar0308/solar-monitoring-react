@@ -31,7 +31,7 @@ const PowerVsRadiationGraph = () => {
     datasets: [
       {
         label: 'Power (kW)',
-        data: [0, 0.4, 0.8, 1.2, 1.4, 1.1],
+        data: [0, 0.4, 0.8, 1.2, 1.4, 1.1 ],
         backgroundColor: 'rgba(75,192,192,0.5)',
         borderColor: 'rgba(75,192,192,1)',
         fill: true,
