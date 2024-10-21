@@ -21,4 +21,7 @@
   .text-input{
     @apply mb-2 mt-2 px-4 py-2 sm:py-0 rounded-lg focus:outline-blue-500  sm:w-1/2 border-cyan-50 bg-gray-100
   }
+  .table-header{
+    @apply font-bold text-gray-800;
+  }
 }

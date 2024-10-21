@@ -8,6 +8,7 @@ import Settings from './components/Settings';
 import Profile from './components/Profile';
 import UserDashBoard from "./components/UserDashboard";
 import Sendnotification from "./components/Notifications";
+import Tables from "./components/Table";
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('dashboard'); // Default tab
@@ -25,7 +26,7 @@ const App = () => {
             <div className="w-full overflow-y-auto">
               <Routes>
                 <Route path="/dashboard" element={<Dashboard setActiveTab={setActiveTab} activeTab={activeTab}/>} />
-                <Route path="/users" element={<Users setActiveTab={setActiveTab} showMobNavBar={true} activeTab={activeTab}/>} />
+                <Route path="/users" element={<Tables setActiveTab={setActiveTab} showMobNavBar={true} activeTab={activeTab}/>} />
                 <Route path="/settings" element={<Settings setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/profile" element={<Profile setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/userDashboard" element={<UserDashBoard setActiveTab={setActiveTab} activeTab={activeTab}/>} />

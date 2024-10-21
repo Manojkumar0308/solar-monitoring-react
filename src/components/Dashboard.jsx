@@ -1,7 +1,9 @@
 import React from 'react';
 import Users from './Users';
 import MobNavBar from './MobileNavBar';
+import Table from './Table';
 import { motion } from 'framer-motion';
+import { DataGrid } from '@mui/x-data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faPlayCircle, faEye, faTimesCircle, faTowerBroadcast, faTowerCell, faTowerObservation } from '@fortawesome/free-solid-svg-icons';
 const Dashboard = ({ isSidebarOpen, toggleSidebar, setActiveTab ,activeTab }) => {
@@ -80,7 +82,11 @@ const Dashboard = ({ isSidebarOpen, toggleSidebar, setActiveTab ,activeTab }) =>
           whileInView="visible" // Animate when in view
           viewport={{ once: true}} // Trigger animation when 20% is visible // Only animate once when it comes into view
         >
-          <Users />
+          <div className='p-0'>
+            <h1 className='text-2xl font-bold'>Recent Sites</h1>
+          <Table/>
+          </div>
+        
         </motion.div>
       </div>
     </div>
