@@ -1,12 +1,12 @@
 import React from 'react';
 import SocialLoginButton from './SocialLoginButton';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
 import FormInput from './FormInput';
 import { Link } from 'react-router-dom';
 import  io  from 'socket.io-client'; // Import socket.io-client
 import { useEffect ,useState} from 'react';
 import  axios from 'axios';
-import sockets from '../socket';
+
 // Other imports remain unchanged
 
 const LoginForm = ({ onLogin }) => {
@@ -14,15 +14,17 @@ const LoginForm = ({ onLogin }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [socket, setSocket] = useState(null);
+  // const [socket, setSocket] = useState(null);
   const [errorMessage, setErrorMessage] = useState(''); // State for error messages
+   // Initialize socket connection
+   const [socket, setSocket] = useState(null);
  
   const handleLoginClick = async (e) => {
     e.preventDefault();
     console.log('Login button clicked'); 
 
     // Validate email and password
-     // Validate email and password
+   
      if (!email || !password) {
       setErrorMessage('Email and password are required.');
       console.log('Validation failed:', { email, password }); // Log validation failure
@@ -32,43 +34,53 @@ const LoginForm = ({ onLogin }) => {
   console.log('Logging in with:', { email, password });
 
 
-    try {
+  try {
+    // Make API call to login
+    const response = await axios.post('http://localhost:3000/api/user/login', {
+        email,
+        password,
+    });
+    console.log(response.status); 
+    // Check if the response status is 200
+    if (response.status === 200) {
+      // Establish socket connection after successful login
+      const newSocket = io('http://localhost:3000'); // Connect to the server
+      setSocket(newSocket);
+
+      // Emit login event with user details
+      newSocket.emit('login', {
+        userId: response.data.user._id,
+         email: response.data.user.email,  
+      });
+
+      newSocket.on('connect', () => {
+        console.log(`Socket connected with ID: ${newSocket.id}`);
+        onLogin();
+        navigate('/dashboard', { replace: true });
+      });
       
-        // Make API call to login
-        const response = await axios.post('http://localhost:3000/api/user/login', {
-            email,
-            password,
-        });
-        console.log(response.status)
-        const result = await response.data; // Parse the JSON response
-        // Check if the response status is 200
-        if (response.status===200) {
-         
-          sockets.connect();
-          sockets.emit('login', { id: result.user._id, email: result.user.email });
-            navigate('/dashboard'); 
-        }
-    } catch (error) {
-        // Handle login failure
-        if (error.response) {
-            setErrorMessage(error.response.data.message || 'Login failed. Please try again.');
-        } else {
-            setErrorMessage('Login failed. Please check your network connection.');
-        }
-        console.error('Login failed:', error);
+      newSocket.on('disconnect', () => {
+        console.log('Socket disconnected');
+      });
+     
     }
+} catch (error) {
+    // Handle login failure
+    if (error.response) {
+      
+        setErrorMessage(error.response.data.message || 'Login failed. Please try again.');
+    } else if (error.request) {
+        // The request was made but no response was received
+        setErrorMessage('No response from server. Please check your network connection.');
+    } else {
+        // Other unexpected errors
+        setErrorMessage('Login failed. Please try again later.');
+    }
+    console.error('Login failed:', error);
+}
 };
 
-useEffect(() => {
-  if (socket) {
-      socket.on('connect', () => {
-          console.log('Socket connected:', socket.id);
-      });
-      return () => {
-          socket.disconnect(); // Clean up on component unmount
-      };
-  }
-}, [socket]);
+
 
 
   return (
