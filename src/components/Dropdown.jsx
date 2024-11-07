@@ -2,10 +2,12 @@ import React, {  useRef,useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { } from '@fortawesome/free-brands-svg-icons';
 import {  faUser, faGear, faRightFromBracket} from '@fortawesome/free-solid-svg-icons';
-
+import { disconnectSocket } from '../socket'; // Import socket functions
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Dropdown = ({isOpen ,closeDropdown})=> {
- 
+  const navigate = useNavigate();
   const dropdownRef = useRef(null); // Reference for the dropdown
   
 
@@ -17,6 +19,33 @@ const Dropdown = ({isOpen ,closeDropdown})=> {
     } else {
       console.log('Outside Click');
       closeDropdown(); // Close the dropdown if clicked outside
+    }
+  };
+
+  //handle logout
+  const handleLogout = async (event) => {
+    event.preventDefault(); // Prevent the default behavior
+    try {
+      const user = JSON.parse(localStorage.getItem('user')); // Assuming you stored the token in local storage
+      console.log('token:', user.token);
+      const response = await axios.post('http://localhost:3000/api/user/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      console.log(response.data);
+      // You can also call the disconnectSocket function here
+      
+      if (response.status === 200) {
+        disconnectSocket();
+       const result = localStorage.removeItem('user');
+       console.log('result:', result);
+        closeDropdown();
+        navigate('/', { replace: true });
+      }
+     
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -52,7 +81,7 @@ const Dropdown = ({isOpen ,closeDropdown})=> {
           <div className='h-px mt-2  bg-gray-700 sm:mb-2'></div>
           <li className="px-4 py-2 text-sm hover:bg-blue-500 cursor-pointer rounded-md" onClick={() => handleOptionSelect('Settings')}><span className="mr-2"><FontAwesomeIcon icon={faGear} /></span>Settings</li>
           <div className='h-px mt-2  bg-gray-700 sm:mb-2'></div>
-          <li className="px-4 py-2 text-sm hover:bg-blue-500 cursor-pointer rounded-md" onClick={() => handleOptionSelect('Logout')}><span className="mr-2"><FontAwesomeIcon icon={faRightFromBracket} /></span>Logout</li>
+          <li className="px-4 py-2 text-sm hover:bg-blue-500 cursor-pointer rounded-md" onClick={handleLogout}><span className="mr-2"><FontAwesomeIcon icon={faRightFromBracket} /></span>Logout</li>
           <div className='h-px mt-2  bg-gray-700 sm:mb-2'></div>
         </ul>
       </div>

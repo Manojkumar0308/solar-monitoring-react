@@ -13,6 +13,9 @@ import Tables from "./components/Table";
 const App = () => {
   const [activeTab, setActiveTab] = useState('dashboard'); // Default tab
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
 
   return (
     <Router>
@@ -31,7 +34,7 @@ const App = () => {
                 <Route path="/profile" element={<Profile setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/userDashboard" element={<UserDashBoard setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/sendnotification" element={<Sendnotification setActiveTab={setActiveTab} activeTab={activeTab}/>}/>
-                <Route path="/" element={<Navigate to="/dashboard" activeTab={activeTab}/>} /> {/* Default route */}
+                <Route path="/" element={<AuthContainer onLogin={() => setIsLoggedIn(true)}/>} /> {/* Default route */}
               </Routes>
             </div>
           </div>

@@ -1,29 +1,29 @@
-// src/services/socket.js
+// socket.js
 import { io } from 'socket.io-client';
 
 let socket;
 
-export const initiateSocketConnection = () => {
-  socket = io('http://localhost:3000'); // Your server URL
+export const initializeSocket = () => {
+  // Create socket connection if not already connected
+  if (!socket) {
+    socket = io('http://localhost:3000');
 
-  // This event is triggered when the client successfully connects to the server
-  socket.on('connect', () => {
-    console.log(`Connected to server with socket ID: ${socket.id}`);
-  });
-};
-
-export const emitLoginEvent = (userDetails) => {
-  if (socket) {
-    // Emit the login event with the user details and socket ID
-    socket.emit('login', { ...userDetails, socketId: socket.id });
+    // Log connection status
+    socket.on('connect', () => console.log(`Connected with ID: ${socket.id}`));
+    socket.on('disconnect', () => console.log(`user disconnected`));
   }
+  return socket;
 };
 
+// Get existing socket instance
+export const getSocket = () => socket;
+
+// Disconnect the socket
 export const disconnectSocket = () => {
-  if (socket) {
-    socket.disconnect();
-    console.log('Socket disconnected');
-  }
+  const socketId = socket?.id;
+  socket?.disconnect();
+  console.log(`User disconnected with ID: ${socketId}`);
+  socket = null;
 };
 
-export default socket;
+
