@@ -6,7 +6,7 @@ import { disconnectSocket } from '../socket'; // Import socket functions
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Dropdown = ({isOpen ,closeDropdown})=> {
+const Dropdown = ({setIsLoggedIn,isOpen ,closeDropdown })=> {
   const navigate = useNavigate();
   const dropdownRef = useRef(null); // Reference for the dropdown
   
@@ -41,11 +41,13 @@ const Dropdown = ({isOpen ,closeDropdown})=> {
        const result = localStorage.removeItem('user');
        console.log('result:', result);
         closeDropdown();
+        setIsLoggedIn(false);
+      
         navigate('/', { replace: true });
       }
      
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 

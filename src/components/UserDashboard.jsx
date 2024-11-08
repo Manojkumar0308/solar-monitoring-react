@@ -7,7 +7,7 @@ import MobileNavbar from "./MobileNavBar";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons/faPowerOff";
 import DashboardGraphs from "./UserDashboardGraph";
 import {motion} from 'framer-motion';
-const UserDashBoard = ({ isSidebarOpen, toggleSidebar, setActiveTab,activeTab }) => {
+const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab,activeTab }) => {
     const animation = {
         hidden: { opacity: 0, y: 100 }, // Start off-screen to the left
         visible: { opacity: 1, y: 0 }, // Final state
@@ -26,7 +26,7 @@ const UserDashBoard = ({ isSidebarOpen, toggleSidebar, setActiveTab,activeTab })
 
     return (
         <div className="min-w-full bg-white h-screen flex flex-col">
-            <MobileNavbar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} setActiveTab={setActiveTab} activeTab={activeTab}></MobileNavbar>
+            <MobileNavbar setIsLoggedIn={setIsLoggedIn} isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} setActiveTab={setActiveTab} activeTab={activeTab}></MobileNavbar>
             <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-2 mt-4 p-4">
                 <div className="flex flex-1 flex-col gap-2 h-[32vh] ">
                     <motion.div 

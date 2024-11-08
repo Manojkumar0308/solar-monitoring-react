@@ -2,7 +2,7 @@ import React from "react";
 import MobNavBar from "./MobileNavBar";
 import { motion } from 'framer-motion';
 
-const Profile = ({ isSidebarOpen, toggleSidebar, setActiveTab,activeTab }) => {
+const Profile = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab,activeTab }) => {
 
     const itemVariant = {
         hidden: { opacity: 0, y: -20 },
@@ -23,6 +23,7 @@ const Profile = ({ isSidebarOpen, toggleSidebar, setActiveTab,activeTab }) => {
         >
             {/* Use MobileNavbar component */}
             <MobNavBar 
+            setIsLoggedIn={setIsLoggedIn}
                 isSidebarOpen={isSidebarOpen} 
                 toggleSidebar={toggleSidebar} 
                 setActiveTab={setActiveTab} 

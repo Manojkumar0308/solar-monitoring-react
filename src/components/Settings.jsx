@@ -1,11 +1,12 @@
 import React,{useState} from "react";
 import MobNavBar from "./MobileNavBar";
-const Settings =({isSidebarOpen,toggleSidebar,setActiveTab,activeTab})=>{
+const Settings =({setIsLoggedIn,isSidebarOpen,toggleSidebar,setActiveTab,activeTab})=>{
     
     return(
         <div className="max-w-full bg-gray-100">
                {/* Use MobileNavbar component */}
-      <MobNavBar 
+      <MobNavBar
+      setIsLoggedIn={setIsLoggedIn} 
         isSidebarOpen={isSidebarOpen} 
         toggleSidebar={toggleSidebar} setActiveTab={setActiveTab} activeTab={activeTab}
       />

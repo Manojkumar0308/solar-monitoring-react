@@ -135,12 +135,13 @@ const rows = [
   { id: 15, siteId: 'S137', siteName: 'MJSH Plant', email: 'site15@example.com', contact: '8529637410', address: 'Plot-12348, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
 ];
 
-export default function DataGridDemo({ isSidebarOpen, toggleSidebar, setActiveTab, showMobNavBar, activeTab }) {
+export default function DataGridDemo({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab, showMobNavBar, activeTab }) {
   
   return (
     <div className=" flex flex-col">
       {showMobNavBar && (
         <MobNavBar
+        setIsLoggedIn={setIsLoggedIn}
           isSidebarOpen={isSidebarOpen}
           toggleSidebar={toggleSidebar}
           setActiveTab={setActiveTab}

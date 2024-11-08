@@ -1,12 +1,10 @@
 import React from 'react';
-import Users from './Users';
 import MobNavBar from './MobileNavBar';
 import Table from './Table';
 import { motion } from 'framer-motion';
-import { DataGrid } from '@mui/x-data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faPlayCircle, faEye, faTimesCircle, faTowerBroadcast, faTowerCell, faTowerObservation } from '@fortawesome/free-solid-svg-icons';
-const Dashboard = ({ isSidebarOpen, toggleSidebar, setActiveTab ,activeTab }) => {
+import { faEye, faTowerCell, faTowerObservation } from '@fortawesome/free-solid-svg-icons';
+const Dashboard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab ,activeTab }) => {
   // Animation settings for the grid items
   const gridItemVariants = {
     hidden: { opacity: 0, x: -100 }, // Start off-screen to the left
@@ -30,6 +28,8 @@ const Dashboard = ({ isSidebarOpen, toggleSidebar, setActiveTab ,activeTab }) =>
     <div className="max-w-full dark:bg-gray-900">
       {/* Use MobileNavbar component */}
       <MobNavBar 
+      
+        setIsLoggedIn={setIsLoggedIn}
         isSidebarOpen={isSidebarOpen} 
         toggleSidebar={toggleSidebar} 
         setActiveTab={setActiveTab}

@@ -10,13 +10,10 @@ import UserDashBoard from "./components/UserDashboard";
 import Sendnotification from "./components/Notifications";
 import Tables from "./components/Table";
 
+
 const App = () => {
   const [activeTab, setActiveTab] = useState('dashboard'); // Default tab
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
-
   return (
     <Router>
       <div className="h-screen">
@@ -25,18 +22,20 @@ const App = () => {
           <AuthContainer onLogin={() => setIsLoggedIn(true)} />  
         ) : (
           <div className="flex h-screen"> 
-            <Sidebar setActiveTab={setActiveTab} activeTab={activeTab} />
+          
+             {isLoggedIn && <Sidebar setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab} />}
             <div className="w-full overflow-y-auto">
               <Routes>
-                <Route path="/dashboard" element={<Dashboard setActiveTab={setActiveTab} activeTab={activeTab}/>} />
-                <Route path="/users" element={<Tables setActiveTab={setActiveTab} showMobNavBar={true} activeTab={activeTab}/>} />
-                <Route path="/settings" element={<Settings setActiveTab={setActiveTab} activeTab={activeTab}/>} />
-                <Route path="/profile" element={<Profile setActiveTab={setActiveTab} activeTab={activeTab}/>} />
-                <Route path="/userDashboard" element={<UserDashBoard setActiveTab={setActiveTab} activeTab={activeTab}/>} />
-                <Route path="/sendnotification" element={<Sendnotification setActiveTab={setActiveTab} activeTab={activeTab}/>}/>
-                <Route path="/" element={<AuthContainer onLogin={() => setIsLoggedIn(true)}/>} /> {/* Default route */}
+                <Route path="/dashboard" element={<Dashboard setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
+                <Route path="/users" element={<Tables setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} showMobNavBar={true} activeTab={activeTab}/>} />
+                <Route path="/settings" element={<Settings setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
+                <Route path="/profile" element={<Profile setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
+                <Route path="/userDashboard" element={<UserDashBoard setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
+                <Route path="/sendnotification" element={<Sendnotification setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>}/>
+                <Route path="/" element={<AuthContainer />} /> {/* Default route */}
               </Routes>
             </div>
+           
           </div>
         )}
       </div>
