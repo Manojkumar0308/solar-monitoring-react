@@ -34,7 +34,7 @@ const LoginForm = ({ onLogin }) => {
         socket.emit('login', {
           userId: response.data.user._id,
           email: response.data.user.email,
-        });
+        }); 
 
         onLogin();
         navigate('/dashboard', { replace: true });

@@ -6,8 +6,13 @@ import { faWater } from "@fortawesome/free-solid-svg-icons/faWater";
 import MobileNavbar from "./MobileNavBar";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons/faPowerOff";
 import DashboardGraphs from "./UserDashboardGraph";
+import {initializeSocket, getSocket } from '../socket';
+import { useState,useEffect } from "react";
 import {motion} from 'framer-motion';
 const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab,activeTab }) => {
+    const [inverterData, setInverterData] = useState([]);
+
+  
     const animation = {
         hidden: { opacity: 0, y: 100 }, // Start off-screen to the left
         visible: { opacity: 1, y: 0 }, // Final state
@@ -24,6 +29,21 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
         { icon: faPowerOff, value: "2.6 m/s", label: "Voltage", duration: 4.9 },
     ];
 
+    useEffect(() => {
+        // Initialize the socket connection
+        const socket = initializeSocket();
+
+        // Listen for real-time inverter data
+        socket.on('send-inverter-data', (data) => {
+            console.log('Received real-time inverter data:', data);
+            setInverterData((prevData) => [...prevData, data]);
+        });
+
+        // Cleanup on component unmount
+        return () => {
+            socket.off('send-inverter-data');
+        };
+    }, []);
     return (
         <div className="min-w-full bg-white h-screen flex flex-col">
             <MobileNavbar setIsLoggedIn={setIsLoggedIn} isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} setActiveTab={setActiveTab} activeTab={activeTab}></MobileNavbar>
@@ -162,6 +182,21 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
     </div>
   </div>
 </div>
+   {/* Inverter Data Section */}
+   <div className="w-full border border-gray-200 rounded-lg mt-4 p-4">
+                <h2 className="text-lg font-semibold">Inverter Data Dashboard</h2>
+                {inverterData.length > 0 ? (
+                    inverterData.map((data, index) => (
+                        <div key={index} className="p-2 border-b border-gray-300">
+                            <p>Inverter ID: {data.inverterId}</p>
+                            <p>Power Output: {data.powerOutput} kW</p>
+                            <p>Energy Generated: {data.energyGenerated} kWh</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>No data available</p>
+                )}
+            </div>
 
 
 
