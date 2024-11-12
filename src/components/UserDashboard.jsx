@@ -20,7 +20,7 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
           setUser(storedUser.user);
         }
         
-      const socket = initializeSocket();
+      const socket = getSocket();
   
       // Listen for real-time data from server
       socket.on("sendInvertersData", (data) => {

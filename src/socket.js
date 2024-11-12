@@ -13,7 +13,7 @@ export const initializeSocket = () => {
     socket.on('connect', () => console.log(`Connected with ID: ${socket.id}`));
     socket.on('disconnect', () => console.log(`user disconnected`));
     socket.on('error', (error) => console.log('Socket error:', error));
-    socket.on('sendInvertersData', (data) => console.log(data));
+    // socket.on('sendInvertersData', (data) => console.log(data));
   }
   return socket;
 };
