@@ -30,11 +30,8 @@ const LoginForm = ({ onLogin }) => {
   localStorage.setItem('user', JSON.stringify(response.data));
   const userData = JSON.parse(localStorage.getItem('user')); // Get the user data from local storage
   console.log('userData:', userData.token); // Now userData should be defined
-        const socket = initializeSocket();
-        socket.emit('login', {
-          userId: response.data.user._id,
-          email: response.data.user.email,
-        }); 
+       initializeSocket();
+        
 
         onLogin();
         navigate('/dashboard', { replace: true });

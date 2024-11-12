@@ -9,10 +9,11 @@ export const initializeSocket = () => {
     socket = io('http://localhost:3000', {
       
     });
-    console.log('Socket connection established:', socket);
+    // console.log('Socket connection established:', socket);
     socket.on('connect', () => console.log(`Connected with ID: ${socket.id}`));
     socket.on('disconnect', () => console.log(`user disconnected`));
     socket.on('error', (error) => console.log('Socket error:', error));
+    socket.on('sendInvertersData', (data) => console.log(data));
   }
   return socket;
 };

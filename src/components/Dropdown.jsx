@@ -2,7 +2,7 @@ import React, {  useRef,useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { } from '@fortawesome/free-brands-svg-icons';
 import {  faUser, faGear, faRightFromBracket} from '@fortawesome/free-solid-svg-icons';
-import { disconnectSocket } from '../socket'; // Import socket functions
+import { disconnectSocket, initializeSocket } from '../socket'; // Import socket functions
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -38,6 +38,8 @@ const Dropdown = ({setIsLoggedIn,isOpen ,closeDropdown })=> {
       
       if (response.status === 200) {
         disconnectSocket();
+       
+
        const result = localStorage.removeItem('user');
        console.log('result:', result);
         closeDropdown();
