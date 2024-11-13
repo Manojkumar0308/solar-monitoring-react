@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { initializeSocket } from '../socket'; // Import socket functions
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = ({ onLogin, setUser}) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,14 +27,22 @@ const LoginForm = ({ onLogin }) => {
 
       if (response.status === 200) {
         // Initialize socket connection after successful login
-  localStorage.setItem('user', JSON.stringify(response.data));
+  
+  const user =response.data.user;
+  console.log('User role:', user.role); // Console log the role here
+        setUser(user);
+        localStorage.setItem('user', JSON.stringify(response.data));
   const userData = JSON.parse(localStorage.getItem('user')); // Get the user data from local storage
-  console.log('userData:', userData.token); // Now userData should be defined
+  // console.log('userData:', userData.token); // Now userData should be defined
        initializeSocket();
         
 
         onLogin();
-        navigate('/dashboard', { replace: true });
+        if (userData.user.role === 'admin') {
+          navigate('/dashboard', { replace: true });
+        } else {
+          navigate('/userDashboard', { replace: true });
+        }
       }
     } catch (error) {
       if (error.response) {

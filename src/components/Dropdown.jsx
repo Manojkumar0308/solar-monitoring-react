@@ -6,7 +6,7 @@ import { disconnectSocket, initializeSocket } from '../socket'; // Import socket
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Dropdown = ({setIsLoggedIn,isOpen ,closeDropdown })=> {
+const Dropdown = ({setIsLoggedIn,isOpen ,closeDropdown,setUser ,user})=> {
   const navigate = useNavigate();
   const dropdownRef = useRef(null); // Reference for the dropdown
   
@@ -27,6 +27,10 @@ const Dropdown = ({setIsLoggedIn,isOpen ,closeDropdown })=> {
     event.preventDefault(); // Prevent the default behavior
     try {
       const user = JSON.parse(localStorage.getItem('user')); // Assuming you stored the token in local storage
+      if (!user) {
+        console.error('User not found in local storage');
+        return;
+      }
       console.log('token:', user.token);
       const response = await axios.post('http://localhost:3000/api/user/logout', {}, {
         headers: {
@@ -39,10 +43,12 @@ const Dropdown = ({setIsLoggedIn,isOpen ,closeDropdown })=> {
       if (response.status === 200) {
         disconnectSocket();
        
-
+  
        const result = localStorage.removeItem('user');
        console.log('result:', result);
+       setUser(null);
         closeDropdown();
+        
         setIsLoggedIn(false);
       
         navigate('/', { replace: true });

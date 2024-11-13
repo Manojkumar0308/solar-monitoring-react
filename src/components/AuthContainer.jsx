@@ -4,7 +4,7 @@ import LoginForm from './LoginForm';
 import SidePanel from './SidePanel';
 import Signup from './Signup';
 
-const AuthContainer = ({ onLogin }) => {
+const AuthContainer = ({ onLogin ,setUser}) => {
   const location = useLocation();
 
   return (
@@ -17,7 +17,7 @@ const AuthContainer = ({ onLogin }) => {
         {location.pathname === '/signup' ? (
           <Signup />
         ) : (
-          <LoginForm onLogin={onLogin} />
+          <LoginForm onLogin={onLogin} setUser={setUser}/>
         )}
       </div>
     </div>

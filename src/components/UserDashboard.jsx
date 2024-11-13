@@ -9,11 +9,12 @@ import DashboardGraphs from "./UserDashboardGraph";
 import {initializeSocket, getSocket } from '../socket';
 import { useState,useEffect } from "react";
 import {motion} from 'framer-motion';
-const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab,activeTab }) => {
+const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab,activeTab ,setUser,user}) => {
     const [inverterData, setInverterData] = useState({});
-    const [user, setUser] = useState(null);
+    const [sensorsData, setSensorsData] = useState({ humidity: "NA", temperature: "NA" });
+   
 
-    // Initialize socket connection and handle incoming data
+   
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem("user"));
         if (storedUser) {
@@ -31,8 +32,18 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
           }
         
       });
+
+      socket.on("sendSensorData", (data) => {
+        console.log("Received sensors data:", data); // Log the incoming data to inspect its structure
+        if (storedUser?.user?._id === data.customer_id) {
+            console.log("Data matches customer:", data);
+            setSensorsData(data);
+          }
+      })
     
     }, []);
+
+   
   
 
     const animation = {
@@ -42,7 +53,7 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
     
       const data = [
         { icon: faSun, value: "378.79Wh/m2", label: "Light intensity", duration: 3.2 },
-        { icon: faThermometerFull, value: "21.88°C", label: "Temperature", duration: 3.4 },
+        { icon: faThermometerFull, value: "21.88°C", label: "Panel Temperature", duration: 3.4 },
         { icon: faSun, value: "378.79Wh/m2", label: "Light intensity", duration: 3.6 },
         { icon: faThermometerFull, value: "21.88°C", label: "Temperature", duration: 3.8 },
         { icon: faCloud, value: "71.00%rh", label: "Humidity", duration: 4 },
@@ -146,7 +157,9 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
                 >
                     <FontAwesomeIcon icon={item.icon} className="text-[20px]" />
                     <div className="flex flex-col">
-                        <span className="text-sm font-semibold">{item.value}</span>
+                        <span className="text-sm font-semibold">
+                          {item.label==="Humidity"?sensorsData.humidity+"%":item.label==="Temperature"?sensorsData.temperature+"°C":item.value}
+                          </span>
                         <span className="text-xs font-semibold text-gray-200">{item.label}</span>
                     </div>
                 </motion.div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import AuthContainer from "./components/AuthContainer";
 import Sidebar from "./components/Sidebar";
@@ -14,23 +14,26 @@ import Tables from "./components/Table";
 const App = () => {
   const [activeTab, setActiveTab] = useState('dashboard'); // Default tab
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
+  const [user, setUser] = useState(null);
+
+  
   return (
     <Router>
       <div className="h-screen">
         {/* Conditionally render the AuthContainer or the main dashboard */}
         {!isLoggedIn ? (
-          <AuthContainer onLogin={() => setIsLoggedIn(true)} />  
+           <AuthContainer onLogin={() => setIsLoggedIn(true)} setUser={setUser} />
         ) : (
           <div className="flex h-screen"> 
           
-             {isLoggedIn && <Sidebar setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab} />}
+             {isLoggedIn && <Sidebar setIsLoggedIn={setIsLoggedIn} setUser={setUser} user={user} setActiveTab={setActiveTab} activeTab={activeTab} />}
             <div className="w-full overflow-y-auto">
               <Routes>
                 <Route path="/dashboard" element={<Dashboard setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/users" element={<Tables setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} showMobNavBar={true} activeTab={activeTab}/>} />
                 <Route path="/settings" element={<Settings setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/profile" element={<Profile setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
-                <Route path="/userDashboard" element={<UserDashBoard setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
+                <Route path="/userDashboard" element={<UserDashBoard setIsLoggedIn={setIsLoggedIn} setUser={setUser} user={user} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/sendnotification" element={<Sendnotification setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>}/>
                 <Route path="/" element={<AuthContainer />} /> {/* Default route */}
               </Routes>

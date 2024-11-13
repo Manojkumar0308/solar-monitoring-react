@@ -6,4 +6,11 @@ export default defineConfig({
     host: true, // Allow access from other devices in the network
     port: 5173, // Use the default Vite port or change as needed
   },
+  proxy: {
+    '/socket.io': {
+      target: 'http://localhost:3000',
+      ws: true,
+      changeOrigin: true,
+    },
+  },
 });

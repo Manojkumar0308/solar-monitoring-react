@@ -4,7 +4,7 @@ import Table from './Table';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTowerCell, faTowerObservation } from '@fortawesome/free-solid-svg-icons';
-const Dashboard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab ,activeTab }) => {
+const Dashboard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab ,activeTab ,setUser,user}) => {
   // Animation settings for the grid items
   const gridItemVariants = {
     hidden: { opacity: 0, x: -100 }, // Start off-screen to the left
