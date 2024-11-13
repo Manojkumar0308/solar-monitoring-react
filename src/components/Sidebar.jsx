@@ -16,7 +16,6 @@ const Sidebar = ({setIsLoggedIn, setActiveTab, isSidebarOpen,activeTab,setIsSide
   const handleTabClick = (tab) => {
     setActiveTab(tab);
    
-     // Set active tab
   };
   
   const tabs =user && user.role === 'admin' ? ['dashboard', 'users', 'settings', 'profile','sendnotification'] : ['userDashboard', 'settings', 'profile', 'sendnotification'];

@@ -16,20 +16,26 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
   const [user, setUser] = useState(null);
 
-  
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem('user');
+  //   if (storedUser) {
+  //     setUser(JSON.parse(storedUser));  // Set user data from localStorage
+  //     setIsLoggedIn(true);  // Mark as logged in
+  //   }
+  // }, []);
   return (
     <Router>
       <div className="h-screen">
         {/* Conditionally render the AuthContainer or the main dashboard */}
         {!isLoggedIn ? (
-           <AuthContainer onLogin={() => setIsLoggedIn(true)} setUser={setUser} />
+           <AuthContainer onLogin={() => setIsLoggedIn(true)} setUser={setUser} user={user} />
         ) : (
           <div className="flex h-screen"> 
           
              {isLoggedIn && <Sidebar setIsLoggedIn={setIsLoggedIn} setUser={setUser} user={user} setActiveTab={setActiveTab} activeTab={activeTab} />}
             <div className="w-full overflow-y-auto">
               <Routes>
-                <Route path="/dashboard" element={<Dashboard setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
+                <Route path="/dashboard" element={<Dashboard setIsLoggedIn={setIsLoggedIn} setUser={setUser} user={user} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/users" element={<Tables setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} showMobNavBar={true} activeTab={activeTab}/>} />
                 <Route path="/settings" element={<Settings setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/profile" element={<Profile setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />

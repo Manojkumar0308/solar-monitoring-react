@@ -46,10 +46,11 @@ const Dropdown = ({setIsLoggedIn,isOpen ,closeDropdown,setUser ,user})=> {
   
        const result = localStorage.removeItem('user');
        console.log('result:', result);
-       setUser(null);
+     
         closeDropdown();
         
         setIsLoggedIn(false);
+        setUser(null);
       
         navigate('/', { replace: true });
       }

@@ -65,7 +65,8 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
   
     return (
         <div className="min-w-full bg-white h-screen flex flex-col">
-            <MobileNavbar setIsLoggedIn={setIsLoggedIn} isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} setActiveTab={setActiveTab} activeTab={activeTab}></MobileNavbar>
+            <MobileNavbar setIsLoggedIn={setIsLoggedIn} setUser={setUser}
+        user={user} isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} setActiveTab={setActiveTab} activeTab={activeTab}></MobileNavbar>
             <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-2 mt-4 p-4">
                 <div className="flex flex-1 flex-col gap-2 h-[32vh] ">
                     <motion.div 

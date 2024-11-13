@@ -30,6 +30,8 @@ const Dashboard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab ,a
       <MobNavBar 
       
         setIsLoggedIn={setIsLoggedIn}
+        setUser={setUser}
+        user={user}
         isSidebarOpen={isSidebarOpen} 
         toggleSidebar={toggleSidebar} 
         setActiveTab={setActiveTab}
@@ -41,7 +43,7 @@ const Dashboard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab ,a
       <div className="p-8 max-w-full  overflow-hidden dark:bg-gray-900">
         <h2 className="text-2xl font-bold mb-6">Welcome, Admin</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
           {/* Animated Grid Items with staggered effect */}
           {gridItems.map((item, index) => (
             <motion.div

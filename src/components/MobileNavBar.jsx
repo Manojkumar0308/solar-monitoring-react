@@ -7,7 +7,7 @@ import Sidebar from './Sidebar'; // Assuming Sidebar component is imported from 
 const sidebarOpenClass = "translate-x-0"; 
 const sidebarClosedClass = "-translate-x-full";
 
-const MobileNavbar = ({setIsLoggedIn, setActiveTab, activeTab}) => {
+const MobileNavbar = ({setIsLoggedIn, setActiveTab, activeTab,setUser ,user}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Function to toggle sidebar visibility
@@ -44,6 +44,8 @@ const MobileNavbar = ({setIsLoggedIn, setActiveTab, activeTab}) => {
         <div className='overflow-y-auto h-full hide-scrollbar'>
         <Sidebar 
   setIsLoggedIn={setIsLoggedIn}  // Pass setIsLoggedIn here
+  setUser={setUser}
+  user={user}
   isSidebarOpen={isSidebarOpen} 
   setActiveTab={setActiveTab} 
   activeTab={activeTab}
