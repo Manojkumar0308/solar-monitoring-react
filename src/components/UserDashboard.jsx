@@ -16,33 +16,47 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
 
    
     useEffect(() => {
-        const storedUser = JSON.parse(localStorage.getItem("user"));
-        if (storedUser) {
-          setUser(storedUser.user);
-        }
-        
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      if (storedUser) {
+        setUser(storedUser.user);
+      }
+    
+      // Initialize socket only if it hasn't been initialized yet
+      if (!getSocket()) {
+        initializeSocket();
+      }
+    
       const socket = getSocket();
-  
-      // Listen for real-time data from server
-      socket.on("sendInvertersData", (data) => {
-        console.log("Received inverter data:", data); // Log the incoming data to inspect its structure
-        if (storedUser?.user?._id === data.customer_id) {
+    
+      // Ensure socket is defined before setting up listeners
+      if (socket) {
+        // Listen for real-time data from server
+        socket.on("sendInvertersData", (data) => {
+          console.log("Received inverter data:", data);
+          if (storedUser?.user?._id === data.customer_id) {
             console.log("Data matches customer:", data);
             setInverterData(data);
           }
-        
-      });
-
-      socket.on("sendSensorData", (data) => {
-        console.log("Received sensors data:", data); // Log the incoming data to inspect its structure
-        if (storedUser?.user?._id === data.customer_id) {
+        });
+    
+        socket.on("sendSensorData", (data) => {
+          console.log("Received sensors data:", data);
+          if (storedUser?.user?._id === data.customer_id) {
             console.log("Data matches customer:", data);
             setSensorsData(data);
           }
-      })
+        });
+      }
     
+      // Cleanup the socket listeners when the component unmounts
+      return () => {
+        if (socket) {
+          socket.off("sendInvertersData");
+          socket.off("sendSensorData");
+        }
+      };
     }, []);
-
+    
    
   
 

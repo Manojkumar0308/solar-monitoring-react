@@ -18,7 +18,7 @@ const Sidebar = ({setIsLoggedIn, setActiveTab, isSidebarOpen,activeTab,setIsSide
    
   };
   
-  const tabs =user && user.role === 'admin' ? ['dashboard', 'users', 'settings', 'profile','sendnotification'] : ['userDashboard', 'settings', 'profile', 'sendnotification'];
+  const tabs =user && user.role === 'admin' ? ['dashboard', 'users', 'settings', 'profile','sendnotification'] : ['userDashboard', 'settings', 'profile', 'sendnotification','notifications'];
   return (
     <div className={` lg:w-64  bg-gray-800 text-white ${isSidebarOpen ? 'block' : 'hidden'} lg:block overflow-y-auto hidden-scrollbar`}>
       <div className="px-4 mt-2 flex flex-row gap-1 items-center justify-center hover:bg-gray-700 rounded-md" onClick={toggleDropdown}>
@@ -30,7 +30,7 @@ const Sidebar = ({setIsLoggedIn, setActiveTab, isSidebarOpen,activeTab,setIsSide
       
       <nav className="mt-5 px-4">
         {
-        // ['dashboard', 'users', 'settings', 'profile', 'userDashboard','sendnotification']
+       
         tabs.map((tab) => (
           <Link
             key={tab}
@@ -75,6 +75,8 @@ const getIcon = (tab) => {
       return faBell;
       case 'sendnotification':
         return faTelegramPlane;
+        case 'notifications':
+          return faBell;
     default:
       return null;
   }

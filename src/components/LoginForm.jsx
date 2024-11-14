@@ -32,6 +32,7 @@ const LoginForm = ({ onLogin, setUser}) => {
   console.log('User role:', user.role); // Console log the role here
         setUser(user);
         localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem('logedIn', true);
   const userData = JSON.parse(localStorage.getItem('user')); // Get the user data from local storage
   // console.log('userData:', userData.token); // Now userData should be defined
        initializeSocket();

@@ -8,6 +8,11 @@ import Settings from './components/Settings';
 import Profile from './components/Profile';
 import UserDashBoard from "./components/UserDashboard";
 import Sendnotification from "./components/Notifications";
+import UserNotification from "./components/UserNotification";
+import { ReactNotifications } from 'react-notifications-component';
+import { NotificationProvider } from '../src/context/NotificationContext';  
+import 'react-notifications-component/dist/theme.css'; // Make sure this is in your App.js
+
 import Tables from "./components/Table";
 
 
@@ -15,17 +20,20 @@ const App = () => {
   const [activeTab, setActiveTab] = useState('dashboard'); // Default tab
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
   const [user, setUser] = useState(null);
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    const loggedIn = localStorage.getItem('logedIn') === 'true';
 
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem('user');
-  //   if (storedUser) {
-  //     setUser(JSON.parse(storedUser));  // Set user data from localStorage
-  //     setIsLoggedIn(true);  // Mark as logged in
-  //   }
-  // }, []);
+    if (loggedIn && userData) {
+      setUser(userData.user);
+      setIsLoggedIn(true);
+    }
+  }, []);
   return (
-    <Router>
+    <NotificationProvider>
+       <Router>
       <div className="h-screen">
+      <ReactNotifications />
         {/* Conditionally render the AuthContainer or the main dashboard */}
         {!isLoggedIn ? (
            <AuthContainer onLogin={() => setIsLoggedIn(true)} setUser={setUser} user={user} />
@@ -41,6 +49,7 @@ const App = () => {
                 <Route path="/profile" element={<Profile setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/userDashboard" element={<UserDashBoard setIsLoggedIn={setIsLoggedIn} setUser={setUser} user={user} setActiveTab={setActiveTab} activeTab={activeTab}/>} />
                 <Route path="/sendnotification" element={<Sendnotification setIsLoggedIn={setIsLoggedIn} setActiveTab={setActiveTab} activeTab={activeTab}/>}/>
+                <Route path="notifications" element={<UserNotification setIsLoggedIn={setIsLoggedIn} setUser={setUser} user={user} setActiveTab={setActiveTab} showMobNavBar={true} activeTab={activeTab}/>} />
                 <Route path="/" element={<AuthContainer />} /> {/* Default route */}
               </Routes>
             </div>
@@ -49,6 +58,8 @@ const App = () => {
         )}
       </div>
     </Router>
+    </NotificationProvider>
+   
   );
 };
 
