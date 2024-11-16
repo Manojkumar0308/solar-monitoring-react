@@ -17,7 +17,7 @@ import Tables from "./components/Table";
 
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState('dashboard'); // Default tab
+  const [activeTab, setActiveTab] = useState(''); // Default tab
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -27,6 +27,7 @@ const App = () => {
     if (loggedIn && userData) {
       setUser(userData.user);
       setIsLoggedIn(true);
+      userData.user.role === 'admin' ? setActiveTab('dashboard') : setActiveTab('userDashboard');
     }
   }, []);
   return (
