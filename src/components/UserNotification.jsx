@@ -1,33 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import MobileNavbar from "./MobileNavBar";
 import { initializeSocket, getSocket } from '../socket';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowCircleLeft, faArrowCircleRight, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { Store } from 'react-notifications-component';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleSidebar, setActiveTab, activeTab }) => {
   const [notifications, setNotifications] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  // const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
+
+  const [showDateRange, setShowDateRange] = useState(false);
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // 7 din pehle ki date
+      endDate: new Date(),
+      key: 'selection'
+    }
+  ]);
+
+  const datePickerRef = useRef();
+const itemsPerPage = 10;
+
   // Fetch notifications from server
-  const fetchNotifications = async (page = 1) => {
+  const fetchNotifications = async () => {
     try {
       const storedUser = JSON.parse(localStorage.getItem("user"));
       if (storedUser) {
         setLoading(true);
-        const response = await axios.get(`http://localhost:3000/api/admin/get-notification/${storedUser.user._id}`, {
-          params: { page, limit: 10 }
-        });
+        const response = await axios.get(`http://localhost:3000/api/admin/get-notification/${storedUser.user._id}`
+        //   {
+        //   params: { page, limit: 10 }
+        // }
+      );
 
          // Ensure the response contains the expected structure
          if (response.data && response.data.data) {
           setNotifications(response.data.data);
          
-          setTotalPages(response.data.totalPages); // Ensure this is correct
-          setCurrentPage(response.data.page); // Set current page from response
+          // setTotalPages(response.data.totalPages); // Ensure this is correct
+          // setCurrentPage(response.data.page); // Set current page from response
         }
         setLoading(false);
       }
@@ -43,7 +61,7 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
     }
 
     // Fetch existing notifications on component mount
-    fetchNotifications(currentPage);
+    fetchNotifications();
     
     // Initialize socket
     if (!getSocket()) {
@@ -58,7 +76,7 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
         setNotifications((prev) => [...prev, data]); // Add new notification to the top
         Store.addNotification({
           title: "New Notification",
-          message: data.message,
+          message: data.title,
           type: "success",
           insert: "top",
           container: "top-right",
@@ -80,22 +98,79 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
       }
     };
     
-  }, [setUser,currentPage,totalPages]);
+  }, [setUser]);
  
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-     
-      setCurrentPage((prevPage) => parseInt(prevPage) + 1) // Update the currentPage state
-     
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+  
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
     }
   };
 
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => parseInt(prevPage) - 1); // Update the currentPage state
+  const handleFilterBtnClick = ()=>{
+      setDateRange([{ startDate: new Date(), endDate: new Date(), key: 'selection' }]);
+      setCurrentPage(1);
+    
+    setShowDateRange(!showDateRange);
+  }
+
+  const handleDateChange = (ranges)=>{
+    setDateRange([ranges.selection]);
+  }
+
+  const handleClickOutside = (event) => {
+    if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
+      setShowDateRange(false); // Close the date range picker
+      setDateRange([{ startDate: new Date(), endDate: new Date(), key: 'selection' }]); // Reset the filter
     }
   };
+
+  useEffect(() => {
+    if (showDateRange) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDateRange]);
+
+ // Apply date range filter
+const filteredNotifications = notifications.filter((notification) => {
+  const notificationDate = new Date(notification.created_at);
+
+  const startDate = new Date(dateRange[0].startDate);
+  startDate.setHours(0, 0, 0, 0); // Normalize to start of day
+
+  const endDate = new Date(dateRange[0].endDate);
+  endDate.setHours(23, 59, 59, 999); // Normalize to end of day
+
+  const isWithinRange = notificationDate >= startDate && notificationDate <= endDate;
+  // console.log('Is Within Range:', isWithinRange);
+ 
+  return isWithinRange;
+});
+const sortedNotifications = filteredNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+const totalPages = Math.ceil(sortedNotifications.length / itemsPerPage);
+
+// Get notifications for the current page
+const paginatedNotifications = sortedNotifications.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
+
+console.log('Total Pages:', totalPages);
+console.log('Current Page:', currentPage);
+console.log('Filtered Notifications:', filteredNotifications.length);
+console.log('Paginated Notifications:', paginatedNotifications.length);
 
   return (
     <div className='w-[100%]'>
@@ -108,26 +183,51 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
         setActiveTab={setActiveTab}
         activeTab={activeTab}
       />
+     
       <div className=" mt-6">
         <div className='flex items-start justify-between px-4'>
         <h2 className="text-2xl font-semibold mb-4 ">Notifications</h2>
-        <button className=" bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-md text-xs">Filter</button>
-        </div>
+        <button className=" bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-md text-xs" onClick={handleFilterBtnClick}>Filter</button>
+        </div>  
+        {/* Selection of Date Range*/}
+        {showDateRange && (
+          <div className="mb-4">
+            <div ref={datePickerRef}
+            className="absolute z-10 right-0 bg-white shadow-lg p-4 rounded-md">
+            <DateRangePicker
+             editableDateInputs={true}
+             ranges={dateRange}
+              onChange={(handleDateChange)}
+            />
+            <div className='w-[20%] justify-end'></div>
+             <button
+              onClick={() => setShowDateRange(false)}
+              className="bg-green-500 hover:bg-green-600 text-white mt-4 py-1 px-4 rounded-md text-xs"
+            >
+              Apply
+            </button>
+            </div>
+          </div>
+        )} 
+
         
-        
-        <div className="bg-white shadow-md  w-full">
-  {notifications.length === 0 ? (
+{loading ? (
+          <div className="flex justify-center items-center py-8">
+            <div className="animate-spin border-t-4 border-blue-500 w-10 h-10 rounded-full"></div>
+          </div>
+        ) :(<div className="bg-white shadow-md  w-full">
+  {paginatedNotifications.length === 0 ? (
     <div className="text-center py-8 text-gray-500 w-full">No notifications to show</div>
   ) : (
     <ul className="w-full">
-      {notifications.map((notification, index) => (
+      {paginatedNotifications.map((notification, index) => (
         <NotificationItem key={index} notification={notification} />
       ))}
     </ul>
   )}
-</div>
+</div>)}
 {/* Pagination */}
- <div className="flex justify-center mt-4 gap-4 items-center">
+{loading?<div></div>:( <div className=" flex justify-center mt-4 gap-4 items-center">
  <span className='mr-2' onClick={handlePreviousPage} disabled={currentPage <= 1}><FontAwesomeIcon icon={faArrowLeft} className='text-xl text-gray-600'/></span>
           
           <span className="text-xs text-semibold">Page {currentPage} of {totalPages}</span>
@@ -138,7 +238,7 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
           >
             <FontAwesomeIcon icon={faArrowRight} className='text-xl text-gray-600'/>
           </span>
-        </div>
+        </div>)}
       </div>
     </div>
   );
