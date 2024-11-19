@@ -8,51 +8,74 @@ import { Store } from 'react-notifications-component';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import { format } from 'date-fns'; // date-fns का उपयोग
 
 const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleSidebar, setActiveTab, activeTab }) => {
   const [notifications, setNotifications] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  // const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1); // Current page
+  const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
 
-
+  const [isFilterApplied, setIsFilterApplied] = useState(false); // New state to track filter application
   const [showDateRange, setShowDateRange] = useState(false);
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // 7 din pehle ki date
-      endDate: new Date(),
-      key: 'selection'
-    }
-  ]);
+  
+  const [dateRange, setDateRange] = useState([{
+    startDate: new Date(),
+    endDate: new Date(),
+    key: 'selection',
+  }]);
 
   const datePickerRef = useRef();
-const itemsPerPage = 10;
+  const limit = 10; // Records per page
+  const API_URL = "http://localhost:3000/api/admin/get-notification";
 
   // Fetch notifications from server
-  const fetchNotifications = async () => {
+  const fetchNotifications = async (stDate = "", enDate = "") => {
     try {
       const storedUser = JSON.parse(localStorage.getItem("user"));
+      console.log('Stored User:', storedUser);
+  
       if (storedUser) {
+        console.log('User Token:', storedUser.token);
         setLoading(true);
-        const response = await axios.get(`http://localhost:3000/api/admin/get-notification/${storedUser.user._id}`
-        //   {
-        //   params: { page, limit: 10 }
-        // }
-      );
-
-         // Ensure the response contains the expected structure
-         if (response.data && response.data.data) {
-          setNotifications(response.data.data);
-         
-          // setTotalPages(response.data.totalPages); // Ensure this is correct
-          // setCurrentPage(response.data.page); // Set current page from response
+  
+        const requestBody = {
+          stDate, 
+        enDate, 
+        };
+  
+        const response = await axios.post(
+          API_URL, // Endpoint
+          requestBody, // Request body
+          {
+            headers: {
+              Authorization: `Bearer ${storedUser.token}`,
+            },
+            params: {
+              page, // Query parameters
+              limit,
+            },
+          }
+        );
+  
+        console.log('API Response:', response.data);
+  
+        // Ensure the response contains the expected structure
+        if (response.data && response.data.data) {
+          setNotifications(response.data.data); // Set notifications
+          setTotalPages(response.data.totalPages); // Set total pages
+        } else {
+          console.error('Unexpected response structure:', response.data);
         }
-        setLoading(false);
       }
+  
+      setLoading(false);
     } catch (err) {
-      console.error('Error fetching notifications:', err);
+      console.error('Error fetching notifications:', err.message);
+      setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -61,8 +84,11 @@ const itemsPerPage = 10;
     }
 
     // Fetch existing notifications on component mount
-    fetchNotifications();
-    
+    if (isFilterApplied) {
+      fetchNotifications(dateRange[0].startDate, dateRange[0].endDate);
+    } else {
+      fetchNotifications(); // Fetch all notifications if no filter is applied
+    }
     // Initialize socket
     if (!getSocket()) {
       initializeSocket();
@@ -98,36 +124,38 @@ const itemsPerPage = 10;
       }
     };
     
-  }, [setUser]);
+  }, [setUser,page,isFilterApplied]);
  
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
+  const handleNextPage = (newPage) => {
+    console.log('totalPages:', totalPages);
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage); 
     }
+     
   };
   
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
-  };
+  
 
   const handleFilterBtnClick = ()=>{
-      setDateRange([{ startDate: new Date(), endDate: new Date(), key: 'selection' }]);
-      setCurrentPage(1);
+     
+      setPage(1);
+      setTotalPages(0);
     
     setShowDateRange(!showDateRange);
+    setDateRange([{
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    }])
+    setIsFilterApplied(false); // Reset filter application when opening date range
   }
 
-  const handleDateChange = (ranges)=>{
-    setDateRange([ranges.selection]);
-  }
-
+ 
   const handleClickOutside = (event) => {
     if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
       setShowDateRange(false); // Close the date range picker
-      setDateRange([{ startDate: new Date(), endDate: new Date(), key: 'selection' }]); // Reset the filter
+      
     }
   };
 
@@ -143,34 +171,19 @@ const itemsPerPage = 10;
     };
   }, [showDateRange]);
 
- // Apply date range filter
-const filteredNotifications = notifications.filter((notification) => {
-  const notificationDate = new Date(notification.created_at);
+  
 
-  const startDate = new Date(dateRange[0].startDate);
-  startDate.setHours(0, 0, 0, 0); // Normalize to start of day
+  const handleApplyFilter = () => {
+    const startDate = format(dateRange[0].startDate, 'yyyy-MM-dd'); 
+    const endDate = format(dateRange[0].endDate, 'yyyy-MM-dd');
+    setIsFilterApplied(true);
+    fetchNotifications(startDate, endDate);
+    
+    setShowDateRange(false); // Date Range Picker को बंद करना
+    
+  };
 
-  const endDate = new Date(dateRange[0].endDate);
-  endDate.setHours(23, 59, 59, 999); // Normalize to end of day
 
-  const isWithinRange = notificationDate >= startDate && notificationDate <= endDate;
-  // console.log('Is Within Range:', isWithinRange);
- 
-  return isWithinRange;
-});
-const sortedNotifications = filteredNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-const totalPages = Math.ceil(sortedNotifications.length / itemsPerPage);
-
-// Get notifications for the current page
-const paginatedNotifications = sortedNotifications.slice(
-  (currentPage - 1) * itemsPerPage,
-  currentPage * itemsPerPage
-);
-
-console.log('Total Pages:', totalPages);
-console.log('Current Page:', currentPage);
-console.log('Filtered Notifications:', filteredNotifications.length);
-console.log('Paginated Notifications:', paginatedNotifications.length);
 
   return (
     <div className='w-[100%]'>
@@ -197,11 +210,13 @@ console.log('Paginated Notifications:', paginatedNotifications.length);
             <DateRangePicker
              editableDateInputs={true}
              ranges={dateRange}
-              onChange={(handleDateChange)}
+        onChange={(ranges) => setDateRange([ranges.selection])}
+             
             />
             <div className='w-[20%] justify-end'></div>
              <button
-              onClick={() => setShowDateRange(false)}
+              onClick={handleApplyFilter}
+
               className="bg-green-500 hover:bg-green-600 text-white mt-4 py-1 px-4 rounded-md text-xs"
             >
               Apply
@@ -216,11 +231,11 @@ console.log('Paginated Notifications:', paginatedNotifications.length);
             <div className="animate-spin border-t-4 border-blue-500 w-10 h-10 rounded-full"></div>
           </div>
         ) :(<div className="bg-white shadow-md  w-full">
-  {paginatedNotifications.length === 0 ? (
+  {notifications.length === 0 ? (
     <div className="text-center py-8 text-gray-500 w-full">No notifications to show</div>
   ) : (
     <ul className="w-full">
-      {paginatedNotifications.map((notification, index) => (
+      {notifications.map((notification, index) => (
         <NotificationItem key={index} notification={notification} />
       ))}
     </ul>
@@ -228,12 +243,13 @@ console.log('Paginated Notifications:', paginatedNotifications.length);
 </div>)}
 {/* Pagination */}
 {loading?<div></div>:( <div className=" flex justify-center mt-4 gap-4 items-center">
- <span className='mr-2' onClick={handlePreviousPage} disabled={currentPage <= 1}><FontAwesomeIcon icon={faArrowLeft} className='text-xl text-gray-600'/></span>
+ <span className='mr-2' onClick={() => handleNextPage(page - 1)}
+          disabled={page === 1}><FontAwesomeIcon icon={faArrowLeft} className='text-xl text-gray-600'/></span>
           
-          <span className="text-xs text-semibold">Page {currentPage} of {totalPages}</span>
+          <span className="text-xs text-semibold">Page {page} of {totalPages}</span>
           <span 
-            onClick={handleNextPage} 
-            disabled={currentPage >= totalPages} 
+            onClick={() => handleNextPage(page + 1)} 
+            disabled={page === totalPages}
             
           >
             <FontAwesomeIcon icon={faArrowRight} className='text-xl text-gray-600'/>
