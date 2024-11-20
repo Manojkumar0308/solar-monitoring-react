@@ -1,4 +1,6 @@
 import React, {  useRef,useEffect} from 'react';
+import {useAuth} from '../context/AuthContext/AuthContext';
+import { useActiveTab } from '../context/ActiveTab/ActiveTab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { } from '@fortawesome/free-brands-svg-icons';
 import {  faUser, faGear, faRightFromBracket} from '@fortawesome/free-solid-svg-icons';
@@ -6,7 +8,9 @@ import { disconnectSocket, initializeSocket } from '../socket'; // Import socket
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Dropdown = ({setIsLoggedIn,isOpen ,closeDropdown,setUser ,user})=> {
+const Dropdown = ({isOpen ,closeDropdown})=> {
+  const {isLoggedIn, logout,user,token } = useAuth();
+  const { setActiveTab } = useActiveTab(); // Access setActiveTab from ActiveTabContext
   const navigate = useNavigate();
   const dropdownRef = useRef(null); // Reference for the dropdown
   
@@ -25,40 +29,33 @@ const Dropdown = ({setIsLoggedIn,isOpen ,closeDropdown,setUser ,user})=> {
   //handle logout
   const handleLogout = async (event) => {
     event.preventDefault(); // Prevent the default behavior
-    try {
-      const user = JSON.parse(localStorage.getItem('user')); // Assuming you stored the token in local storage
-      if (!user) {
-        console.error('User not found in local storage');
-        return;
-      }
-      console.log('token:', user.token);
-      const response = await axios.post('http://localhost:3000/api/user/logout', {}, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      console.log(response.data);
-      // You can also call the disconnectSocket function here
-      
-      if (response.status === 200) {
-        disconnectSocket();
-       
-  
-       const result = localStorage.removeItem('user');
-       localStorage.removeItem('logedIn');
-       console.log('result:', result);
-     
-        closeDropdown();
+    // try {
+    //   if (token) {
+    //     console.log('token:', token);
+    //     const response = await axios.post('http://localhost:3000/api/user/logout', {}, {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     });
+    //     console.log(response.data);
+    //     // You can also call the disconnectSocket function here
         
-        setIsLoggedIn(false);
-        setUser(null);
-      
-        navigate('/', { replace: true });
-      }
-     
-    } catch (error) {
-      console.log(error);
-    }
+    //     if (response.status === 200) {
+    //       disconnectSocket();
+    //       logout(); // AuthContext logout
+    //       closeDropdown();      
+    //       navigate('/', { replace: true });
+    //     }
+    //   } else {
+    //     console.log('No token found',token);
+    //   }
+    // } catch (error) {
+    //   console.log(error.message);
+    // }
+    logout(); // Call the logout function from context
+    setActiveTab(''); // Reset active tab on logout
+    closeDropdown(); // Close the dropdown if applicable
+    navigate('/', { replace: true }); // Redirect to home or login page
   };
 
   useEffect(() => {

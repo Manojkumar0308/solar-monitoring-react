@@ -9,18 +9,17 @@ import DashboardGraphs from "./UserDashboardGraph";
 import {initializeSocket, getSocket } from '../socket';
 import { useState,useEffect } from "react";
 import {motion} from 'framer-motion';
-const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab,activeTab ,setUser,user}) => {
+import { useAuth } from "../context/AuthContext/AuthContext";
+const UserDashBoard = ({ isSidebarOpen, toggleSidebar}) => {
+  const {token,user}=useAuth();
+  console.log('on UserDashBoard user',user?._id);
     const [inverterData, setInverterData] = useState({});
     const [sensorsData, setSensorsData] = useState({ humidity: "NA", temperature: "NA" });
    
-
+console.log('on UserDashBoard token',token);
    
     useEffect(() => {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      if (storedUser) {
-        setUser(storedUser.user);
-      }
-    
+
       // Initialize socket only if it hasn't been initialized yet
       if (!getSocket()) {
         initializeSocket();
@@ -33,7 +32,7 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
         // Listen for real-time data from server
         socket.on("sendInvertersData", (data) => {
           console.log("Received inverter data:", data);
-          if (storedUser?.user?._id === data.customer_id) {
+          if (user?._id === data.customer_id) {
             console.log("Data matches customer:", data);
             setInverterData(data);
           }
@@ -41,7 +40,7 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
     
         socket.on("sendSensorData", (data) => {
           console.log("Received sensors data:", data);
-          if (storedUser?.user?._id === data.customer_id) {
+          if (user?._id === data.customer_id) {
             console.log("Data matches customer:", data);
             setSensorsData(data);
           }
@@ -79,8 +78,8 @@ const UserDashBoard = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTa
   
     return (
         <div className="min-w-full bg-white h-screen flex flex-col">
-            <MobileNavbar setIsLoggedIn={setIsLoggedIn} setUser={setUser}
-        user={user} isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} setActiveTab={setActiveTab} activeTab={activeTab}></MobileNavbar>
+            <MobileNavbar 
+         isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar}></MobileNavbar>
             <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-2 mt-4 p-4">
                 <div className="flex flex-1 flex-col gap-2 h-[32vh] ">
                     <motion.div 

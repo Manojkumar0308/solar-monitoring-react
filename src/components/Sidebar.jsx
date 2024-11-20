@@ -1,11 +1,15 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext/AuthContext';
 import { Link } from 'react-router-dom'; // Import Link
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faTelegram, faTelegramPlane, faWindows } from '@fortawesome/free-brands-svg-icons';
+import {useActiveTab} from '../context/ActiveTab/ActiveTab'
+import {  faTelegramPlane, faWindows } from '@fortawesome/free-brands-svg-icons';
 import { faBell, faCake, faChevronDown, faGear,  faSolarPanel, faStar, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './Dropdown';
 
-const Sidebar = ({setIsLoggedIn, setActiveTab, isSidebarOpen,activeTab,setIsSidebarOpen,setUser,user}) => {
+const Sidebar = ({  isSidebarOpen,setIsSidebarOpen}) => {
+  const { user } = useAuth();
+  const { activeTab, setActiveTab } = useActiveTab(); // Access activeTab and setActiveTab from context
   const [openDropdown, setOpenDropdown] = useState(false);
   
   const toggleDropdown = (event) => {
@@ -26,7 +30,7 @@ const Sidebar = ({setIsLoggedIn, setActiveTab, isSidebarOpen,activeTab,setIsSide
         <button className="block py-2 px-1 w-full text-left text-sm font-semibold">Takyon Networks</button>
         <FontAwesomeIcon icon={faChevronDown} className='text-xs' />
       </div>
-      <Dropdown setIsLoggedIn={setIsLoggedIn} setUser={setUser} user={user} isOpen={openDropdown} closeDropdown={() => setOpenDropdown(false)} />
+      <Dropdown  isOpen={openDropdown} closeDropdown={() => setOpenDropdown(false)} />
       
       <nav className="mt-5 px-4">
         {

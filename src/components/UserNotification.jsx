@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect,useRef,useContext } from 'react';
 import MobileNavbar from "./MobileNavBar";
 import { initializeSocket, getSocket } from '../socket';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,8 +9,11 @@ import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { format } from 'date-fns'; // date-fns का उपयोग
+import { useAuth } from '../context/AuthContext/AuthContext';
 
-const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleSidebar, setActiveTab, activeTab }) => {
+const UserNotification = ({ isSidebarOpen, toggleSidebar }) => {
+  const { user, setUser, isLoggedIn ,token} = useAuth(); // Access user and setUser from AuthContext
+  console.log('On user notification page token:', token);
   const [notifications, setNotifications] = useState([]);
   const [page, setPage] = useState(1); // Current page
   const [totalPages, setTotalPages] = useState(0);
@@ -32,11 +35,10 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
   // Fetch notifications from server
   const fetchNotifications = async (stDate = "", enDate = "") => {
     try {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      console.log('Stored User:', storedUser);
+    
   
-      if (storedUser) {
-        console.log('User Token:', storedUser.token);
+      if (token) {
+      
         setLoading(true);
   
         const requestBody = {
@@ -49,7 +51,7 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
           requestBody, // Request body
           {
             headers: {
-              Authorization: `Bearer ${storedUser.token}`,
+              Authorization: `Bearer ${token}`,
             },
             params: {
               page, // Query parameters
@@ -78,10 +80,7 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
   
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setUser(storedUser.user);
-    }
+  
 
     // Fetch existing notifications on component mount
     if (isFilterApplied) {
@@ -124,7 +123,7 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
       }
     };
     
-  }, [setUser,page,isFilterApplied]);
+  }, [user,page,isFilterApplied]);
  
 
   const handleNextPage = (newPage) => {
@@ -188,13 +187,10 @@ const UserNotification = ({ setIsLoggedIn, setUser, user, isSidebarOpen, toggleS
   return (
     <div className='w-[100%]'>
       <MobileNavbar
-        setIsLoggedIn={setIsLoggedIn}
-        setUser={setUser}
-        user={user}
+     
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
-        setActiveTab={setActiveTab}
-        activeTab={activeTab}
+       
       />
      
       <div className=" mt-6">

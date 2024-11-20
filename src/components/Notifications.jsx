@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MobileNavbar from './MobileNavBar'; // Ensure this is implemented correctly
 import DropdownButton from './DropdownButton';
 
-const Sendnotification = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiveTab, activeTab }) => {
+const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
     const categoryItems = [
         'Option-1',
         'Option-2',
@@ -68,11 +68,8 @@ const Sendnotification = ({setIsLoggedIn, isSidebarOpen, toggleSidebar, setActiv
     return (
         <div className='max-w-full h-screen flex flex-col'>
             <MobileNavbar
-                setIsLoggedIn={setIsLoggedIn}
                 isSidebarOpen={isSidebarOpen}
-                toggleSidebar={toggleSidebar}
-                setActiveTab={setActiveTab}
-                activeTab={activeTab}
+                toggleSidebar={toggleSidebar}    
             />
 
             <div className='h-screen min-w-full bg-white py-8 px-4'>

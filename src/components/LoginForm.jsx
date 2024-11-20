@@ -3,10 +3,14 @@ import React, { useEffect, useState } from 'react';
 import SocialLoginButton from './SocialLoginButton';
 import FormInput from './FormInput';
 import { Link, useNavigate } from 'react-router-dom';
+import {useAuth} from '../context/AuthContext/AuthContext';
+import { useActiveTab } from '../context/ActiveTab/ActiveTab';
 import axios from 'axios';
 import { initializeSocket } from '../socket'; // Import socket functions
 
-const LoginForm = ({ onLogin, setUser}) => {
+const LoginForm = () => {
+  const { login } = useAuth();
+  const { setActiveTab } = useActiveTab();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,22 +32,16 @@ const LoginForm = ({ onLogin, setUser}) => {
       if (response.status === 200) {
         // Initialize socket connection after successful login
   
-  const user =response.data.user;
-  console.log('User role:', user.role); // Console log the role here
-        setUser(user);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        localStorage.setItem('logedIn', true);
-  const userData = JSON.parse(localStorage.getItem('user')); // Get the user data from local storage
-  // console.log('userData:', userData.token); // Now userData should be defined
-       initializeSocket();
-        
-
-        onLogin();
-        if (userData.user.role === 'admin') {
-          navigate('/dashboard', { replace: true });
-        } else {
-          navigate('/userDashboard', { replace: true });
-        }
+  const userData =response.data.user;
+  const userToken = response.data.token; // Get the token from the response
+  console.log('User role:', userData.role); // Console log the role here
+  login(userData, userToken); // Pass user data and token to login
+  initializeSocket(); // Initialize socket connection after successful login
+  
+  // Navigate based on user role
+  const targetPath = userData.role === 'admin' ? '/dashboard' : '/userDashboard';
+  setActiveTab(userData.role === 'admin' ? 'dashboard' : 'userDashboard'); // Set active tab based on user role
+        navigate(targetPath, { replace: true });
       }
     } catch (error) {
       if (error.response) {
