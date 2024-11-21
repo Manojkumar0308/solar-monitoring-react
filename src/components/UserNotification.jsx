@@ -11,7 +11,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { format } from 'date-fns'; // date-fns का उपयोग
 import { useAuth } from '../context/AuthContext/AuthContext';
 
-const UserNotification = ({ isSidebarOpen, toggleSidebar }) => {
+const UserNotification = () => {
   const { user, setUser, isLoggedIn ,token} = useAuth(); // Access user and setUser from AuthContext
   console.log('On user notification page token:', token);
   const [notifications, setNotifications] = useState([]);
@@ -186,12 +186,7 @@ const UserNotification = ({ isSidebarOpen, toggleSidebar }) => {
 
   return (
     <div className='w-[100%]'>
-      <MobileNavbar
-     
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-       
-      />
+      <MobileNavbar/>
      
       <div className=" mt-6">
         <div className='flex items-start justify-between px-4'>

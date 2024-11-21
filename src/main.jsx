@@ -8,7 +8,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
      {/* Wrap AuthProvider here */}
     <AuthProvider>
-    <App />
+    
+      <App />
+      
+   
     </AuthProvider>
   </React.StrictMode>
 );

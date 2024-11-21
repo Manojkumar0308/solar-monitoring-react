@@ -1,7 +1,9 @@
 import React, { useState,useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext/AuthContext';
-import { ActiveTabProvider } from './context/ActiveTab/ActiveTab'; // Import the new context
+import { ActiveTabProvider } from './context/ActiveTab/ActiveTab';
+import {SidebarToggleProvider} from './context/SidebarToggle/SidebarToggleContext'
+import { DropdownProvider } from "./context/DropDownContext/DropdownContext";
 import AuthContainer from "./components/AuthContainer";
 import Sidebar from "./components/Sidebar";
 import Dashboard from './components/Dashboard';
@@ -18,7 +20,7 @@ import 'react-notifications-component/dist/theme.css'; // Make sure this is in y
 import Tables from "./components/Table";
 
 
-const App = ({isSideBarOpen,toggleSidebar}) => {
+const App = () => {
   const { user, setUser, isLoggedIn, setIsLoggedIn,role } = useAuth();
   console.log(user, isLoggedIn); // Check if user is coming from context
  
@@ -32,8 +34,10 @@ const App = ({isSideBarOpen,toggleSidebar}) => {
   }, [user]); 
   return (
     <NotificationProvider>
-        <ActiveTabProvider> {/* Wrap with ActiveTabProvider */}
-       <Router>
+      <SidebarToggleProvider>
+      <ActiveTabProvider> {/* Wrap with ActiveTabProvider */}
+          <DropdownProvider>
+          <Router>
       <div className="h-screen">
       <ReactNotifications />
         {/* Conditionally render the AuthContainer or the main dashboard */}
@@ -41,26 +45,33 @@ const App = ({isSideBarOpen,toggleSidebar}) => {
            <AuthContainer />
         ) : (
           <div className="flex h-screen"> 
-          
-             {isLoggedIn && <Sidebar   />}
+          <DropdownProvider>
+            <Sidebar />           
             <div className="w-full overflow-y-auto">
               <Routes>
                 <Route path="/dashboard" element={<Dashboard  />} />
                 <Route path="/users" element={<Tables  showMobNavBar={true} />} />
                 <Route path="/settings" element={<Settings  />} />
-                <Route path="/profile" element={<Profile isSidebarOpen={isSideBarOpen} toggleSidebar={toggleSidebar} />} />
+                <Route path="/profile" element={<Profile  />} />
                 <Route path="/userDashboard" element={<UserDashBoard  />} />
                 <Route path="/sendnotification" element={<Sendnotification  />}/>
-                <Route path="notifications" element={<UserNotification   showMobNavBar={true} />} />
+                <Route path="notifications" element={<UserNotification  />} />
+                <Route path="support" element={<UserDashBoard />} /> 
                 <Route path="/" element={<AuthContainer />} /> {/* Default route */}
               </Routes>
+
             </div>
-           
+            </DropdownProvider>
           </div>
+          
         )}
       </div>
     </Router>
-    </ActiveTabProvider> 
+          </DropdownProvider>
+    
+    </ActiveTabProvider>
+      </SidebarToggleProvider>
+     
     </NotificationProvider>
    
   );

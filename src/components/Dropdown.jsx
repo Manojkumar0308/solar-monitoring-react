@@ -1,5 +1,7 @@
 import React, {  useRef,useEffect} from 'react';
 import {useAuth} from '../context/AuthContext/AuthContext';
+import { useSidebarToggle } from '../context/SidebarToggle/SidebarToggleContext';
+import { useDropdown } from '../context/DropDownContext/DropdownContext';
 import { useActiveTab } from '../context/ActiveTab/ActiveTab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { } from '@fortawesome/free-brands-svg-icons';
@@ -8,59 +10,38 @@ import { disconnectSocket, initializeSocket } from '../socket'; // Import socket
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Dropdown = ({isOpen ,closeDropdown})=> {
+const Dropdown = ()=> {
   const {isLoggedIn, logout,user,token } = useAuth();
+  const {closeSidebar} = useSidebarToggle();
   const { setActiveTab } = useActiveTab(); // Access setActiveTab from ActiveTabContext
+  const {isDropdownOpen,closeDropdown} = useDropdown();
   const navigate = useNavigate();
   const dropdownRef = useRef(null); // Reference for the dropdown
   
 
   const handleClickOutside = (event) => {
-    event.stopPropagation();
-    
     if (dropdownRef.current && dropdownRef.current.contains(event.target)) {
-      console.log('Inside Click');
-    } else {
-      console.log('Outside Click');
-      closeDropdown(); // Close the dropdown if clicked outside
+        console.log('Inside Click');
+    } else if (isDropdownOpen) {
+        console.log('Outside Click');
+        closeDropdown(); // Close the dropdown if clicked outside
     }
-  };
+};
 
   //handle logout
   const handleLogout = async (event) => {
     event.preventDefault(); // Prevent the default behavior
-    // try {
-    //   if (token) {
-    //     console.log('token:', token);
-    //     const response = await axios.post('http://localhost:3000/api/user/logout', {}, {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     });
-    //     console.log(response.data);
-    //     // You can also call the disconnectSocket function here
-        
-    //     if (response.status === 200) {
-    //       disconnectSocket();
-    //       logout(); // AuthContext logout
-    //       closeDropdown();      
-    //       navigate('/', { replace: true });
-    //     }
-    //   } else {
-    //     console.log('No token found',token);
-    //   }
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
     logout(); // Call the logout function from context
+    disconnectSocket();
     setActiveTab(''); // Reset active tab on logout
     closeDropdown(); // Close the dropdown if applicable
+    closeSidebar();
     navigate('/', { replace: true }); // Redirect to home or login page
   };
 
   useEffect(() => {
    
-    if (isOpen) {
+    if (isDropdownOpen) {
       document.addEventListener('click', handleClickOutside);
     }
     
@@ -68,7 +49,7 @@ const Dropdown = ({isOpen ,closeDropdown})=> {
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isDropdownOpen]);
    
    // The dropdown will automatically open when the parent is clicked
   
@@ -79,7 +60,8 @@ const Dropdown = ({isOpen ,closeDropdown})=> {
     closeDropdown(); // Close all dropdowns after selecting an option
   };
 
-  if(!isOpen){
+  if(!isDropdownOpen){
+    console.log("Is Dropdown Open:", isDropdownOpen);
     return null;
   }
   return (
@@ -98,4 +80,4 @@ const Dropdown = ({isOpen ,closeDropdown})=> {
   );
 }
 
-export default React.memo(Dropdown);
+export default Dropdown;

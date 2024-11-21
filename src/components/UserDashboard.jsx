@@ -10,7 +10,7 @@ import {initializeSocket, getSocket } from '../socket';
 import { useState,useEffect } from "react";
 import {motion} from 'framer-motion';
 import { useAuth } from "../context/AuthContext/AuthContext";
-const UserDashBoard = ({ isSidebarOpen, toggleSidebar}) => {
+const UserDashBoard = () => {
   const {token,user}=useAuth();
   console.log('on UserDashBoard user',user?._id);
     const [inverterData, setInverterData] = useState({});
@@ -54,7 +54,7 @@ console.log('on UserDashBoard token',token);
           socket.off("sendSensorData");
         }
       };
-    }, []);
+    }, [user]);
     
    
   
@@ -78,8 +78,7 @@ console.log('on UserDashBoard token',token);
   
     return (
         <div className="min-w-full bg-white h-screen flex flex-col">
-            <MobileNavbar 
-         isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar}></MobileNavbar>
+            <MobileNavbar/>
             <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-2 mt-4 p-4">
                 <div className="flex flex-1 flex-col gap-2 h-[32vh] ">
                     <motion.div 

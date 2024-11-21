@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import MobNavBar  from './MobileNavBar';
 
-const Users = ({isSidebarOpen,toggleSidebar,setActiveTab,showMobNavBar,activeTab}) => {
+const Users = ({showMobNavBar}) => {
   const Users = [
     { id: 1, date: 'May 9, 2024', name: 'Leslie Alexander', site_name: 'Lucknow,Royal City', status: 'Active' },
     { id: 2, date: 'May 5, 2024', name: 'Michael Foster', site_name: 'Bareilly,Shubhash Nagar', status: 'Unactive' },
@@ -13,14 +13,7 @@ const Users = ({isSidebarOpen,toggleSidebar,setActiveTab,showMobNavBar,activeTab
   return (
     <div className="flex-1  dark:bg-gray-900 min-h-screen">
          {showMobNavBar && (
-        <MobNavBar 
-       
-          isSidebarOpen={isSidebarOpen} 
-          toggleSidebar={toggleSidebar} 
-          setActiveTab={setActiveTab}
-          activeTab={activeTab}
-          
-        />
+        <MobNavBar/>
       )}
       <div className='p-8'>
       <h2 className="text-2xl font-bold mb-6">Recent Users</h2>

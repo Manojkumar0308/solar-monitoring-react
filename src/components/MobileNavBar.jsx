@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBarsStaggered, faClose, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { useSidebarToggle } from '../context/SidebarToggle/SidebarToggleContext';
 import Sidebar from './Sidebar'; // Assuming Sidebar component is imported from another file
 
 // CSS classes for managing open/closed states of the sidebar, can be reused elsewhere
@@ -8,14 +9,7 @@ const sidebarOpenClass = "translate-x-0";
 const sidebarClosedClass = "-translate-x-full";
 
 const MobileNavbar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Function to toggle sidebar visibility
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-
- 
-  };
+  const {isSidebarOpen, toggleSidebar} = useSidebarToggle();
 
   return (
     <div>
@@ -42,11 +36,7 @@ const MobileNavbar = () => {
 
         {/* Sidebar content: Here we reuse the Sidebar component */}
         <div className='overflow-y-auto h-full hide-scrollbar'>
-        <Sidebar 
-  
-  isSidebarOpen={isSidebarOpen} 
-  
-/>
+        <Sidebar/>
 
         </div>
       </div>

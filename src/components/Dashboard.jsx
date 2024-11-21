@@ -4,7 +4,7 @@ import Table from './Table';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTowerCell, faTowerObservation } from '@fortawesome/free-solid-svg-icons';
-const Dashboard = ({ isSidebarOpen, toggleSidebar }) => {
+const Dashboard = () => {
   // Animation settings for the grid items
   const gridItemVariants = {
     hidden: { opacity: 0, x: -100 }, // Start off-screen to the left
@@ -27,15 +27,7 @@ const Dashboard = ({ isSidebarOpen, toggleSidebar }) => {
   return (
     <div className="max-w-full dark:bg-gray-900">
       {/* Use MobileNavbar component */}
-      <MobNavBar 
-      
-       
-        isSidebarOpen={isSidebarOpen} 
-        toggleSidebar={toggleSidebar} 
-        setActiveTab={setActiveTab}
-        activeTab={activeTab}
-        
-      />
+      <MobNavBar/>
 
       {/* Main content */}
       <div className="p-8 max-w-full  overflow-hidden dark:bg-gray-900">

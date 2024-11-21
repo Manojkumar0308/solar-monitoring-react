@@ -2,7 +2,7 @@ import React from "react";
 import MobNavBar from "./MobileNavBar";
 import { motion } from 'framer-motion';
 
-const Profile = ({isSidebarOpen, toggleSidebar}) => {
+const Profile = () => {
 
     const itemVariant = {
         hidden: { opacity: 0, y: -20 },
@@ -22,12 +22,8 @@ const Profile = ({isSidebarOpen, toggleSidebar}) => {
             className="min-w-full bg-gray-100"
         >
             {/* Use MobileNavbar component */}
-            <MobNavBar 
-           
-                isSidebarOpen={isSidebarOpen} 
-                toggleSidebar={toggleSidebar} 
-               
-            />
+            <MobNavBar/>    
+            
 
             <motion.div 
                 className="w-full xl:w-[65%] bg-white p-8 mx-auto">

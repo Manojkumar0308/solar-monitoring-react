@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MobileNavbar from './MobileNavBar'; // Ensure this is implemented correctly
 import DropdownButton from './DropdownButton';
 
-const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
+const Sendnotification = () => {
     const categoryItems = [
         'Option-1',
         'Option-2',
@@ -68,8 +68,7 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
     return (
         <div className='max-w-full h-screen flex flex-col'>
             <MobileNavbar
-                isSidebarOpen={isSidebarOpen}
-                toggleSidebar={toggleSidebar}    
+               
             />
 
             <div className='h-screen min-w-full bg-white py-8 px-4'>
