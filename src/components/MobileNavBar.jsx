@@ -28,18 +28,15 @@ const MobileNavbar = () => {
       </div>
 
       {/* Sidebar for mobile screens */}
-      <div className={`w-2/3 sm:w-[30%] md:w-[30%]  fixed inset-0 z-50 transition-transform transform bg-gray-800 ${isSidebarOpen ? sidebarOpenClass : sidebarClosedClass} lg:hidden`}>
-        {/* Close icon for the sidebar */}
-        <div className='flex justify-end items-center px-4 py-2'>
-          <FontAwesomeIcon icon={faClose} className='text-white text-2xl cursor-pointer' onClick={toggleSidebar} />
-        </div>
+     {isSidebarOpen && <div className={`w-2/3 sm:w-[30%] md:w-[30%]  fixed inset-0 z-50 transition-transform transform bg-gray-800 ${isSidebarOpen ? sidebarOpenClass : sidebarClosedClass} lg:hidden`}>
+      
 
         {/* Sidebar content: Here we reuse the Sidebar component */}
         <div className='overflow-y-auto h-full hide-scrollbar'>
         <Sidebar/>
 
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

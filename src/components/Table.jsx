@@ -1,167 +1,76 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
-import MobNavBar from './MobileNavBar';
-import { Typography } from '@mui/material';
 import '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';  
-import ClearIcon from '@mui/icons-material/Clear';
+import { useUserPlant } from '../context/UserPlantContext/UserPlantContext';
+import { useActiveTab } from '../context/ActiveTab/ActiveTab';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+export default function DataGridDemo({  showMobNavBar }) {
+ const { activeTab } = useActiveTab();
+ console.log('activeTab:', activeTab);
+  const { plantData, loading, currentPage, totalPages, handlePageChange } = useUserPlant();
 
-const formatDate = (date) => {
-  return date.toLocaleString('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
+  // Render loading state
+  if (loading) {
+      return <div className="text-center py-4">Loading...</div>;
+  }
+
+  // Render table
+  return (
+      <div className=" mx-auto px-4 py-8">
+          <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
+              <table className="min-w-full table-auto">
+                  <thead>
+                      <tr className="bg-gray-100 border-b">
+                          
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Plant Name</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Plant ID</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Capacity (KW)</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Location</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Customer Name</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Installation Date</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {plantData.map((user) => (
+                          user.plant_details.map((plant) => (
+                              <tr key={plant._id} className="border-b">
+                                  
+                                  <td className="px-6 py-4 text-sm text-gray-900">{plant.plant_name}</td>
+                                  <td className="px-6 py-4 text-sm text-gray-900">{plant.plant_id}</td>
+                                  <td className="px-6 py-4 text-sm text-gray-900">{plant.capacity_kw}</td>
+                                  <td className="px-6 py-4 text-sm text-gray-900">{plant.location}</td>
+                                  <td className="px-6 py-4 text-sm text-gray-900">{user.first_name} {user.last_name}</td>
+                                  <td className="px-6 py-4 text-sm text-gray-900">
+                                      <span className={`px-2 py-1 rounded-full text-xs ${plant.status === 'active' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-800'}`}>
+                                          {plant.status}
+                                      </span>
+                                  </td>
+                                  <td className="px-6 py-4 text-sm text-gray-900">{new Date(plant.installation_date).toLocaleDateString()}</td>
+                              </tr>
+                          ))
+                      ))}
+                  </tbody>
+              </table>
+          </div>
+
+                 {/* Conditionally render pagination controls */}
+                 {activeTab !== 'dashboard' && (
+                <div className="flex gap-4 justify-center items-center mt-4">
+                   <span className='mr-2' onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}><FontAwesomeIcon icon={faArrowLeft} className='text-xl text-gray-600'/></span>
+          
+          <span className="text-xs text-semibold">Page {currentPage} of {totalPages}</span>
+          <span 
+            onClick={() => handlePageChange(currentPage + 1)} 
+            disabled={currentPage === totalPages}
+            
+          >
+            <FontAwesomeIcon icon={faArrowRight} className='text-xl text-gray-600'/>
+          </span>
+                </div>
+            )}
+      </div>
+  );
 };
 
-const columns = [
-  { field: 'id', headerName: 'ID', width: 90, headerAlign: 'center',  renderCell: (params) => <div className='flex justify-center items-center'>{params.value
-  }</div>,
- },
-  {
-    field: 'siteId',
-    headerName: 'Site-Id',
-    width: 150,
-    editable: false,
-    headerAlign: 'center',
-    renderCell: (params) => <div className='flex justify-center items-center'>{params.value
-    }</div>,
-   
-    
-  },
-  {
-    field: 'siteName',
-    headerName: 'Site Name',
-    width: 150,
-    editable: false,
-    headerAlign: 'center',
-    flex :1,
-    renderCell: (params) => <div className='flex justify-center items-center'>{params.value
-    }</div>,
-   
-  },
-  {
-    field: 'email',
-    headerName: 'Email-Id',
-    width: 150,
-    editable: false,
-    headerAlign: 'center',
-    renderCell: (params) => <div className='flex justify-center items-center'>{params.value
-    }</div>,
-   
-  },
-  {
-    field: 'contact',
-    headerName: 'Contact',
-    width: 150,
-    editable: false,
-    headerAlign: 'center',
-    renderCell: (params) => <div className='flex justify-center items-center'>{params.value
-    }</div>,
-   
-  },
-  {
-    field: 'address',
-    headerName: 'Address',
-    width: 150,
-    editable: false,
-    flex:2,
-    headerAlign: 'center',
-    renderCell: (params) => <div className='flex justify-center items-center' >{params.value}</div>,
-   
-  },
-  {
-    field: 'city',
-    headerName: 'City',
-    width: 110,
-    editable: false,
-    headerAlign: 'center',
-    renderCell: (params) => <div className='flex justify-center items-center'>{params.value
-    }</div>,
-   
-  },
-  {
-    field: 'status',
-    headerName: 'Status',
-    width: 110,
-    editable: false,
-    headerAlign: 'center',
-    renderCell: (params) => <div className='flex items-center justify-center h-full'>
-    {params.value === 'Active' ? (
-      <CheckIcon className='text-green-500' />
-    ) : (
-      <ClearIcon className='text-red-500' />
-    )}
-  </div>
-   
-  },
-  {
-    field: 'createdAt',
-    headerName: 'Created At',
-    type: 'dateTime',
-    width: 180,
-    editable: false,
-    headerAlign: 'center',
-    
-    renderCell: (params) => (
-      <div className='flex justify-center items-center'>
-        {formatDate(new Date(params.value))} {/* Format the date here */}
-      </div>
-    ),
-   
-  },
-  
-];
-
-const rows = [
-  { id: 1, siteId: 'S123', siteName: 'MJSH Plant', email: 'site1@example.com', contact: '1234567890', address: 'Plot-12334, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 2, siteId: 'S124', siteName: 'MJSH Plant', email: 'site2@example.com', contact: '9876543210', address: 'Plot-12335, abc nagar, abc Road', city: 'Noida', status: 'InActive', createdAt: new Date() },
-  { id: 3, siteId: 'S125', siteName: 'MJSH Plant', email: 'site3@example.com', contact: '6543219870', address: 'Plot-12336, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 4, siteId: 'S126', siteName: 'MJSH Plant', email: 'site4@example.com', contact: '3216549870', address: 'Plot-12337, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 5, siteId: 'S127', siteName: 'MJSH Plant', email: 'site5@example.com', contact: '9871236540', address: 'Plot-12338, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 6, siteId: 'S128', siteName: 'MJSH Plant', email: 'site6@example.com', contact: '1472583690', address: 'Plot-12339, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 7, siteId: 'S129', siteName: 'MJSH Plant', email: 'site7@example.com', contact: '2583691470', address: 'Plot-12340, abc nagar, abc Road', city: 'Noida', status: 'InActive', createdAt: new Date() },
-  { id: 8, siteId: 'S130', siteName: 'MJSH Plant', email: 'site8@example.com', contact: '3691472580', address: 'Plot-12341, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 9, siteId: 'S131', siteName: 'MJSH Plant', email: 'site9@example.com', contact: '1473692580', address: 'Plot-12342, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 10, siteId: 'S132', siteName: 'MJSH Plant', email: 'site10@example.com', contact: '2581473690', address: 'Plot-12343, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 11, siteId: 'S133', siteName: 'MJSH Plant', email: 'site11@example.com', contact: '9638527410', address: 'Plot-12344, abc nagar, abc Road', city: 'Noida', status: 'InActive', createdAt: new Date() },
-  { id: 12, siteId: 'S134', siteName: 'MJSH Plant', email: 'site12@example.com', contact: '8527419630', address: 'Plot-12345, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 13, siteId: 'S135', siteName: 'MJSH Plant', email: 'site13@example.com', contact: '7418529630', address: 'Plot-12346, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 14, siteId: 'S136', siteName: 'MJSH Plant', email: 'site14@example.com', contact: '3692581470', address: 'Plot-12347, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-  { id: 15, siteId: 'S137', siteName: 'MJSH Plant', email: 'site15@example.com', contact: '8529637410', address: 'Plot-12348, abc nagar, abc Road', city: 'Noida', status: 'Active', createdAt: new Date() },
-];
-
-export default function DataGridDemo({  showMobNavBar }) {
-  
-  return (
-    <div className=" flex flex-col">
-      {showMobNavBar && (
-        <MobNavBar/>
-      )}
-      {showMobNavBar && (<h1 className='text-3xl font-bold p-8'>Site List</h1>)}
-
-      <Box sx={{ width: '100%',textAlign: 'center' }} className="mt-8 px-8">
-       
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10, // Set initial page size to 10
-              },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-        
-          enableRowSelectionOnClick
-               
-        />
-      </Box>
-    </div>
-  );
-}
