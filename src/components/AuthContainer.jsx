@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import SidePanel from './SidePanel';
 import Signup from './Signup';
-
+import { SignupProvider } from '../context/SignupContext/SignupContext'; // Import SignupProvider
 const AuthContainer = () => {
   const {isLoggedIn,login,user} = useAuth();
   const location = useLocation();
@@ -17,7 +17,7 @@ const AuthContainer = () => {
     <div className="h-screen relative">
       <SidePanel />
       <div className="absolute inset-0 flex justify-center items-center">
-        {location.pathname === '/signup' ? <Signup /> : <LoginForm />}
+        {location.pathname === '/signup' ?<SignupProvider><Signup /></SignupProvider> : <LoginForm />}
       </div>
     </div>
   );

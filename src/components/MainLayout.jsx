@@ -11,6 +11,7 @@ import UserDashBoard from "../components/UserDashboard";
 import Sendnotification from "../components/Notifications";
 import UserNotification from "../components/UserNotification";
 import Tables from "../components/Table";
+import OTPInput  from "../components/Otp";
 import 'react-notifications-component/dist/theme.css'; // Make sure this is in your App.js
 
 import { useSidebarToggle } from '../context/SidebarToggle/SidebarToggleContext';
@@ -34,6 +35,7 @@ export const MainLayout = () => {
                 <Route path="/sendnotification" element={<Sendnotification  />}/>
                 <Route path="notifications" element={<UserNotification  />} />
                 <Route path="support" element={<UserDashBoard />} /> 
+                <Route path="/otp" element={<OTPInput />} />
                 <Route path="/" element={<AuthContainer />} /> {/* Default route */}
             </Routes>
           </div>

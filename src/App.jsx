@@ -1,26 +1,15 @@
-import React, { useState,useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { BrowserRouter as Router } from 'react-router-dom';
 import { useAuth } from './context/AuthContext/AuthContext';
 import { ActiveTabProvider } from './context/ActiveTab/ActiveTab';
 import {SidebarToggleProvider} from './context/SidebarToggle/SidebarToggleContext';
-import { useSidebarToggle } from './context/SidebarToggle/SidebarToggleContext';
-import { UserPlantProvider } from "./context/UserPlantContext/UserPlantContext";
-import { DropdownProvider } from "./context/DropDownContext/DropdownContext";
+import {SignupProvider} from './context/SignupContext/SignupContext';
 import AuthContainer from "./components/AuthContainer";
-import Sidebar from "./components/Sidebar";
-import Dashboard from './components/Dashboard';
 
-import Users from './components/Users';
-import Settings from './components/Settings';
-import Profile from './components/Profile';
-import UserDashBoard from "./components/UserDashboard";
-import Sendnotification from "./components/Notifications";
-import UserNotification from "./components/UserNotification";
 import { ReactNotifications } from 'react-notifications-component';
 import { NotificationProvider } from '../src/context/NotificationContext';  
 import 'react-notifications-component/dist/theme.css'; // Make sure this is in your App.js
 
-import Tables from "./components/Table";
 import { MainLayout } from "./components/MainLayout";
 
 
@@ -45,7 +34,9 @@ const App = () => {
             <div className="h-screen">
               <ReactNotifications />
               {!isLoggedIn ? (
+              
                 <AuthContainer />
+             
               ) : (
                 <MainLayout />
               )}
