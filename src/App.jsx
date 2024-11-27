@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { useAuth } from './context/AuthContext/AuthContext';
 import { ActiveTabProvider } from './context/ActiveTab/ActiveTab';
 import {SidebarToggleProvider} from './context/SidebarToggle/SidebarToggleContext';
-import {SignupProvider} from './context/SignupContext/SignupContext';
 import AuthContainer from "./components/AuthContainer";
 
 import { ReactNotifications } from 'react-notifications-component';
@@ -36,6 +35,8 @@ const App = () => {
               {!isLoggedIn ? (
               
                 <AuthContainer />
+              
+                
              
               ) : (
                 <MainLayout />

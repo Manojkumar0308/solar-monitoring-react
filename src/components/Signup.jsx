@@ -23,17 +23,21 @@ const Signup = () => {
     error,
   } = signUpUser();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    const data = await signup(); // Trigger signup from context
-   
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+    console.log('Form Submitted'); // Debugging form submission
+    await signup(); // Call signup function
   };
+
 
   return (
     <div className="flex flex-col items-center bg-transparent md:w-full w-full justify-center min-h-screen">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">Create Account</h2>
       <p className="text-sm text-gray-600 mb-4">Welcome! Please register your account.</p>
-      <form className="w-full max-w-sm px-4" onSubmit={signup}  autoComplete="off">
+      <form className="w-full max-w-sm px-4" onSubmit={(e) => {
+    e.preventDefault(); // Prevent page reload
+    signup(); // Call the signup function
+  }}  autoComplete="off">
         <FormInput
           type="text"
           label="First Name"
@@ -80,7 +84,7 @@ const Signup = () => {
 
         <button
           type="submit"
-          onClick={signup}
+          // onClick={signup}
           className="w-full bg-blue-600 text-white font-semibold py-2 mt-4 rounded-lg hover:bg-blue-700 transition duration-300"
           disabled={loading} // Disable the button while loading
         >

@@ -1,49 +1,22 @@
-import { de } from 'date-fns/locale';
-import React, { useState, useRef } from 'react';
+import React from 'react';
+import { useOtp } from '../context/OtpContext/OtpContext';
 
- const OTPInput = ({ length = 6 }) => {
-  const [otp, setOtp] = useState(Array(length).fill(''));
-  const inputs = useRef([]);
-
-  const handleChange = (e, index) => {
-    const { value } = e.target;
-
-    // Only allow single digit input
-    if (value.match(/^\d$/)) {
-      const newOtp = [...otp];
-      newOtp[index] = value;
-      setOtp(newOtp);
-
-      // Move focus to the next input
-      if (index < length - 1) {
-        inputs.current[index + 1].focus();
-      }
-    }
-
-    // Move focus to previous input on backspace
-    if (value === '' && index > 0) {
-      inputs.current[index - 1].focus();
-    }
-  };
-
-  const handleKeyDown = (e, index) => {
-    if (e.key === 'Backspace' && otp[index] === '') {
-      // Move focus to previous input on backspace if current input is empty
-      if (index > 0) {
-        inputs.current[index - 1].focus();
-      }
-    }
-  };
+const OTPInput = () => {
+  const { otp, handleChange, handleKeyDown, verifyOtp,inputs } = useOtp();
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      {otp.map((_, index) => (
+    <div className='flex flex-col items-center justify-center gap-2'>
+      <h3 className='text-xl font-semibold'>OTP Verification</h3>
+      <span className='text-sm text-gray-600'>Enter the OTP sent to your email address</span>
+         <div className='mt-4  bg-red-200'>
+         <div  style={{ display: 'flex', justifyContent: 'center' }}>
+      {otp.map((digit, index) => (
         <input
           key={index}
           type="text"
           maxLength="1"
-          value={otp[index]}
-          onChange={(e) => handleChange(e, index)}
+          value={digit}
+          onChange={(e) => handleChange(e.target.value, index)}
           onKeyDown={(e) => handleKeyDown(e, index)}
           ref={(el) => (inputs.current[index] = el)}
           style={{
@@ -58,6 +31,11 @@ import React, { useState, useRef } from 'react';
         />
       ))}
     </div>
+         </div>
+      
+    <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs' onClick={verifyOtp}>Submit</button>
+    </div>
+
   );
 };
 

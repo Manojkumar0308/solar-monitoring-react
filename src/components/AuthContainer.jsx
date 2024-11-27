@@ -4,7 +4,9 @@ import { useLocation } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import SidePanel from './SidePanel';
 import Signup from './Signup';
-import { SignupProvider } from '../context/SignupContext/SignupContext'; // Import SignupProvider
+import OTPInput from './Otp';
+import { SignupProvider } from '../context/SignupContext/SignupContext';
+import {OtpProvider} from '../context/OtpContext/OtpContext';
 const AuthContainer = () => {
   const {isLoggedIn,login,user} = useAuth();
   const location = useLocation();
@@ -17,7 +19,21 @@ const AuthContainer = () => {
     <div className="h-screen relative">
       <SidePanel />
       <div className="absolute inset-0 flex justify-center items-center">
-        {location.pathname === '/signup' ?<SignupProvider><Signup /></SignupProvider> : <LoginForm />}
+      {location.pathname === '/signup' ? (
+          <SignupProvider>
+            
+            <Signup />
+           
+          </SignupProvider>
+        ) : location.pathname === '/otp' ? (
+          <SignupProvider>
+          <OtpProvider>
+          <OTPInput />
+          </OtpProvider>
+          </SignupProvider>
+        ) : (
+          <LoginForm />
+        )}
       </div>
     </div>
   );
