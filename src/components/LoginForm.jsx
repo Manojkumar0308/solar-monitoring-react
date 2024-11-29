@@ -48,6 +48,8 @@ const LoginForm = () => {
   const targetPath = userData.role === 'admin' ? '/dashboard' : '/userDashboard';
   setActiveTab(userData.role === 'admin' ? 'dashboard' : 'userDashboard'); // Set active tab based on user role
         navigate(targetPath, { replace: true });
+      }else {
+        console.log('Login failed:', response.data);
       }
     } catch (error) {
       if (error.response) {

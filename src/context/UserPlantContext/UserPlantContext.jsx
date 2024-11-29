@@ -14,6 +14,7 @@ export const UserPlantProvider = ({ children }) => {
     // Function to fetch user plant details based on page
     const getUserPlantDetails = async (page) => {
         try {
+            console.log('admin token:', token);
             setLoading(true); // Start loading
             const response = await axios.post(
                 'http://localhost:3000/api/admin/get-customer-with-plant-details', 

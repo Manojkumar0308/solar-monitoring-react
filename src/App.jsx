@@ -25,20 +25,17 @@ const App = () => {
     }
   }, [user]); 
   return (
-    <NotificationProvider>
+   
     <SidebarToggleProvider>
       <ActiveTabProvider>
-     
+      
           <Router>
             <div className="h-screen">
-              <ReactNotifications />
-              {!isLoggedIn ? (
-              
-                <AuthContainer />
-              
-                
              
+              {!isLoggedIn ? (
+                <AuthContainer />   
               ) : (
+                
                 <MainLayout />
               )}
             </div>
@@ -46,7 +43,7 @@ const App = () => {
         
       </ActiveTabProvider>
     </SidebarToggleProvider>
-  </NotificationProvider>
+  
    
   );
 };

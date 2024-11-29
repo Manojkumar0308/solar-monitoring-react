@@ -16,22 +16,35 @@ import 'react-notifications-component/dist/theme.css'; // Make sure this is in y
 import { useSidebarToggle } from '../context/SidebarToggle/SidebarToggleContext';
 import { UserPlantProvider } from "../context/UserPlantContext/UserPlantContext";
 import {UserProvider} from "../context/AllUserContext/AllUserContext";
+import { NotificationProvider } from "../context/NotificationContext";
 export const MainLayout = () => {
     const { isSidebarOpen } = useSidebarToggle();
     
     return (
       <div className="flex h-screen">
         <DropdownProvider>
-           <UserPlantProvider>
+           
             {!isSidebarOpen && <Sidebar />}
           
           <div className="w-full overflow-y-auto ">
             <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/users" element={<Tables showMobNavBar={true} />} />
+              <Route path="/dashboard" element={
+                  <UserPlantProvider>
+                <Dashboard /> </UserPlantProvider>} />
+              <Route path="/users" element={
+                <UserPlantProvider>
+                   <Tables showMobNavBar={true} />
+                </UserPlantProvider>
+               
+               
+                } />
               <Route path="/settings" element={<Settings  />} />
                 <Route path="/profile" element={<Profile  />} />
-                <Route path="/userDashboard" element={<UserDashBoard  />} />
+                <Route path="/userDashboard" element={
+                  
+                    <UserDashBoard  />
+                  
+                  } />
                 <Route path="/sendnotification" element={
                  
                   
@@ -39,14 +52,16 @@ export const MainLayout = () => {
                     <Sendnotification  />
                   </UserProvider>
                   }/>
-                <Route path="notifications" element={<UserNotification  />} />
+                <Route path="notifications" element={
+                  <NotificationProvider>  
+                  <UserNotification  /></NotificationProvider>} />
                 <Route path="support" element={<UserDashBoard />} /> 
                 
                 <Route path="/" element={<AuthContainer />} /> {/* Default route */}
             </Routes>
           </div>
            
-       </UserPlantProvider>
+      
         </DropdownProvider>
       </div>
     );
