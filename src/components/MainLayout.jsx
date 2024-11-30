@@ -17,11 +17,26 @@ import { useSidebarToggle } from '../context/SidebarToggle/SidebarToggleContext'
 import { UserPlantProvider } from "../context/UserPlantContext/UserPlantContext";
 import {UserProvider} from "../context/AllUserContext/AllUserContext";
 import { NotificationProvider } from "../context/NotificationContext";
+import {SendNotificationProvider} from '../context/SendNotificationContext/SendNotificationContext';
+import { ToastContainer } from 'react-toastify';
 export const MainLayout = () => {
     const { isSidebarOpen } = useSidebarToggle();
     
     return (
       <div className="flex h-screen">
+        <ToastContainer
+  position="top-right"
+  autoClose={3000}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="colored"
+/>
+
         <DropdownProvider>
            
             {!isSidebarOpen && <Sidebar />}
@@ -45,11 +60,15 @@ export const MainLayout = () => {
                     <UserDashBoard  />
                   
                   } />
+                
                 <Route path="/sendnotification" element={
                  
                   
                   <UserProvider>
-                    <Sendnotification  />
+                      <SendNotificationProvider>
+                      <Sendnotification  />
+                      </SendNotificationProvider>
+                  
                   </UserProvider>
                   }/>
                 <Route path="notifications" element={

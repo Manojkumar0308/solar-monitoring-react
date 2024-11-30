@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import MobileNavbar from './MobileNavBar'; // Ensure this is implemented correctly
 import DropdownButton from './DropdownButton';
-import Example from './JoditEditor';
+import EditorBox from './JoditEditor';
 import { useUsers } from '../context/AllUserContext/AllUserContext'; // Import the custom hook
-
+import { useSendNotification } from '../context/SendNotificationContext/SendNotificationContext';
 const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
     const categoryItems = [
         'Option-1',
@@ -18,18 +18,80 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
     ];
 
     const [selectedUsers, setSelectedUsers] = useState([]);
+    const [selectedUserIds, setSelectedUserIds] = useState([]);
     const { users, loading, error } = useUsers(); // Fetch users from the context
+    const {
+        title,
+        setTitle,
+        message,
+        setMessage,
+        customerIds,
+        setCustomerIds,
+        sendNotification,
+        loading: sending,
+        error: sendError,
+      } = useSendNotification(); // Access context states and methods
 
     const handleUserSelect = (userEmail) => {
-        // Add user email to selectedUsers if not already selected
-        if (!selectedUsers.includes(userEmail)) {
-            setSelectedUsers([...selectedUsers, userEmail]);
-        }
+    const selectedUser=    users.find((user) => user.email === userEmail);
+    if (selectedUser && !selectedUsers.includes(userEmail)) {
+        // Derive the updated states
+        const updatedSelectedUsers = [...selectedUsers, userEmail];
+        const updatedSelectedUserIds = [...customerIds, selectedUser._id];
+        
+        // Update the states
+        setSelectedUsers(updatedSelectedUsers);
+        setCustomerIds(updatedSelectedUserIds);
+        
+        // Log the updated states
+        console.log('Selected User Emails:', updatedSelectedUsers);
+        console.log('Selected User IDs:', updatedSelectedUserIds);
+    } else {
+        console.log('No user selected or user already selected.');
+    }
+       
+      
+       
     };
 
     const handleUserRemove = (userEmail) => {
-        setSelectedUsers(selectedUsers.filter((email) => email !== userEmail));
+      
+        const selectedUser = users.find((user) => user.email === userEmail);
+        if (selectedUser) {
+          // Remove the selected user email and ID from the arrays
+          const updatedSelectedUsers = selectedUsers.filter((userEmail) => userEmail !== selectedUser.email);
+          const updatedSelectedUserIds = customerIds.filter((userId) => userId !== selectedUser._id);
+          
+          // Update the states
+          setSelectedUsers(updatedSelectedUsers);
+          setCustomerIds(updatedSelectedUserIds);
+          
+          // Log the updated states
+          console.log('Selected User Emails:', updatedSelectedUsers);
+          console.log('Selected User IDs:', updatedSelectedUserIds);
+        } else {
+          console.log('No user selected or user already selected.');
+        }
     };
+    const handleSendNotification = async () => {
+        try {
+          await sendNotification(); // Sends the notification
+      
+          // Reset all states
+          setTitle('');
+          setMessage('');
+          setCustomerIds([]);
+          setSelectedUsers([]);
+      
+          // Reset the editor content by passing a blank value
+          const editorElement = document.querySelector('.jodit-wysiwyg');
+          if (editorElement) {
+            editorElement.innerHTML = ''; // Clear the content inside the editor
+          }
+        } catch (error) {
+          console.error('Error sending notification:', error);
+        }
+      };
 
     const getRandomColor = () => {
         const letters = '0123456789ABCDEF';
@@ -69,6 +131,7 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
                         label="Select Users"
                         items={users.map((user) => user.email)} // Map users to email addresses
                         onSelect={handleUserSelect} // Pass handler to dropdown
+                        value = {selectedUsers}
                     />
                 </div>
 
@@ -91,8 +154,30 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
                     ))}
                 </div>
                 <div>
-       
-       <Example placeholder="Enter your text here" />
+        {/* Title Input */}
+        <div className='mt-8'>
+          <label className='block text-lg font-medium mb-2'>Notification Title</label>
+          <input
+            type='text'
+            className='w-full px-3 py-2 border border-gray-300 rounded-md'
+            placeholder='Enter notification title'
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+       <EditorBox placeholder="Enter your text here" />
+
+         {/* Send Notification */}
+         <div className='mt-8'>
+          <button
+            onClick={handleSendNotification}
+            disabled={sending}
+            className='px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-gray-400'
+          >
+            {sending ? 'Sending...' : 'Send Notification'}
+          </button>
+          {sendError && <div className='text-red-500 mt-2'>{sendError}</div>}
+        </div>
       </div>
             </div>
         </div>

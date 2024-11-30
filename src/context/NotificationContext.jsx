@@ -43,7 +43,7 @@ export const NotificationProvider = ({ children }) => {
           stDate, 
         enDate, 
         };
-  
+  console.log('Request Body:', requestBody);
         const response = await axios.post(
           API_URL, // Endpoint
           requestBody, // Request body
@@ -75,21 +75,17 @@ export const NotificationProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-  
-
-    const fetchNotificationsOnChange = async () => {
-      if (token) {
-        // Fetch notifications after login if token is available
-        if (isFilterApplied) {
-          await fetchNotifications(dateRange[0].startDate, dateRange[0].endDate);
-        } else {
-          await fetchNotifications();
-        }
+  const fetchNotificationsOnChange = async () => {
+    if (token) {
+      // Fetch notifications after login if token is available
+      if (isFilterApplied) {
+        await fetchNotifications(format(dateRange[0].startDate,'yyyy-MM-dd'), format(dateRange[0].endDate,'yyyy-MM-dd'));
+      } else {
+        await fetchNotifications();
       }
-    };
-  
+    }
+  };
+  useEffect(() => {
     fetchNotificationsOnChange(); // Call fetch function on token or filter change
     // Initialize socket
     if (!getSocket()) {
@@ -144,11 +140,13 @@ export const NotificationProvider = ({ children }) => {
     setIsFilterApplied(false); // Reset filter application when opening date range
   }
 
-  const handleApplyFilter = () => {
+  const handleApplyFilter =async () => {
     const startDate = format(dateRange[0].startDate, 'yyyy-MM-dd'); 
     const endDate = format(dateRange[0].endDate, 'yyyy-MM-dd');
+    console.log('Start Date:', startDate);
+    console.log('End Date:', endDate);
     setIsFilterApplied(true);
-    fetchNotifications(startDate, endDate);
+    await fetchNotificationsOnChange();
     
     setShowDateRange(false); // Date Range Picker को बंद करना
     
