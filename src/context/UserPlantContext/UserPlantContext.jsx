@@ -38,8 +38,10 @@ export const UserPlantProvider = ({ children }) => {
 
     // Fetch data whenever the current page changes
     useEffect(() => {
-        getUserPlantDetails(currentPage);
-    }, [currentPage]); // Dependency on currentPage to trigger fetching on page change
+        if (token) {
+            getUserPlantDetails(currentPage);
+        }
+    }, [token, currentPage]); // Dependency on currentPage to trigger fetching on page change
 
     // Function to handle page change
     const handlePageChange = (page) => {

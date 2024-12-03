@@ -5,6 +5,7 @@ import DropdownButton from './DropdownButton';
 import EditorBox from './JoditEditor';
 import { useUsers } from '../context/AllUserContext/AllUserContext'; // Import the custom hook
 import { useSendNotification } from '../context/SendNotificationContext/SendNotificationContext';
+import Loader from './Loader';
 const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
     const categoryItems = [
         'Option-1',
@@ -103,7 +104,9 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
     };
 
     if (loading) {
-        return <div>Loading users...</div>;
+        return (
+            <Loader/>
+        );
     }
 
     if (error) {

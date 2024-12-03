@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
         const fetchUsers = async () => {
             try {
                 const response = await fetch('http://localhost:3000/api/user/get-user');
+                console.log('response:', response);
                 const data = await response.json();
                 setUsers(data.users); // Assuming the API returns a field `users` containing an array of user objects
                 setLoading(false);

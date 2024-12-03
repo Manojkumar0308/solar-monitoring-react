@@ -1,5 +1,6 @@
 import React, { useState, useEffect,useRef } from 'react';
 import MobileNavbar from "./MobileNavBar";
+import Loader from './Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { DateRangePicker } from 'react-date-range';
@@ -62,36 +63,49 @@ const UserNotification = () => {
           </div>
         )} 
 
-        
 {loading ? (
-          <div className="flex justify-center items-center py-8">
-            <div className="animate-spin border-t-4 border-blue-500 w-10 h-10 rounded-full"></div>
-          </div>
-        ) :(<div className="bg-white shadow-md  w-full">
-  {notifications.length === 0 ? (
-    <div className="text-center py-8 text-gray-500 w-full">No notifications to show</div>
-  ) : (
+  <Loader />
+) : !loading && (!notifications || parseInt(notifications.length) === 0) ? (
+  <div className="flex justify-center items-center py-8 text-gray-500 w-full">
+    No notifications to show
+  </div>
+) : (
+  <div className="bg-white shadow-md w-full">
     <ul className="w-full">
       {notifications.map((notification, index) => (
         <NotificationItem key={index} notification={notification} />
       ))}
     </ul>
-  )}
-</div>)}
+  </div>
+)}  
 {/* Pagination */}
-{loading?<div></div>:( <div className=" flex justify-center mt-4 gap-4 items-center">
- <span className='mr-2' onClick={() => handleNextPage(page - 1)}
-          disabled={page === 1}><FontAwesomeIcon icon={faArrowLeft} className='text-xl text-gray-600'/></span>
-          
-          <span className="text-xs text-semibold">Page {page} of {totalPages}</span>
-          <span 
-            onClick={() => handleNextPage(page + 1)} 
-            disabled={page === totalPages}
-            
-          >
-            <FontAwesomeIcon icon={faArrowRight} className='text-xl text-gray-600'/>
-          </span>
-        </div>)}
+{!loading && notifications.length > 0 && (
+  <div className="flex justify-center mt-4 gap-4 items-center">
+    <button
+      onClick={() => handleNextPage(page - 1)}
+      disabled={page === 1}
+      className={`text-xl text-gray-600 ${
+        page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-800'
+      }`}
+    >
+      <FontAwesomeIcon icon={faArrowLeft} />
+    </button>
+    
+    <span className="text-xs font-semibold">
+      Page {page} of {totalPages}
+    </span>
+    
+    <button
+      onClick={() => handleNextPage(page + 1)}
+      disabled={page === totalPages}
+      className={`text-xl text-gray-600 ${
+        page === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-800'
+      }`}
+    >
+      <FontAwesomeIcon icon={faArrowRight} />
+    </button>
+  </div>
+)}
       </div>
     </div>
   );

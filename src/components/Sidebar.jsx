@@ -28,7 +28,7 @@ const Sidebar = () => {
    
   };
   
-  const tabs =user && user.role === 'admin' ? ['dashboard', 'users', 'settings', 'profile','sendnotification'] : ['userDashboard', 'settings', 'profile', 'sendnotification','notifications','support'];
+  const tabs =user && user.role === 'admin' ? ['dashboard', 'users', 'settings', 'profile','sendnotification'] : ['userDashboard', 'settings', 'profile', ,'notifications','support'];
   return (
     <div className="flex flex-col h-screen bg-gray-800">
      { isSidebarOpen && <div className='flex justify-end items-center px-4 py-2 bg-gray-800'>

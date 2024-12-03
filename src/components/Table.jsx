@@ -4,6 +4,7 @@ import { useUserPlant } from '../context/UserPlantContext/UserPlantContext';
 import { useActiveTab } from '../context/ActiveTab/ActiveTab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import Loader from './Loader';
 export default function DataGridDemo({  showMobNavBar }) {
  const { activeTab } = useActiveTab();
  console.log('activeTab:', activeTab);
@@ -11,7 +12,9 @@ export default function DataGridDemo({  showMobNavBar }) {
 
   // Render loading state
   if (loading) {
-      return <div className="text-center py-4">Loading...</div>;
+      return (
+    <Loader/>);
+    
   }
 
   // Render table

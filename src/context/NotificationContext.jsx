@@ -62,14 +62,16 @@ export const NotificationProvider = ({ children }) => {
   
         // Ensure the response contains the expected structure
         if (response.data && response.data.data) {
+          setLoading(false);
           setNotifications(response.data.data); // Set notifications
           setTotalPages(response.data.totalPages); // Set total pages
         } else {
           console.error('Unexpected response structure:', response.data);
+          setLoading(false);
         }
       }
   
-      setLoading(false);
+      
     } catch (err) {
       console.error('Error fetching notifications:', err.message);
       setLoading(false);
