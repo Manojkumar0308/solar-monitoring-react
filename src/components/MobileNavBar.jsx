@@ -21,10 +21,10 @@ const MobileNavbar = () => {
           className='ml-3 text-white text-2xl' 
           onClick={toggleSidebar} 
         />
-        <div className='flex gap-1 items-center justify-center'>
+        {/* <div className='flex gap-1 items-center justify-center'>
           <FontAwesomeIcon icon={faRightFromBracket} className='m-auto text-white text-2xl'/>
           <span className='text-sm font-semibold m-auto text-white mr-3'>Logout</span>
-        </div>
+        </div> */}
       </div>
 
       {/* Sidebar for mobile screens */}
