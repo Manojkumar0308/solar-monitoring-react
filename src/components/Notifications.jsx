@@ -7,6 +7,7 @@ import { useUsers } from '../context/AllUserContext/AllUserContext'; // Import t
 import { useSendNotification } from '../context/SendNotificationContext/SendNotificationContext';
 import Loader from './Loader';
 const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
+  const { users, loading, error } = useUsers(); // Fetch users from the context
     const categoryItems = [
         'Option-1',
         'Option-2',
@@ -20,7 +21,7 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
 
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [selectedUserIds, setSelectedUserIds] = useState([]);
-    const { users, loading, error } = useUsers(); // Fetch users from the context
+  
     const {
         title,
         setTitle,
@@ -103,15 +104,14 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
         return color;
     };
 
-    if (loading) {
-        return (
-            <Loader/>
-        );
-    }
+    // if (loading) {
+    //     return (
+    //       console.log('Loading...'),
+    //         <Loader/>
+    //     );
+    // }
 
-    if (error) {
-        return <div>{error}</div>;
-    }
+
 
     return (
         <div className='max-w-full h-screen flex flex-col'>

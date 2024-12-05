@@ -3,7 +3,7 @@ import {Blocks} from 'react-loader-spinner';
 
 const Loader = () => {
     return (
-        <div className="flex justify-center items-center h-screen"> 
+        <div className="flex flex-col justify-center items-center w-full h-screen bg-white"> 
             <Blocks
                 height="80"
                 width="80"
@@ -13,6 +13,7 @@ const Loader = () => {
                 wrapperClass="blocks-wrapper"
                 visible={true}
             />
+            <p className='text-xs text-gray-500 '>Loading.....</p>
         </div>
     );
 };

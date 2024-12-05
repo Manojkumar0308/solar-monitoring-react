@@ -7,13 +7,19 @@ import Signup from './Signup';
 import OTPInput from './Otp';
 import { SignupProvider } from '../context/SignupContext/SignupContext';
 import {OtpProvider} from '../context/OtpContext/OtpContext';
+
+import Loader from './Loader';
 const AuthContainer = () => {
+ 
+
+ 
   const {isLoggedIn,login,user} = useAuth();
+  
   const location = useLocation();
   console.log('isLoggedIn:', isLoggedIn);
   console.log('user:', user);
 
-  if (isLoggedIn) return null; // Redirect logic can be handled here if needed
+  
 
   return (
     <div className="h-screen relative">

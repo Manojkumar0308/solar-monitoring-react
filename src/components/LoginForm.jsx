@@ -10,9 +10,13 @@ import axios from 'axios';
 import { initializeSocket } from '../socket'; // Import socket functions
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-
+import { useLoading } from '../context/LoadingContext/LoadingContext';
+import { set } from 'date-fns';
+import Particles from '@tsparticles/react';
+import Loader from './Loader';
 const LoginForm = () => {
-  const { login } = useAuth();
+  const { login,loading,setLoading } = useAuth();
+  // const [loading, setLoading ]= useState(false);
   const { setActiveTab } = useActiveTab();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -30,6 +34,7 @@ const LoginForm = () => {
     }
 
     try {
+      setLoading(true);
       const response = await axios.post('http://localhost:3000/api/user/login', {
         email,
         password,
@@ -37,7 +42,7 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         // Initialize socket connection after successful login
-  
+       
   const userData =response.data.user;
   const userToken = response.data.token; // Get the token from the response
   console.log('User role:', userData.role); // Console log the role here
@@ -47,11 +52,14 @@ const LoginForm = () => {
   // Navigate based on user role
   const targetPath = userData.role === 'admin' ? '/dashboard' : '/userDashboard';
   setActiveTab(userData.role === 'admin' ? 'dashboard' : 'userDashboard'); // Set active tab based on user role
+
         navigate(targetPath, { replace: true });
       }else {
+      
         console.log('Login failed:', response.data);
       }
     } catch (error) {
+    
       if (error.response) {
         setErrorMessage(error.response.data.message || 'Login failed. Please try again.');
       } else if (error.request) {
@@ -60,11 +68,16 @@ const LoginForm = () => {
         setErrorMessage('Login failed. Please try again later.');
       }
       console.error('Login failed:', error);
+    }finally {
+      setLoading(false); // Stop loader regardless of success or error
     }
   };
-
+if(loading){
+  return <Loader/>
+}
   return (
     <div className="flex flex-col items-center bg-transparent md:w-full w-full justify-center min-h-screen">
+   
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">Hello Again!</h2>
       <p className="text-sm text-gray-600 mb-4">Welcome back! Please login to your account.</p>
 

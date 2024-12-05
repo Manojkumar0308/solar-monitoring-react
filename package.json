@@ -21,6 +21,7 @@
     "@mui/material": "^6.1.4",
     "@mui/x-data-grid": "^7.21.0",
     "@react-google-maps/api": "^2.20.3",
+    "@tsparticles/react": "^3.0.0",
     "axios": "^1.7.7",
     "chart.js": "^4.4.5",
     "date-fns": "^4.1.0",

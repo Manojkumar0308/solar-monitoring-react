@@ -1,23 +1,33 @@
 import React, { useState, useEffect,useRef } from 'react';
 import MobileNavbar from "./MobileNavBar";
-import Loader from './Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { useNotifications } from '../context/NotificationContext';
-
+import { userNotification } from '../context/NotificationContext';
+import { useLoading } from '../context/LoadingContext/LoadingContext';
+import Loader from './Loader';
 const UserNotification = () => {
-  const { notifications, setNotifications ,page, setPage, totalPages, setTotalPages, loading, setLoading, handleNextPage, handleFilterBtnClick, handleApplyFilter, showDateRange, setShowDateRange, dateRange, setDateRange} = useNotifications();
+  const { notifications, page, totalPages, handleNextPage, handleFilterBtnClick, handleApplyFilter, showDateRange, setShowDateRange, dateRange, setDateRange} = userNotification();
   const datePickerRef = useRef();
- 
+  const {loading} = userNotification();
+ console.log('Notifications:', notifications);
+ console.log('Notifications.length`:', notifications.length);
   const handleClickOutside = (event) => {
     if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
       setShowDateRange(false); // Close the date range picker
       
     }
   };
+   // Ensure loading state is handled properly
+   const [isNotificationsFetched, setIsNotificationsFetched] = useState(false);
+
+   useEffect(() => {
+     if (!loading && notifications.length > 0) {
+       setIsNotificationsFetched(true);
+     }
+   }, [loading, notifications.length]);
 
   useEffect(() => {
     if (showDateRange) {
@@ -30,6 +40,17 @@ const UserNotification = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showDateRange]);
+  // Render Loader while notifications are loading
+  if (loading || !isNotificationsFetched) {
+    return <Loader />;
+  }
+  if(notifications.length === 0){
+    return (
+      <div className="flex justify-center items-center py-8 text-gray-500 w-full">
+    No notifications to show
+  </div>
+    )
+  }
 
   return (
     <div className='w-[100%]'>
@@ -63,23 +84,17 @@ const UserNotification = () => {
           </div>
         )} 
 
-{loading ? (
-  <Loader />
-) : !loading && (!notifications || parseInt(notifications.length) === 0) ? (
-  <div className="flex justify-center items-center py-8 text-gray-500 w-full">
-    No notifications to show
-  </div>
-) : (
-  <div className="bg-white shadow-md w-full">
+<div className="bg-white shadow-md w-full">
     <ul className="w-full">
       {notifications.map((notification, index) => (
         <NotificationItem key={index} notification={notification} />
       ))}
     </ul>
   </div>
-)}  
+
+
 {/* Pagination */}
-{!loading && notifications.length > 0 && (
+{notifications.length > 0 && (
   <div className="flex justify-center mt-4 gap-4 items-center">
     <button
       onClick={() => handleNextPage(page - 1)}

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../AuthContext/AuthContext';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useLoading } from '../LoadingContext/LoadingContext';
 const SendNotificationContext = createContext();
 export const SendNotificationProvider = ({ children }) => {
   const { token } = useAuth();
@@ -19,8 +20,9 @@ export const SendNotificationProvider = ({ children }) => {
       return;
     }
 
-    setLoading(true);
+   
     try {
+      setLoading(true);
       const response = await axios.post('http://localhost:3000/api/admin/send-notification', {
         customer_ids: customerIds,
         title: title,
@@ -36,13 +38,16 @@ export const SendNotificationProvider = ({ children }) => {
         toast.error('Error sending notification');
         console.log('Response:', response);
       }
-      setLoading(false);
+      
     } catch (error) {
       setError(error.message);
      
-      setLoading(false);
+     
       toast.error('Failed to send notification: ' + error.message); // Show error toast
+    }finally{
+      setLoading(false);
     }
+    
   };
 
   return (

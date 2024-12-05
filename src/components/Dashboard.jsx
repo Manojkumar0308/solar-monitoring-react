@@ -4,7 +4,12 @@ import Table from './Table';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTowerCell, faTowerObservation } from '@fortawesome/free-solid-svg-icons';
+import { useUserPlant } from '../context/UserPlantContext/UserPlantContext';
+import Loader from './Loader';
+import { useAuth } from '../context/AuthContext/AuthContext';
 const Dashboard = () => {
+const {token,loading}=  useAuth();
+  // const {loading} = useUserPlant();
   // Animation settings for the grid items
   const gridItemVariants = {
     hidden: { opacity: 0, x: -100 }, // Start off-screen to the left
@@ -23,7 +28,9 @@ const Dashboard = () => {
     { title: 'Inactive Sites', value: '10', change: '-4.5%', changeColor: 'text-white', bgColor: '#Ffc107', icon: faTowerObservation,iconColor:'text-[#d9a406]' },
     { title: 'Pageviews', value: '823,067', change: '+21.2%', changeColor: 'text-white', bgColor: '#dc3545', icon: faEye ,iconColor:'text-[#bb2d3b]'},
 ];
-
+// if(loading && !token){
+//   return <Loader/>; 
+// }
   return (
     <div className="max-w-full dark:bg-gray-900">
       {/* Use MobileNavbar component */}

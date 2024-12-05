@@ -1,51 +1,71 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useAuth } from './context/AuthContext/AuthContext';
 import { ActiveTabProvider } from './context/ActiveTab/ActiveTab';
 import {SidebarToggleProvider} from './context/SidebarToggle/SidebarToggleContext';
 import AuthContainer from "./components/AuthContainer";
-
-import { ReactNotifications } from 'react-notifications-component';
-import { NotificationProvider } from '../src/context/NotificationContext';  
 import 'react-notifications-component/dist/theme.css'; // Make sure this is in your App.js
 
 import { MainLayout } from "./components/MainLayout";
+import Loader from "./components/Loader";
 
 
 const App = () => {
-  const { user, setUser, isLoggedIn, setIsLoggedIn,role } = useAuth();
-  console.log(user, isLoggedIn); // Check if user is coming from context
-  // const {isSidebarOpen} = useSidebarToggle();
+  const {loading  } = useAuth();
+const isLogedIn = sessionStorage.getItem('logedIn');
  
-  useEffect(() => {
-    if (user) {
-      // Set the active tab based on user role
-      console.log(user.role);
-      // setActiveTab(user.role === 'admin' ? 'dashboard' : 'userDashboard');
-    }
-  }, [user]); 
-  return (
-   
-    <SidebarToggleProvider>
-      <ActiveTabProvider>
-      
-          <Router>
-            <div className="h-screen">
-             
-              {!isLoggedIn ? (
-                <AuthContainer />   
-              ) : (
-                
-                <MainLayout />
-              )}
-            </div>
-          </Router>
+// if(loading&& isLogedIn){
+//   return(
+//     <Loader/>
+//   )
+// }
+  if(!isLogedIn){
+    return(
+      <SidebarToggleProvider>
+        <ActiveTabProvider>
         
-      </ActiveTabProvider>
-    </SidebarToggleProvider>
-  
-   
-  );
+            <Router>
+              <div className="h-screen">
+             
+             
+                  <AuthContainer />   
+            
+             
+              </div>
+            </Router>
+          
+        </ActiveTabProvider>
+      </SidebarToggleProvider>
+       
+      
+    );
+  }
+ 
+    return (
+ 
+
+      <SidebarToggleProvider>
+        <ActiveTabProvider>
+        
+            <Router>
+              <div className="h-screen">
+             
+           
+                  
+                  <MainLayout />
+              
+              </div>
+            </Router>
+          
+        </ActiveTabProvider>
+      </SidebarToggleProvider>
+     
+    
+     
+    );
+
+ 
+
 };
 
 export default App;

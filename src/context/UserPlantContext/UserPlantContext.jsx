@@ -1,13 +1,15 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../AuthContext/AuthContext';
-
+import { useLoading } from '../LoadingContext/LoadingContext';
+import { use } from 'framer-motion/client';
 const UserPlantContext = createContext();
 
 export const UserPlantProvider = ({ children }) => {
     const { token } = useAuth();
+  const [loading, setLoading]=  useState(false);
     const [plantData, setPlantData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1); // State for current page
     const [totalPages, setTotalPages] = useState(1); // State for total pages
 
@@ -49,7 +51,7 @@ export const UserPlantProvider = ({ children }) => {
     };
 
     return (
-        <UserPlantContext.Provider value={{ plantData, loading, currentPage, totalPages, handlePageChange }}>
+        <UserPlantContext.Provider value={{ plantData,loading,currentPage, totalPages, handlePageChange }}>
             {children}
         </UserPlantContext.Provider>
     );

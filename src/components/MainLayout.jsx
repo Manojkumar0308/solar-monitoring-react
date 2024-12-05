@@ -1,87 +1,100 @@
-import React, {  } from "react";
+import React, { Suspense, lazy } from "react";
 import { Route, Routes } from 'react-router-dom';
-// import { useSidebarToggle } from './context/SidebarToggle/SidebarToggleContext';
-import { DropdownProvider } from "../context/DropDownContext/DropdownContext";
-import AuthContainer from "../components/AuthContainer";
-import Sidebar from "../components/Sidebar";
-import Dashboard from '../components/Dashboard';
-import Settings from '../components/Settings';
-import Profile from '../components/Profile';
-import UserDashBoard from "../components/UserDashboard";
-import Sendnotification from "../components/Notifications";
-import UserNotification from "../components/UserNotification";
-import Tables from "../components/Table";
-import 'react-notifications-component/dist/theme.css'; // Make sure this is in your App.js
-
 import { useSidebarToggle } from '../context/SidebarToggle/SidebarToggleContext';
+import { DropdownProvider } from "../context/DropDownContext/DropdownContext";
 import { UserPlantProvider } from "../context/UserPlantContext/UserPlantContext";
-import {UserProvider} from "../context/AllUserContext/AllUserContext";
+import { UserProvider } from "../context/AllUserContext/AllUserContext";
 import { NotificationProvider } from "../context/NotificationContext";
-import {SendNotificationProvider} from '../context/SendNotificationContext/SendNotificationContext';
+import { SendNotificationProvider } from '../context/SendNotificationContext/SendNotificationContext';
 import { ToastContainer } from 'react-toastify';
-export const MainLayout = () => {
-    const { isSidebarOpen } = useSidebarToggle();
-    
-    return (
-      <div className="flex h-screen">
-        <ToastContainer
-  position="top-right"
-  autoClose={3000}
-  hideProgressBar={false}
-  newestOnTop={false}
-  closeOnClick
-  rtl={false}
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-  theme="colored"
-/>
 
-        <DropdownProvider>
-           
-            {!isSidebarOpen && <Sidebar />}
-          
-          <div className="w-full overflow-y-auto ">
+// Lazily load components
+const Sidebar = lazy(() => import("../components/Sidebar"));
+const Dashboard = lazy(() => import('../components/Dashboard'));
+const Settings = lazy(() => import('../components/Settings'));
+const Profile = lazy(() => import('../components/Profile'));
+const UserDashBoard = lazy(() => import("../components/UserDashboard"));
+const Sendnotification = lazy(() => import("../components/Notifications"));
+const UserNotification = lazy(() => import("../components/UserNotification"));
+const Tables = lazy(() => import("../components/Table"));
+const Loader = lazy(() => import("../components/Loader"));
+const AuthContainer = lazy(() => import("../components/AuthContainer"));
+
+export const MainLayout = () => {
+  const { isSidebarOpen } = useSidebarToggle();
+  const isLogedIn = sessionStorage.getItem('logedIn'); // Check login status
+
+  if (!isLogedIn) {
+    return <AuthContainer />;
+  }
+
+  return (
+    <div className="flex h-screen">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      <DropdownProvider>
+        {/* Lazy load Sidebar if not open */}
+        {/* <Suspense fallback={<Loader />}> */}
+          {!isSidebarOpen && <Sidebar />}
+        {/* </Suspense> */}
+
+        <div className="w-full overflow-y-auto">
+          {/* Wrap Routes with Suspense for lazy-loaded components */}
+          <Suspense fallback={<Loader />}>
             <Routes>
-              <Route path="/dashboard" element={
+              <Route
+                path="/dashboard"
+                element={
                   <UserPlantProvider>
-                <Dashboard /> </UserPlantProvider>} />
-              <Route path="/users" element={
-                <UserPlantProvider>
-                   <Tables showMobNavBar={true} />
-                </UserPlantProvider>
-               
-               
-                } />
-              <Route path="/settings" element={<Settings  />} />
-                <Route path="/profile" element={<Profile  />} />
-                <Route path="/userDashboard" element={
-                  
-                    <UserDashBoard  />
-                  
-                  } />
-                
-                <Route path="/sendnotification" element={
-                 
-                  
+                    <Dashboard />
+                  </UserPlantProvider>
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <UserPlantProvider>
+                    <Tables showMobNavBar={true} />
+                  </UserPlantProvider>
+                }
+              />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/userDashboard" element={<UserDashBoard />} />
+              <Route
+                path="/sendnotification"
+                element={
                   <UserProvider>
-                      <SendNotificationProvider>
-                      <Sendnotification  />
-                      </SendNotificationProvider>
-                  
+                    <SendNotificationProvider>
+                      <Sendnotification />
+                    </SendNotificationProvider>
                   </UserProvider>
-                  }/>
-                <Route path="notifications" element={
-                  <NotificationProvider>  
-                  <UserNotification  /></NotificationProvider>} />
-                <Route path="support" element={<UserDashBoard />} /> 
-                
-                <Route path="/" element={<AuthContainer />} /> {/* Default route */}
+                }
+              />
+              <Route
+                path="notifications"
+                element={
+                  <NotificationProvider>
+                    <UserNotification />
+                  </NotificationProvider>
+                }
+              />
+              <Route path="support" element={<UserDashBoard />} />
+              <Route path="/" element={<AuthContainer />} /> {/* Default route */}
             </Routes>
-          </div>
-           
-      
-        </DropdownProvider>
-      </div>
-    );
-  };
+          </Suspense>
+        </div>
+      </DropdownProvider>
+    </div>
+  );
+};

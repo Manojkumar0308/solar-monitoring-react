@@ -5,7 +5,7 @@ import { initializeSocket, getSocket } from '../socket';
 import { format } from 'date-fns';
 const NotificationContext = createContext();
 import axios from 'axios';
-
+import { useLoading } from './LoadingContext/LoadingContext';
 export const useNotifications = () => {
   return useContext(NotificationContext);
 };
@@ -33,11 +33,11 @@ export const NotificationProvider = ({ children }) => {
   const API_URL = "http://localhost:3000/api/admin/get-notification";
   const fetchNotifications = async (stDate = "", enDate = "") => {
     try {
-    
+      setLoading(true);
   
       if (token) {
       
-        setLoading(true);
+       
   
         const requestBody = {
           stDate, 
@@ -61,19 +61,21 @@ export const NotificationProvider = ({ children }) => {
         console.log('API Response:', response.data);
   
         // Ensure the response contains the expected structure
-        if (response.data && response.data.data) {
-          setLoading(false);
+        if (response.status === 200) {
+         
           setNotifications(response.data.data); // Set notifications
           setTotalPages(response.data.totalPages); // Set total pages
         } else {
           console.error('Unexpected response structure:', response.data);
-          setLoading(false);
+         
         }
       }
   
       
     } catch (err) {
       console.error('Error fetching notifications:', err.message);
+      
+    }finally{
       setLoading(false);
     }
   };
@@ -159,3 +161,5 @@ export const NotificationProvider = ({ children }) => {
     </NotificationContext.Provider>
   );
 };
+
+export const userNotification = () => useContext(NotificationContext);

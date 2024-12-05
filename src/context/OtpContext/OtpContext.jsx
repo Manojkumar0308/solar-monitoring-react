@@ -3,11 +3,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { set } from 'date-fns';
 import {signUpUser} from '../SignupContext/SignupContext';
+import { useLoading } from '../LoadingContext/LoadingContext';
 const OtpContext = createContext();
 
 export const OtpProvider = ({ length = 6, children }) => {
   const [otp, setOtp] = useState(Array(length).fill(''));
-  const [loading,setLoading] = useState(false);
+  const {loading,setLoading} = useLoading();
   const inputs = useRef([]);
 // Accessing regEmail from SignupContext
 const { regEmail } = signUpUser();  // Destructure regEmail from context
@@ -59,15 +60,17 @@ const navigate = useNavigate();
       console.log(' Response:', response);
       if (response?.status === 200) {
         console.log('OTP verified. Navigating to dashboard...');
-        setLoading(false);
+      
         navigate('/login', { replace: true });
       }else{
-        setLoading(false);
+        
         console.log('OTP verification failed.');
       }
     } catch (err) {
-        setLoading(false);
+       
       console.log(err.message);
+    }finally{
+      setLoading(false);
     }
   };
 

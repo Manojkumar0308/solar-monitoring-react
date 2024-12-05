@@ -10,8 +10,9 @@ import {initializeSocket, getSocket } from '../socket';
 import { useState,useEffect } from "react";
 import {motion} from 'framer-motion';
 import { useAuth } from "../context/AuthContext/AuthContext";
+import Loader from "./Loader";
 const UserDashBoard = () => {
-  const {token,user}=useAuth();
+  const {token,user,loading}=useAuth();
   console.log('on UserDashBoard user',user?._id);
     const [inverterData, setInverterData] = useState({});
     const [sensorsData, setSensorsData] = useState({ humidity: "NA", temperature: "NA" });
@@ -75,7 +76,11 @@ console.log('on UserDashBoard token',token);
         { icon: faPowerOff, value: "2.6 m/s", label: "Voltage", duration: 4.9 },
     ];
 
-  
+  if(loading){ 
+    return (
+    <Loader/>
+    );
+  }
     return (
         <div className="min-w-full bg-white h-screen flex flex-col">
             <MobileNavbar/>
