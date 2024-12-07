@@ -104,15 +104,6 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
         return color;
     };
 
-    // if (loading) {
-    //     return (
-    //       console.log('Loading...'),
-    //         <Loader/>
-    //     );
-    // }
-
-
-
     return (
         <div className='max-w-full h-screen flex flex-col'>
             <MobileNavbar

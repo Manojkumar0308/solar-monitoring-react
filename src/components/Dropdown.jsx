@@ -8,6 +8,7 @@ import { } from '@fortawesome/free-brands-svg-icons';
 import {  faUser, faGear, faRightFromBracket} from '@fortawesome/free-solid-svg-icons';
 import { disconnectSocket, initializeSocket } from '../socket'; // Import socket functions
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const Dropdown = ()=> {
@@ -33,10 +34,11 @@ const Dropdown = ()=> {
     event.preventDefault(); // Prevent the default behavior
     logout(); // Call the logout function from context
     disconnectSocket();
-    setActiveTab(''); // Reset active tab on logout
+    // setActiveTab(''); // Reset active tab on logout
     closeDropdown(); // Close the dropdown if applicable
     closeSidebar();
-    navigate('/', { replace: true }); // Redirect to home or login page
+    // toast.dismiss();  // Dismiss any existing toasts
+    // navigate('/', { replace: true }); // Redirect to home or login page
   };
 
   useEffect(() => {

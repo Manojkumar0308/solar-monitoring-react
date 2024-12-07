@@ -6,7 +6,7 @@ const Loader = () => {
         <div className="flex flex-col justify-center items-center w-full h-screen bg-white"> 
             <Blocks
                 height="80"
-                width="80"
+                width="80"      
                 color="#4fa94d"
                 ariaLabel="blocks-loading"
                 wrapperStyle={{}}

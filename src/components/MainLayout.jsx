@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy,useEffect,useState } from "react";
 import { Route, Routes } from 'react-router-dom';
 import { useSidebarToggle } from '../context/SidebarToggle/SidebarToggleContext';
 import { DropdownProvider } from "../context/DropDownContext/DropdownContext";
@@ -7,7 +7,8 @@ import { UserProvider } from "../context/AllUserContext/AllUserContext";
 import { NotificationProvider } from "../context/NotificationContext";
 import { SendNotificationProvider } from '../context/SendNotificationContext/SendNotificationContext';
 import { ToastContainer } from 'react-toastify';
-
+import { useAuth } from "../context/AuthContext/AuthContext";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 // Lazily load components
 const Sidebar = lazy(() => import("../components/Sidebar"));
 const Dashboard = lazy(() => import('../components/Dashboard'));
@@ -23,8 +24,7 @@ const AuthContainer = lazy(() => import("../components/AuthContainer"));
 export const MainLayout = () => {
   const { isSidebarOpen } = useSidebarToggle();
   const isLogedIn = sessionStorage.getItem('logedIn'); // Check login status
-
-  if (!isLogedIn) {
+  if (!isLogedIn ) {
     return <AuthContainer />;
   }
 
@@ -94,6 +94,7 @@ export const MainLayout = () => {
             </Routes>
           </Suspense>
         </div>
+       
       </DropdownProvider>
     </div>
   );

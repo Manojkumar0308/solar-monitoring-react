@@ -1,5 +1,5 @@
 // LoginForm.js
-import React, { useEffect, useState } from 'react';
+import React, { useState ,useRef,useEffect} from 'react';
 import SocialLoginButton from './SocialLoginButton';
 import FormInput from './FormInput';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,10 +10,12 @@ import axios from 'axios';
 import { initializeSocket } from '../socket'; // Import socket functions
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { useLoading } from '../context/LoadingContext/LoadingContext';
-import { set } from 'date-fns';
-import Particles from '@tsparticles/react';
 import Loader from './Loader';
+import { toast } from 'react-toastify';
+import { Dialog, CircularProgress, Box , DialogActions, DialogContent, DialogTitle, Button, } from '@mui/material'; // Material-UI imports
+import { set } from 'date-fns';
+
+import 'react-toastify/dist/ReactToastify.css';
 const LoginForm = () => {
   const { login,loading,setLoading } = useAuth();
   // const [loading, setLoading ]= useState(false);
@@ -21,62 +23,74 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [shakeDialog, setShakeDialog] = useState(false);  // State to handle shake effect
   const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
-
+  const [dialogMessage, setDialogMessage] = useState('');  // Dialog message state
+  const [dialogOpen, setDialogOpen] = useState(false);  // State to manage dialog visibility
+  const dialogRef = useRef();
   // const isPasswordField = type === 'password';
 
   const handleLoginClick = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setErrorMessage('Email and password are required.');
+      setDialogMessage(`${!email?"email can't be empty":"password can't be empty"}`);
+      setDialogOpen(true);
+     
       return;
     }
 
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:3000/api/user/login', {
+     const  response = await axios.post('http://localhost:3000/api/user/login', {
         email,
         password,
-      });
-
-      if (response.status === 200) {
-        // Initialize socket connection after successful login
-       
+      },{
+        headers: {
+          'Content-Type': 'application/json', // Make sure content type is set correctly
+        },
+     });
+     setLoading(false); 
+     console.log(response);  
+      if (response.status === 200) {  
   const userData =response.data.user;
   const userToken = response.data.token; // Get the token from the response
+ 
   console.log('User role:', userData.role); // Console log the role here
   login(userData, userToken); // Pass user data and token to login
+  sessionStorage.setItem('logedIn', true);
   initializeSocket(); // Initialize socket connection after successful login
-  
-  // Navigate based on user role
-  const targetPath = userData.role === 'admin' ? '/dashboard' : '/userDashboard';
-  setActiveTab(userData.role === 'admin' ? 'dashboard' : 'userDashboard'); // Set active tab based on user role
-
-        navigate(targetPath, { replace: true });
-      }else {
-      
-        console.log('Login failed:', response.data);
-      }
-    } catch (error) {
-    
-      if (error.response) {
-        setErrorMessage(error.response.data.message || 'Login failed. Please try again.');
-      } else if (error.request) {
-        setErrorMessage('No response from server. Please check your network connection.');
-      } else {
-        setErrorMessage('Login failed. Please try again later.');
-      }
-      console.error('Login failed:', error);
-    }finally {
-      setLoading(false); // Stop loader regardless of success or error
-    }
-  };
-if(loading){
-  return <Loader/>
+   setActiveTab(userData.role === 'admin' ? 'dashboard' : 'userDashboard'); 
+      const targetPath = userData.role === 'admin' ? '/dashboard' : '/userDashboard';
+      navigate(targetPath, { replace: true });
+ 
+  } else {
+    // Login failed (invalid credentials)
+    setDialogMessage('Wrong Credentials');
+    setShakeDialog(true);  
+    setDialogOpen(true);
+  }
+} catch (error) {
+  setLoading(false);
+  console.log('Login error:', error);
+  setDialogMessage(`${error.message}`);
+  setShakeDialog(true);  
+  setDialogOpen(true);
 }
+  
+  };
+  
+
+useEffect(() => {
+  if (loading && dialogRef.current) {
+    dialogRef.current.focus();
+  }
+}, [loading]);
+
+
   return (
-    <div className="flex flex-col items-center bg-transparent md:w-full w-full justify-center min-h-screen">
+    <div className={`flex flex-col items-center bg-transparent md:w-full w-full justify-center min-h-screen `}>
+
+
    
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">Hello Again!</h2>
       <p className="text-sm text-gray-600 mb-4">Welcome back! Please login to your account.</p>
@@ -111,7 +125,8 @@ if(loading){
         </div>
         
         <button type="submit" onClick={handleLoginClick} className="w-full bg-blue-500 text-white font-semibold py-2 mt-4 rounded-lg hover:bg-blue-700 transition duration-300">
-          Login
+          {loading ? 'Logging in...' : 'Login'}
+
         </button>
         
         <p className="text-center text-gray-500 my-4">or</p>
@@ -121,6 +136,29 @@ if(loading){
           Don't have an account? <Link to="/signup" className="text-blue-500 md:text-white hover:underline">Sign up</Link>
         </p>
       </form>
+
+
+        {/* Error Dialog */}
+        <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} aria-labelledby="login-dialog-title"  className={shakeDialog ? 'animate-shake' : ''}>
+        <DialogTitle className = 'text-red-500 text-semibold' id="login-dialog-title">{dialogMessage.includes('Success') ? 'Success' : 'Error'}</DialogTitle>
+        <DialogContent>
+          <p className='text-xs'>{dialogMessage}</p>
+          <p className={`${(!email || !password) ? 'hidden' : 'block'} text-red-500 text-xs`}> Please login with correct credentials.</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)} color="primary" className='text-xs'>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* Loading Dialog */}
+      <Dialog open={loading}  onClose={() => setLoading(false)} closeAfterTransition={false}
+          ref={dialogRef} aria-labelledby="loading-dialog-title">
+        <Box display="flex" flexDirection="column" alignItems="center" p={3}>
+          <CircularProgress />
+          <p className="mt-2 text-gray-700">Logging in...</p>
+        </Box>
+      </Dialog>
     </div>
   );
 };

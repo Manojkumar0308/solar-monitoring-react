@@ -63,6 +63,9 @@ if(plantData.length > 0) {
                           </tr>
                       </thead>
                       <tbody>
+                  
+                        
+                       
                           {plantData.map((user) => (
                               user.plant_details.map((plant) => (
                                   <tr key={plant._id} className="border-b">

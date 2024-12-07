@@ -10,26 +10,17 @@ import {OtpProvider} from '../context/OtpContext/OtpContext';
 
 import Loader from './Loader';
 const AuthContainer = () => {
- 
-
- 
   const {isLoggedIn,login,user} = useAuth();
-  
   const location = useLocation();
   console.log('isLoggedIn:', isLoggedIn);
   console.log('user:', user);
-
-  
-
   return (
     <div className="h-screen relative">
       <SidePanel />
       <div className="absolute inset-0 flex justify-center items-center">
       {location.pathname === '/signup' ? (
-          <SignupProvider>
-            
-            <Signup />
-           
+          <SignupProvider>      
+            <Signup />   
           </SignupProvider>
         ) : location.pathname === '/otp' ? (
           <SignupProvider>
@@ -41,6 +32,7 @@ const AuthContainer = () => {
           <LoginForm />
         )}
       </div>
+     
     </div>
   );
 };
