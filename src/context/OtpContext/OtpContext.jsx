@@ -4,15 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import { set } from 'date-fns';
 import {signUpUser} from '../SignupContext/SignupContext';
 import { useLoading } from '../LoadingContext/LoadingContext';
+import { useDialog } from '../DialogContext/DialogContext';
 const OtpContext = createContext();
 
 export const OtpProvider = ({ length = 6, children }) => {
   const [otp, setOtp] = useState(Array(length).fill(''));
-  const {loading,setLoading} = useLoading();
+  // const {loading,setLoading} = useLoading();
   const inputs = useRef([]);
 // Accessing regEmail from SignupContext
 const { regEmail } = signUpUser();  // Destructure regEmail from context
+const { showDialog, hideDialog } = useDialog();
 const navigate = useNavigate();
+
   // Handle input changes
    
   const handleChange = (value, index) => {
@@ -50,27 +53,38 @@ const navigate = useNavigate();
    };
   const verifyOtp = async () => {
     try {
+      showDialog({ type: 'loading', message: 'Verifying...' });
         console.log('reqbody  :', reqbody);
-      setLoading(true);
+     
       const response = await axios.post(
-        'http://localhost:3000/api/user/verify-email',
+        'http://192.168.1.238:3000/api/user/verify-email',
         reqbody
       );
       console.log('reqbody  :', reqbody);
       console.log(' Response:', response);
+      hideDialog(); // Hide loading dialog
       if (response?.status === 200) {
         console.log('OTP verified. Navigating to dashboard...');
       
         navigate('/login', { replace: true });
       }else{
-        
+        showDialog({
+          type: 'message',
+          title: 'Error',
+          message: 'Wrong Otp',
+          actions: [{ label: 'Close', onClick: hideDialog }],
+        });
+      
         console.log('OTP verification failed.');
       }
-    } catch (err) {
-       
-      console.log(err.message);
-    }finally{
-      setLoading(false);
+    } catch (error) {
+      showDialog({
+        type: 'message',
+        title: 'Error',
+        message: error.response?.data?.message || 'An unexpected error occurred.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
+      console.log(error.message);
     }
   };
 

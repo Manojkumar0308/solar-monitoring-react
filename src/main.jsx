@@ -7,8 +7,10 @@ import {AuthProvider} from '../src/context/AuthContext/AuthContext'
 import {PasswordVisibilityProvider} from '../src/context/PasswordVisibilityContext/PasswordVisibilityContext'
 import {LoadingProvider} from '../src/context/LoadingContext/LoadingContext'
 import { ActiveTabProvider } from '../src/context/ActiveTab/ActiveTab';
+import { DialogProvider } from '../src/context/DialogContext/DialogContext';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Router>
+    <DialogProvider>
     <ActiveTabProvider>
         <AuthProvider>
           <PasswordVisibilityProvider>
@@ -16,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           </PasswordVisibilityProvider>
         </AuthProvider>
     </ActiveTabProvider>
+    </DialogProvider>
   </Router>
 
 );

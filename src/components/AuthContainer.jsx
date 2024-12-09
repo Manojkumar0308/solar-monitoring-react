@@ -7,7 +7,7 @@ import Signup from './Signup';
 import OTPInput from './Otp';
 import { SignupProvider } from '../context/SignupContext/SignupContext';
 import {OtpProvider} from '../context/OtpContext/OtpContext';
-
+import ParticleBackground from './ParticleBackground';
 import Loader from './Loader';
 const AuthContainer = () => {
   const {isLoggedIn,login,user} = useAuth();
@@ -16,7 +16,8 @@ const AuthContainer = () => {
   console.log('user:', user);
   return (
     <div className="h-screen relative">
-      <SidePanel />
+      {/* <SidePanel /> */}
+      <ParticleBackground />
       <div className="absolute inset-0 flex justify-center items-center">
       {location.pathname === '/signup' ? (
           <SignupProvider>      

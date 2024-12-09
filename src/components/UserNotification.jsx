@@ -46,9 +46,14 @@ const UserNotification = () => {
   }
   if(notifications.length === 0){
     return (
-      <div className="flex justify-center items-center py-8 text-gray-500 w-full">
+     <div >
+  <MobileNavbar/>
+  <div className="flex justify-center items-center py-8 text-gray-500 w-full">
+       
     No notifications to show
   </div>
+     </div>
+      
     )
   }
 
@@ -65,21 +70,22 @@ const UserNotification = () => {
         {showDateRange && (
           <div className="mb-4">
             <div ref={datePickerRef}
-            className="absolute z-10 right-0 bg-white shadow-lg p-4 rounded-md">
+            className="absolute z-10 right-0 bg-white shadow-lg p-4 rounded-md flex flex-col ">
             <DateRangePicker
-             editableDateInputs={true}
+             scroll={{enabled: true}}
+           
              ranges={dateRange}
         onChange={(ranges) => setDateRange([ranges.selection])}
              
             />
-            <div className='w-[20%] justify-end'></div>
-             <button
+           <div className='flex justify-end items-center mb-2'><button
               onClick={handleApplyFilter}
 
-              className="bg-green-500 hover:bg-green-600 text-white mt-4 py-1 px-4 rounded-md text-xs"
+              className="bg-green-500 hover:bg-green-600 text-white mt-4 py-1 px-4 rounded-md text-xs mr-2 mb-2"
             >
               Apply
-            </button>
+            </button></div>
+             
             </div>
           </div>
         )} 

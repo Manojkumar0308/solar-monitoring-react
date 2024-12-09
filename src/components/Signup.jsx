@@ -2,9 +2,10 @@ import React from 'react';
 import FormInput from './FormInput';
 import { Link } from 'react-router-dom';
 import { signUpUser } from '../context/SignupContext/SignupContext';
-
+import { faEnvelope, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { usePasswordVisibility } from '../context/PasswordVisibilityContext/PasswordVisibilityContext';
 const Signup = () => {
- 
+  const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
   const {
     firstName,
     setfirstName,
@@ -38,24 +39,27 @@ const Signup = () => {
     e.preventDefault(); // Prevent page reload
     signup(); // Call the signup function
   }}  autoComplete="off">
-        <FormInput
+    <div className='flex flex-row items-center justify-center gap-2'>
+    <FormInput
           type="text"
           label="First Name"
-          placeholder="Enter your first name"
+          placeholder="First name"
           value={firstName}
           onChange={(e) => setfirstName(e.target.value)}
         />
         <FormInput
           type="text"
           label="Last Name"
-          placeholder="Enter your last name"
+          placeholder="Last name"
           value={lastName}
           onChange={(e) => setlastName(e.target.value)}
         />
+    </div>
+     
         <FormInput
           type="email"
           label="Email"
-          placeholder="Enter your email"
+          placeholder="Email"
           value={regEmail}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="hhhhh"
@@ -68,16 +72,18 @@ const Signup = () => {
           onChange={(e) => setPhone(e.target.value)}
         />
         <FormInput
-          type="password"
+           type={isPasswordVisible ? 'text' : 'password'}
           label="Password"
-          placeholder="Enter your password"
+          placeholder="Password"
           value={regPassword}
           onChange={(e) => setPassword(e.target.value)}
+          icon={isPasswordVisible ? faEyeSlash : faEye}
+          onIconClick={togglePasswordVisibility}
         />
         <FormInput
           type="text"
           label="Role"
-          placeholder="Enter your role"
+          placeholder="Role"
           value={role}
           onChange={(e) => setRole(e.target.value)}
         />
@@ -85,10 +91,10 @@ const Signup = () => {
         <button
           type="submit"
           // onClick={signup}
-          className="w-full bg-blue-600 text-white font-semibold py-2 mt-4 rounded-lg hover:bg-blue-700 transition duration-300"
+          className="w-full bg-blue-600 text-white text-sm font-semibold py-2 mt-4 rounded-lg hover:bg-blue-700 transition duration-300"
           disabled={loading} // Disable the button while loading
         >
-          {loading ? 'Signing up...' : 'Sign Up'}
+          Sign Up
         </button>
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>} {/* Display errors */}
       </form>

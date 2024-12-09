@@ -1,14 +1,19 @@
 import React from 'react';
 import { useOtp } from '../context/OtpContext/OtpContext';
 
+
 const OTPInput = () => {
   const { otp, handleChange, handleKeyDown, verifyOtp,inputs } = useOtp();
+ 
 
   return (
-    <div className='flex flex-col items-center justify-center gap-2'>
-      <h3 className='text-xl font-semibold'>OTP Verification</h3>
+    <div>
+      <h3 className='text-xl font-semibold text-gray-600'>OTP Verification</h3>
       <span className='text-sm text-gray-600'>Enter the OTP sent to your email address</span>
-         <div className='mt-4  bg-red-200'>
+    <div className='flex flex-col items-center justify-center gap-2'>
+      
+      
+         <div className='mt-8'>
          <div  style={{ display: 'flex', justifyContent: 'center' }}>
       {otp.map((digit, index) => (
         <input
@@ -32,8 +37,10 @@ const OTPInput = () => {
       ))}
     </div>
          </div>
+         <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs mt-10' onClick={verifyOtp}>Submit</button>
+         </div>
       
-    <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs' onClick={verifyOtp}>Submit</button>
+   
     </div>
 
   );

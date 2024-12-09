@@ -23,7 +23,7 @@ export const SendNotificationProvider = ({ children }) => {
    
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:3000/api/admin/send-notification', {
+      const response = await axios.post('http://192.168.1.238:3000/api/admin/send-notification', {
         customer_ids: customerIds,
         title: title,
         message: message

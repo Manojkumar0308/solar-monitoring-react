@@ -1,10 +1,12 @@
 import React,{createContext,useEffect,useState,useContext} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {useDialog} from '../DialogContext/DialogContext';
 const SignupContext = createContext();  
 
 export const SignupProvider = ({children})=>{
     const navigate = useNavigate();
+    const { showDialog, hideDialog } = useDialog();
     const [firstName,setfirstName] = useState('');
     const [lastName,setlastName] = useState('');
     const [regEmail,setEmail] = useState('');
@@ -16,9 +18,9 @@ export const SignupProvider = ({children})=>{
 
     const signup = async () => {
         try {
-            setLoading(true);
+            showDialog({ type: 'loading', message: 'Signing up...' });
     
-            const response = await axios.post('http://localhost:3000/api/user/send-verification', {
+            const response = await axios.post('http://192.168.1.238:3000/api/user/send-verification', {
                 first_name: firstName,
                 last_name: lastName,
                 email: regEmail,
@@ -26,7 +28,7 @@ export const SignupProvider = ({children})=>{
                 mobile,
                 role,
             });
-    
+            hideDialog();
             console.log('Signup API Response:', response);
     
             if (response?.status === 200) {
@@ -36,15 +38,26 @@ export const SignupProvider = ({children})=>{
                 navigate('/otp', { replace: true });
             } else {
                 console.log('Unexpected Response Status:', response.status);
-                setLoading(false);
+                showDialog({
+                    type: 'message',
+                    title: 'Error',
+                    message: 'Something went wrong',
+                    actions: [{ label: 'Close', onClick: hideDialog }],
+                  });
                 setError('Signup failed. Unexpected response.');
             }
-        } catch (err) {
-            setLoading(false);
-            console.error('Signup API Error:', err);
+        } catch (error) {
+            hideDialog(); // Hide loading dialog
+      showDialog({
+        type: 'message',
+        title: 'Error',
+        message: error.response?.data?.message || 'An unexpected error occurred.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
+            console.error('Signup API Error:', error);
     
             // Set error message for UI
-            setError(err.response?.data?.message || 'Something went wrong');
+            setError(error.response?.data?.message || 'Something went wrong');
         }
     };
     
