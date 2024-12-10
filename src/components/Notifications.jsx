@@ -6,6 +6,7 @@ import EditorBox from './JoditEditor';
 import { useUsers } from '../context/AllUserContext/AllUserContext'; // Import the custom hook
 import { useSendNotification } from '../context/SendNotificationContext/SendNotificationContext';
 import Loader from './Loader';
+import { Await } from 'react-router-dom';
 const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
   const { users, loading, error } = useUsers(); // Fetch users from the context
     const categoryItems = [
@@ -82,14 +83,20 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
           // Reset all states
           setTitle('');
           setMessage('');
+          // setSelectedUsers([]);
+          selectedUsers.length = 0;
           setCustomerIds([]);
-          setSelectedUsers([]);
-      
+          
+          console.log('After reset, selectedUsers:', selectedUsers);
           // Reset the editor content by passing a blank value
           const editorElement = document.querySelector('.jodit-wysiwyg');
           if (editorElement) {
             editorElement.innerHTML = ''; // Clear the content inside the editor
           }
+           // Reset dropdown states
+        document.querySelectorAll('.dropdown-button').forEach((dropdown) => {
+          dropdown.value = ''; // Clear dropdown value
+      });
         } catch (error) {
           console.error('Error sending notification:', error);
         }
@@ -103,6 +110,11 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
         }
         return color;
     };
+
+
+    useEffect(() => {
+      console.log('selectedUsers updated:', selectedUsers);
+  }, [selectedUsers]);
 
     return (
         <div className='max-w-full h-screen flex flex-col'>

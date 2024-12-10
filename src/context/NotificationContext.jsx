@@ -2,6 +2,7 @@ import React, { createContext, useContext,useState,useEffect } from 'react';
 import { Store } from 'react-notifications-component';
 import { useAuth } from './AuthContext/AuthContext';
 import { initializeSocket, getSocket } from '../socket';
+import { useDialog } from './DialogContext/DialogContext';
 import { format } from 'date-fns';
 const NotificationContext = createContext();
 import axios from 'axios';
@@ -12,7 +13,8 @@ export const useNotifications = () => {
 
 export const NotificationProvider = ({ children }) => {
 
-  const { user, setUser, isLoggedIn ,token,login} = useAuth(); // Access user and setUser from AuthContext
+  const { user, setUser, isLoggedIn ,token,login} = useAuth(); // Access user and setUser from AuthContext'
+  const {showDialog, hideDialog} = useDialog();
   console.log('On user notification page token:', token);
   console.log('On user notification page user:', user._id);
   const [notifications, setNotifications] = useState([]);
@@ -33,7 +35,8 @@ export const NotificationProvider = ({ children }) => {
   const API_URL = "http://192.168.1.238:3000/api/admin/get-notification";
   const fetchNotifications = async (stDate = "", enDate = "") => {
     try {
-      setLoading(true);
+      showDialog({ type: 'loading', message: 'Loading....' });
+      // setLoading(true);
   
       if (token) {
       
@@ -57,7 +60,7 @@ export const NotificationProvider = ({ children }) => {
             },
           }
         );
-  
+  hideDialog();
         console.log('API Response:', response.data);
   
         // Ensure the response contains the expected structure
@@ -67,16 +70,28 @@ export const NotificationProvider = ({ children }) => {
           setTotalPages(response.data.totalPages); // Set total pages
         } else {
           console.error('Unexpected response structure:', response.data);
+          hideDialog(); // Hide loading dialog
+          showDialog({
+            type: 'message',
+            title: 'Error',
+            message: error.response?.data?.message || 'An unexpected error occurred.',
+            actions: [{ label: 'Close', onClick: hideDialog }],
+          });
          
         }
       }
   
       
-    } catch (err) {
-      console.error('Error fetching notifications:', err.message);
+    } catch (error) {
+      console.error('Error fetching notifications:', error.message);
+      hideDialog(); // Hide loading dialog
+      showDialog({
+        type: 'message',
+        title: 'Error',
+        message: error.response?.data?.message || 'An unexpected error occurred.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
       
-    }finally{
-      setLoading(false);
     }
   };
   const fetchNotificationsOnChange = async () => {
@@ -101,10 +116,15 @@ export const NotificationProvider = ({ children }) => {
     const handleNotification = (data) => {
       if (data.customer_id === user?._id) {
         console.log('Received notification:', data);
-        setNotifications((prev) => [...prev, data]); // Add new notification to the top
+        setNotifications((prev) => {
+          const updatedNotifications = [...prev, data];
+          setTotalPages(Math.ceil(updatedNotifications.length / limit)); // Recalculate totalPages
+          return updatedNotifications;
+        });
+      }
      
       }
-    };
+    
 
     // Listen for notifications
     if (socket) {

@@ -42,7 +42,7 @@ const UserNotification = () => {
   }, [showDateRange]);
   // Render Loader while notifications are loading
   if (loading || !isNotificationsFetched) {
-    return <Loader />;
+    return null;
   }
   if(notifications.length === 0){
     return (

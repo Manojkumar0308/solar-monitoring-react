@@ -1,20 +1,29 @@
 import React from 'react';
 import {Blocks} from 'react-loader-spinner';
-
-const Loader = () => {
+import { Dialog,  Box, CircularProgress } from '@mui/material';
+const Loader = ({open}) => {
+    
     return (
-        <div className="flex flex-col justify-center items-center w-full h-screen bg-white"> 
-            <Blocks
-                height="80"
-                width="80"      
-                color="#4fa94d"
-                ariaLabel="blocks-loading"
-                wrapperStyle={{}}
-                wrapperClass="blocks-wrapper"
-                visible={true}
-            />
-            <p className='text-xs text-gray-500 '>Loading.....</p>
-        </div>
+        <Dialog
+        open={open}
+        maxWidth="xs"
+        sx={{
+            '.MuiDialog-paper': {
+              backgroundColor: '#000000' , // Black for loadinng
+             
+            },
+          }}
+      
+      >
+        <Box display="flex" flexDirection="column" alignItems="center" p={3}   sx={{
+            textAlign: 'center',
+           
+          }}>
+      
+          <CircularProgress />
+          <p className="text-xs text-gray-400 mt-2">Loading...</p>
+        </Box>
+      </Dialog>
     );
 };
 

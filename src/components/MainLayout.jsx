@@ -6,9 +6,7 @@ import { UserPlantProvider } from "../context/UserPlantContext/UserPlantContext"
 import { UserProvider } from "../context/AllUserContext/AllUserContext";
 import { NotificationProvider } from "../context/NotificationContext";
 import { SendNotificationProvider } from '../context/SendNotificationContext/SendNotificationContext';
-import { ToastContainer } from 'react-toastify';
-import { useAuth } from "../context/AuthContext/AuthContext";
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+
 // Lazily load components
 const Sidebar = lazy(() => import("../components/Sidebar"));
 const Dashboard = lazy(() => import('../components/Dashboard'));
@@ -23,25 +21,21 @@ const AuthContainer = lazy(() => import("../components/AuthContainer"));
 
 export const MainLayout = () => {
   const { isSidebarOpen } = useSidebarToggle();
+
   const isLogedIn = sessionStorage.getItem('logedIn'); // Check login status
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
   if (!isLogedIn ) {
     return <AuthContainer />;
   }
 
   return (
     <div className="flex h-screen">
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+    
       <DropdownProvider>
         {/* Lazy load Sidebar if not open */}
         {/* <Suspense fallback={<Loader />}> */}
@@ -50,7 +44,7 @@ export const MainLayout = () => {
 
         <div className="w-full overflow-y-auto">
           {/* Wrap Routes with Suspense for lazy-loaded components */}
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<Loader open={loading} />}>
             <Routes>
               <Route
                 path="/dashboard"

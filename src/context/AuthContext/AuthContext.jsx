@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
         if (loggedIn && userData && savedToken && tokenExpiry) {
           const currentTime = new Date().getTime();
           if (currentTime < tokenExpiry) {
+            console.log('login time:',user)
             setUser(userData);
             setIsLoggedIn(true);
             setToken(savedToken);
@@ -55,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.setItem('logedIn', true);
     sessionStorage.setItem('token', userToken); // Save token in sessionStorage
         // Set token expiry time to 2 minutes from now
-        const expiryTime = new Date().getTime() + 2 * 60 * 1000; // Token expires in 2 minutes
+        const expiryTime = new Date().getTime() + 15 * 60 * 1000; // Token expires in 2 minutes
         sessionStorage.setItem('tokenExpiry', expiryTime); // Store token expiry time
   };
 

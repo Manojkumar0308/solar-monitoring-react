@@ -59,7 +59,7 @@ const LoginForm = () => {
         });
       }
     } catch (error) {
-      hideDialog(); // Hide loading dialog
+      console.error('Error logging in:', error.message);
       showDialog({
         type: 'message',
         title: 'Error',

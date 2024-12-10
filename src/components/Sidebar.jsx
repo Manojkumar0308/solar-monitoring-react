@@ -1,23 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAuth } from '../context/AuthContext/AuthContext';
 import {useDropdown} from '../context/DropDownContext/DropdownContext';
 import { useSidebarToggle } from '../context/SidebarToggle/SidebarToggleContext';
 import { Link } from 'react-router-dom'; // Import Link
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {useActiveTab} from '../context/ActiveTab/ActiveTab'
+import {useDialog} from '../context/DialogContext/DialogContext';
 import {  faTelegramPlane, faWindows } from '@fortawesome/free-brands-svg-icons';
 import { faBell, faCake, faChevronDown, faGear,  faSolarPanel, faClose, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './Dropdown';
-import { div } from 'framer-motion/client';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
-import { BrowserRouter as Router, useNavigate } from 'react-router-dom';
-
-
-
 const Sidebar = () => {
   const { user,logout } = useAuth();
-  const [openDialog, setOpenDialog] = useState(false); // For managing dialog visibility
-
+  const {showDialog,hideDialog} = useDialog();
  const tokenExpiryTime = sessionStorage.getItem('tokenExpiry'); // Get stored token expiry time
  const currentTime = new Date().getTime();
  const isTokenExpired = tokenExpiryTime && currentTime > tokenExpiryTime;
@@ -32,19 +26,21 @@ const Sidebar = () => {
 };
   const handleTabClick = (tab) => {
     if(isTokenExpired){
+      showDialog({
+        type: 'message',
+        title: 'Session Expired',
+        message: 'Your session has expired. Please log in again.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
       logout();
-      // sessionStorage.clear();
+      
       closeSidebar();
     }
     setActiveTab(tab);
     closeSidebar();
    
   };
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    // window.location.href = "/"; // Redirect to AuthContainer when dialog is closed
-  };
-  
+ 
   const tabs =user && user.role === 'admin' ? ['dashboard', 'users', 'settings', 'profile','sendnotification'] : ['userDashboard', 'settings', 'profile', ,'notifications','support'];
   return (
     <div className="flex flex-col h-screen bg-gray-800">
@@ -82,24 +78,7 @@ const Sidebar = () => {
         </div>
       </div>
     </div>
-      {/* Dialog Box for Session Expiry */}
-      <Dialog
-            open={openDialog}
-            onClose={handleCloseDialog}
-            aria-labelledby="session-expired-dialog"
-            aria-describedby="session-expired-message"
-          >
-            <DialogTitle>Session Expired</DialogTitle>
-            <DialogContent>
-              <p className="text-xs text-gray-400">Your session has expired. Please log in again.</p>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog} color="primary">
-                OK
-              </Button>
-            </DialogActions>
-          </Dialog>
-    </div>
+  </div>
    
   );
 };

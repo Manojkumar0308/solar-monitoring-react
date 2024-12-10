@@ -37,8 +37,6 @@ const Dropdown = ()=> {
     // setActiveTab(''); // Reset active tab on logout
     closeDropdown(); // Close the dropdown if applicable
     closeSidebar();
-    // toast.dismiss();  // Dismiss any existing toasts
-    // navigate('/', { replace: true }); // Redirect to home or login page
   };
 
   useEffect(() => {

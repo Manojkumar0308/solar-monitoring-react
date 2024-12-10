@@ -1,9 +1,10 @@
 import React from "react";
 import MobNavBar from "./MobileNavBar";
 import { motion } from 'framer-motion';
-
+import { useAuth } from "../context/AuthContext/AuthContext";
 const Profile = () => {
-
+const {user} = useAuth();
+console.log('user :',user);
     const itemVariant = {
         hidden: { opacity: 0, y: -20 },
         visible: {
@@ -35,7 +36,7 @@ const Profile = () => {
                         <h2 className="text-lg font-semibold">Your Name</h2>
                         <span className="text-sm">This will be displayed on your profile</span>
                     </motion.div>
-                    <input type="text" className="text-input"/>
+                    <input type="text" className="text-input"  value={`${user?.first_name || ''} ${user?.last_name || ''}`.trim()} onChange={(e) => console.log(e.target.value)} />
                 </motion.div>
 
                 <motion.div className='h-px mt-12 bg-gray-700 sm:mb-2'></motion.div>
@@ -68,7 +69,7 @@ const Profile = () => {
                         <h2 className="text-lg font-semibold">Organization Email</h2>
                         <span className="text-sm">This is how customers can email you for support.</span>
                     </motion.div>
-                    <input type="text" className="text-input"/>
+                    <input type="text" className="text-input" value={user?.email} onChange={(e) => console.log(e.target.value)} />
                 </motion.div>
 
                 <motion.div className='h-px mt-12 bg-gray-700 sm:mb-2'></motion.div>
@@ -79,7 +80,7 @@ const Profile = () => {
                         <h2 className="text-lg font-semibold">Contact Number</h2>
                         <span className="text-sm">This is how customers can contact you for support.</span>
                     </motion.div>
-                    <input type="text" className="mb-2 mt-2 px-4 py-2 sm:py-0 rounded-lg focus:outline-blue-500 sm:w-1/2 border-cyan-50 bg-gray-100"/>
+                    <input type="text" className="mb-2 mt-2 px-4 py-2 sm:py-0 rounded-lg focus:outline-blue-500 sm:w-1/2 border-cyan-50 bg-gray-100" value={`${user?.mobile}`} onChange={(e) => console.log(e.target.value)}/>
                 </motion.div>
 
                 <motion.div className='h-px mt-12 bg-gray-700 sm:mb-2'></motion.div>

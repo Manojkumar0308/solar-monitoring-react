@@ -4,8 +4,6 @@ import { useOtp } from '../context/OtpContext/OtpContext';
 
 const OTPInput = () => {
   const { otp, handleChange, handleKeyDown, verifyOtp,inputs } = useOtp();
- 
-
   return (
     <div>
       <h3 className='text-xl font-semibold text-gray-600'>OTP Verification</h3>

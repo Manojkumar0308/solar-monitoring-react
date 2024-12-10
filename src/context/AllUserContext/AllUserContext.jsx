@@ -1,11 +1,13 @@
 // context/UserContext.js
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useLoading } from '../LoadingContext/LoadingContext';
+import { useDialog } from '../DialogContext/DialogContext';
 // Create a Context for the user data
 const UserContext = createContext();
 
 // UserContext Provider Component
 export const UserProvider = ({ children }) => {
+const {showDialog,hideDialog  }=    useDialog();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -14,17 +16,19 @@ export const UserProvider = ({ children }) => {
         // Replace `{{base_url}}` with your actual base URL
         const fetchUsers = async () => {
             try {
-                setLoading(true);
+                showDialog({ type: 'loading', message: 'Loading...' });
+               
                 const response = await fetch('http://192.168.1.238:3000/api/user/get-user');
+               
                 console.log('response:', response);
                 const data = await response.json();
                 setUsers(data.users); // Assuming the API returns a field `users` containing an array of user objects
+                hideDialog();
                
             } catch (err) {
-                setError('Error fetching users');
+                console.error('Error fetching users:', err.message);
+                showDialog({ type: 'message', title: 'Error', message: err.message, actions: [{ label: 'Close', onClick: hideDialog }] });
                 
-            }finally{
-                setLoading(false);
             }
         };
 
