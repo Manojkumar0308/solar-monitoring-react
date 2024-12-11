@@ -9,7 +9,7 @@ const DropdownButton = ({label,items,onSelect}) => {
     const dropdownRef = useRef(null);
 
     const toggleDropdown=()=>{
-        setIsOpen(!isOpen);
+        setIsOpen(!isOpen);setSelectedItem('Select Users');
     }
     const handleClickOutside = (event) => {
         event.stopPropagation();

@@ -1,17 +1,14 @@
-import React,{useState,useEffect} from "react";
-import { BrowserRouter as Router,useNavigate } from 'react-router-dom';
+import React,{useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext/AuthContext';
-import { ActiveTabProvider } from './context/ActiveTab/ActiveTab';
 import {SidebarToggleProvider} from './context/SidebarToggle/SidebarToggleContext';
 import AuthContainer from "./components/AuthContainer";
 import 'react-notifications-component/dist/theme.css'; // Make sure this is in your App.js
 import { MainLayout } from "./components/MainLayout";
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import Toastify styles
-import Loader from "./components/Loader";
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 import { useActiveTab } from "./context/ActiveTab/ActiveTab";
 import { useDialog } from "./context/DialogContext/DialogContext";
+import { NotificationProvider } from "./context/NotificationContext";
 const App = () => {
   const {loading,logout } = useAuth();
 const {setActiveTab} = useActiveTab();
@@ -45,7 +42,7 @@ setActiveTab('')
     <SidebarToggleProvider>
      
           <div className={`h-screen `}>
-            {(!isLogedIn || isTokenExpired )? <AuthContainer /> : <MainLayout />}
+            {(!isLogedIn || isTokenExpired )? <AuthContainer /> :<NotificationProvider><MainLayout /></NotificationProvider> }
           </div>     
     </SidebarToggleProvider>
   );

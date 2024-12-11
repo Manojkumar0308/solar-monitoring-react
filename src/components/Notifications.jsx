@@ -8,7 +8,9 @@ import { useSendNotification } from '../context/SendNotificationContext/SendNoti
 import Loader from './Loader';
 import { Await } from 'react-router-dom';
 const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
-  const { users, loading, error } = useUsers(); // Fetch users from the context
+  const { users } = useUsers(); // Fetch users from the context
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dropdownValue, setDropdownValue] = useState('');
     const categoryItems = [
         'Option-1',
         'Option-2',
@@ -21,12 +23,11 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
     ];
 
     const [selectedUsers, setSelectedUsers] = useState([]);
-    const [selectedUserIds, setSelectedUserIds] = useState([]);
+   
   
     const {
         title,
         setTitle,
-        message,
         setMessage,
         customerIds,
         setCustomerIds,
@@ -79,41 +80,42 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
     const handleSendNotification = async () => {
         try {
           await sendNotification(); // Sends the notification
-      
-          // Reset all states
           setTitle('');
           setMessage('');
-          // setSelectedUsers([]);
-          selectedUsers.length = 0;
-          setCustomerIds([]);
+          setCustomerIds((prev) => {
+            console.log('Previous customerIds:', prev);
+            return [];
+          });
           
-          console.log('After reset, selectedUsers:', selectedUsers);
-          // Reset the editor content by passing a blank value
+          setSelectedUsers((prev) => {
+            console.log('Previous selectedUsers:', prev);
+            return [];
+          });
+         
+          
+          
+      
+      
+          // Clear editor content
           const editorElement = document.querySelector('.jodit-wysiwyg');
           if (editorElement) {
             editorElement.innerHTML = ''; // Clear the content inside the editor
           }
-           // Reset dropdown states
-        document.querySelectorAll('.dropdown-button').forEach((dropdown) => {
-          dropdown.value = ''; // Clear dropdown value
-      });
+      
+          // Reset dropdown
+          document.querySelectorAll('.dropdown-button').forEach((dropdown) => {
+            dropdown.value = ''; // Clear dropdown value
+          });
         } catch (error) {
           console.error('Error sending notification:', error);
         }
       };
 
-    const getRandomColor = () => {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    };
 
 
     useEffect(() => {
       console.log('selectedUsers updated:', selectedUsers);
+      setIsSubmitting(false);
   }, [selectedUsers]);
 
     return (
@@ -136,8 +138,8 @@ const Sendnotification = ({ isSidebarOpen, toggleSidebar }) => {
                     <DropdownButton
                         label="Select Users"
                         items={users.map((user) => user.email)} // Map users to email addresses
-                        onSelect={handleUserSelect} // Pass handler to dropdown
-                        value = {selectedUsers}
+                        value={dropdownValue}
+                        onSelect={handleUserSelect}
                     />
                 </div>
 

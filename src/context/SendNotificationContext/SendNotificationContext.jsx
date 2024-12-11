@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../AuthContext/AuthContext';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useLoading } from '../LoadingContext/LoadingContext';
+
 import { useDialog } from '../DialogContext/DialogContext';
 const SendNotificationContext = createContext();
 export const SendNotificationProvider = ({ children }) => {
@@ -32,12 +31,15 @@ export const SendNotificationProvider = ({ children }) => {
      showDialog({
        type: 'loading',
        message: 'Sending...'
+      
      })
-      const response = await axios.post('http://192.168.1.238:3000/api/admin/send-notification', {
-        customer_ids: customerIds,
-        title: title,
-        message: message
-      }, {
+     const requestBody = {
+      customer_ids: customerIds,
+      title: title,
+      message: message
+     }
+     console.log('Request Body:', requestBody);
+      const response = await axios.post('http://192.168.1.238:3000/api/admin/send-notification', requestBody, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -46,8 +48,19 @@ export const SendNotificationProvider = ({ children }) => {
       if(response.status === 200){
        
       console.log('Response:', response);
+      setCustomerIds([]); // Clear the customerIds array
+      showDialog({
+        type: 'success',
+        message: 'Notification sent successfully!',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
+
+      setTimeout(() => {
+        hideDialog();
+      }, 3000); // Adjust the time as needed (in milliseconds)
     }
       else{
+        setCustomerIds([]);
         console.log('Error Response:', response);
         showDialog({
           type: 'message',
@@ -60,6 +73,7 @@ export const SendNotificationProvider = ({ children }) => {
       
     } catch (error) {
       setError(error.message);
+      setCustomerIds([]);
       showDialog({
         type: 'message',
         title: 'Error',

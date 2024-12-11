@@ -88,7 +88,7 @@ const LoginForm = () => {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            icon={isPasswordVisible ? faEyeSlash : faEye}
+            icon={isPasswordVisible ? faEye: faEyeSlash }
             onIconClick={togglePasswordVisibility}
            
           />

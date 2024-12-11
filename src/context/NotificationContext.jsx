@@ -4,6 +4,7 @@ import { useAuth } from './AuthContext/AuthContext';
 import { initializeSocket, getSocket } from '../socket';
 import { useDialog } from './DialogContext/DialogContext';
 import { format } from 'date-fns';
+import NotificationPopup from '../components/NotificationPopup';
 const NotificationContext = createContext();
 import axios from 'axios';
 import { useLoading } from './LoadingContext/LoadingContext';
@@ -11,8 +12,11 @@ export const useNotifications = () => {
   return useContext(NotificationContext);
 };
 
-export const NotificationProvider = ({ children }) => {
 
+
+
+export const NotificationProvider = ({ children }) => {
+  const [popup, setPopup] = useState(null); // Manage current popup
   const { user, setUser, isLoggedIn ,token,login} = useAuth(); // Access user and setUser from AuthContext'
   const {showDialog, hideDialog} = useDialog();
   console.log('On user notification page token:', token);
@@ -25,6 +29,13 @@ export const NotificationProvider = ({ children }) => {
   const [isFilterApplied, setIsFilterApplied] = useState(false); // New state to track filter application
   const [showDateRange, setShowDateRange] = useState(false);
   
+  const showPopup = (title,message, type) => {
+    setPopup({title, message, type });
+    setTimeout(() => {
+      setPopup(null); // Auto-hide popup after 5 seconds
+    }, 5000);
+  };
+
   const [dateRange, setDateRange] = useState([{
     startDate: new Date(),
     endDate: new Date(),
@@ -116,6 +127,9 @@ export const NotificationProvider = ({ children }) => {
     const handleNotification = (data) => {
       if (data.customer_id === user?._id) {
         console.log('Received notification:', data);
+        console.log('reciebved title',data.title)
+         // Show popup for the new notification
+         showPopup(data.title ,data.message, 'info');
         setNotifications((prev) => {
           const updatedNotifications = [...prev, data];
           setTotalPages(Math.ceil(updatedNotifications.length / limit)); // Recalculate totalPages
@@ -178,6 +192,8 @@ export const NotificationProvider = ({ children }) => {
   return (
     <NotificationContext.Provider value={{ notifications, setNotifications ,page, setPage, totalPages, setTotalPages, loading, setLoading, handleNextPage, handleFilterBtnClick, handleApplyFilter, showDateRange, setShowDateRange, dateRange, setDateRange}}>
       {children}
+       {/* Render Notification Popup */}
+       {popup && <NotificationPopup title={popup.title} message={popup.message} type={popup.type} />}
     </NotificationContext.Provider>
   );
 };
