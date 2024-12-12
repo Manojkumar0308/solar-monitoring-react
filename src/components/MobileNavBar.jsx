@@ -21,24 +21,19 @@ const MobileNavbar = () => {
           className='ml-3 text-white text-2xl' 
           onClick={toggleSidebar} 
         />
-        {/* <div className='flex gap-1 items-center justify-center'>
-          <FontAwesomeIcon icon={faRightFromBracket} className='m-auto text-white text-2xl'/>
-          <span className='text-sm font-semibold m-auto text-white mr-3'>Logout</span>
-        </div> */}
+      
       </div>
 
-      {/* Sidebar for mobile screens */}
-     {isSidebarOpen && <div className={`w-2/3 sm:w-[30%] md:w-[30%]  fixed inset-0 z-50 transition-transform transform bg-gray-800 ${isSidebarOpen ? sidebarOpenClass : sidebarClosedClass} lg:hidden`}>
-      
-
-        {/* Sidebar content: Here we reuse the Sidebar component */}
-        <div className='overflow-y-auto h-full hide-scrollbar'>
-        <Sidebar/>
-
-        </div>
-      </div>}
+    {/* Sidebar for mobile screens */}
+    <div className={`fixed inset-0 z-50 ${isSidebarOpen ? 'block' : 'hidden'} ${isSidebarOpen ? sidebarOpenClass : sidebarClosedClass} transform transition-transform duration-600 ease-in-out`}>
+        <Sidebar />
+      </div>
+ 
     </div>
+    
   );
-};
+
+};   
+  
 
 export default MobileNavbar;

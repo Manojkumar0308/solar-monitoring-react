@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.setItem('logedIn', true);
     sessionStorage.setItem('token', userToken); // Save token in sessionStorage
         // Set token expiry time to 2 minutes from now
-        const expiryTime = new Date().getTime() + 15 * 60 * 1000; // Token expires in 2 minutes
+        const expiryTime = new Date().getTime() + 24 * 60 * 60 * 1000; // Token expires in 24 hours
         sessionStorage.setItem('tokenExpiry', expiryTime); // Store token expiry time
   };
 
