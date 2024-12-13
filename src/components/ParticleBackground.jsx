@@ -2,7 +2,7 @@ import React from "react";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 
-const ParticleBackground = () => {
+const ParticleBackground = React.memo(() => {
   const particlesInit = async (engine) => {
     // Load the full tsparticles package
     await loadFull(engine);
@@ -64,6 +64,6 @@ const ParticleBackground = () => {
       />
     </div>
   );
-};
+});
 
 export default ParticleBackground;

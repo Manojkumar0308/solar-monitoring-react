@@ -62,7 +62,7 @@ const Signup = () => {
           placeholder="Email"
           value={regEmail}
           onChange={(e) => setEmail(e.target.value)}
-          autoComplete="hhhhh"
+        
         />
         <FormInput
           type="text"
@@ -77,7 +77,7 @@ const Signup = () => {
           placeholder="Password"
           value={regPassword}
           onChange={(e) => setPassword(e.target.value)}
-          icon={isPasswordVisible ? faEyeSlash : faEye}
+          icon={isPasswordVisible ? faEye : faEyeSlash}
           onIconClick={togglePasswordVisibility}
         />
         <FormInput

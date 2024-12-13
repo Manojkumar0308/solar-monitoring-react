@@ -1,19 +1,27 @@
 // AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useActiveTab } from '../ActiveTab/ActiveTab';
-import { BrowserRouter as Router,useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {useDialog} from '../DialogContext/DialogContext'
+import {initializeSocket} from '../../socket'
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   // const { setLoading } = useLoading(); // Import loading context'
   const navigate = useNavigate(); // To navigate programmatically
+   const { showDialog, hideDialog } = useDialog();
   const [user, setUser] = useState([]);
   const {setActiveTab} = useActiveTab();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null); // New state for token
   const [loading, setLoading] = useState(false); // Add loading state
-  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   useEffect(() => {
+  
     const fetchData = async () => {
      
       try {
@@ -60,6 +68,59 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.setItem('tokenExpiry', expiryTime); // Store token expiry time
   };
 
+
+  const handleLoginClick = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      showDialog({
+        type: 'message',
+        title: 'Error',
+        message: 'Please fill in all fields.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
+      return;
+    }
+
+    try {
+      showDialog({ type: 'loading', message: 'Logging in...' });
+
+      const response = await axios.post(
+        'http://192.168.1.238:3000/api/user/login',
+        { email, password },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+
+      hideDialog(); // Hide loading dialog
+      if (response.status === 200) {
+        const { user, token } = response.data;
+
+        login(user, token);
+        initializeSocket();
+
+        setActiveTab(user.role === 'admin' ? 'dashboard' : 'userDashboard');
+        navigate(user.role === 'admin' ? '/dashboard' : '/userDashboard', { replace: true });
+        setEmail('');
+        setPassword('');
+      } else {
+        showDialog({
+          type: 'message',
+          title: 'Error',
+          message: 'Invalid credentials.',
+          actions: [{ label: 'Close', onClick: hideDialog }],
+        });
+      }
+    } catch (error) {
+      console.error('Error logging in:', error.message);
+      showDialog({
+        type: 'message',
+        title: 'Error',
+        message: error.response?.data?.message || 'An unexpected error occurred.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
+    }
+  };
+
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
@@ -68,9 +129,48 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.clear(); // Remove token from sessionStorage
     navigate('/',{replace:true});
   };
+
+
+  const verifyUseremail = async()=>{
+    if (!email) {
+      showDialog({
+        type: 'message',
+        title: 'Error',
+        message: 'Please fill email field.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
+      return;
+    }
+    try{
+    
+      showDialog({ type: 'loading', message: 'Loading...' });
+      const requestBody={
+        email
+      }
+      console.log('Request Body',requestBody);
+      const response = await axios.post(  'http://192.168.1.238:3000/api/user/get-verify-user', requestBody,{ headers: { 'Content-Type': 'application/json' } })
+      console.log('response',response);
+      if(response.status===200){
+        hideDialog();
+        navigate('/forgotPassword',{replace:true})
+      }else{
+        console.log('else part',response)
+        showDialog({ type: 'message',
+          title: 'Error',
+          message: response.data.message,
+          actions: [{ label: 'Close', onClick: hideDialog }],})
+      }
+    }catch(error){
+      console.log('catch part',error.message)
+      showDialog({ type: 'message',
+        title: 'Error',
+        message:'User not found',
+        actions: [{ label: 'Close', onClick: hideDialog }],})
+    }
+  }
   
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,setLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,email,password,setLoading, login, logout,handleLoginClick,verifyUseremail,setEmail,setPassword,setNewPassword,setConfirmPassword }}>
       {children}
     </AuthContext.Provider>
   );

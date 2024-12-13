@@ -7,6 +7,7 @@ import { UserProvider } from "../context/AllUserContext/AllUserContext";
 import { NotificationProvider } from "../context/NotificationContext";
 import { SendNotificationProvider } from '../context/SendNotificationContext/SendNotificationContext';
 
+
 // Lazily load components
 const Sidebar = lazy(() => import("../components/Sidebar"));
 const Dashboard = lazy(() => import('../components/Dashboard'));
@@ -18,7 +19,7 @@ const UserNotification = lazy(() => import("../components/UserNotification"));
 const Tables = lazy(() => import("../components/Table"));
 const Loader = lazy(() => import("../components/Loader"));
 const AuthContainer = lazy(() => import("../components/AuthContainer"));
-
+const ForGotPassword = lazy(() => import("../components/ForgotPassword"));
 export const MainLayout = () => {
   const { isSidebarOpen } = useSidebarToggle();
 
@@ -85,6 +86,7 @@ export const MainLayout = () => {
               />
               <Route path="support" element={<UserDashBoard />} />
               <Route path="/" element={<AuthContainer />} /> {/* Default route */}
+              <Route path="/forgotPassword" element ={<ForGotPassword />}/>
             </Routes>
           </Suspense>
         </div>

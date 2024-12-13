@@ -8,12 +8,11 @@ import OTPInput from './Otp';
 import { SignupProvider } from '../context/SignupContext/SignupContext';
 import {OtpProvider} from '../context/OtpContext/OtpContext';
 import ParticleBackground from './ParticleBackground';
-import Loader from './Loader';
+import ForGotPassword from './ForgotPassword';
 const AuthContainer = () => {
-  const {isLoggedIn,login,user} = useAuth();
+ 
   const location = useLocation();
-  console.log('isLoggedIn:', isLoggedIn);
-  console.log('user:', user);
+ 
   return (
     <div className="h-screen relative">
       {/* <SidePanel /> */}
@@ -29,7 +28,8 @@ const AuthContainer = () => {
           <OTPInput />
           </OtpProvider>
           </SignupProvider>
-        ) : (
+        ) : location.pathname==='/forgotPassword'?(<ForGotPassword/>):
+        (
           <LoginForm />
         )}
       </div>
