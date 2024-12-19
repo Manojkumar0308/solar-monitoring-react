@@ -57,7 +57,7 @@ const navigate = useNavigate();
         console.log('reqbody  :', reqbody);
      
       const response = await axios.post(
-        'http://192.168.1.238:3000/api/user/verify-email',
+        'http://192.168.1.49:3000/api/user/verify-email',
         reqbody
       );
       console.log('reqbody  :', reqbody);

@@ -19,7 +19,7 @@ export const UserPlantProvider = ({ children }) => {
             console.log('admin token:', token);
             setLoading(true); // Start loading
             const response = await axios.post(
-                'http://192.168.1.238:3000/api/admin/get-customer-with-plant-details', 
+                'http://192.168.1.49:3000/api/admin/get-customer-with-plant-details', 
                 { page: page },
                 {
                     headers: {

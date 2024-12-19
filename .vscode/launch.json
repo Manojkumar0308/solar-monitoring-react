@@ -8,22 +8,22 @@
             "name": "Launch Edge",
             "request": "launch",
             "type": "msedge",
-            "url": "http://192.168.1.238:5173",
+            "url": "http://192.168.1.49:5173",
             "webRoot": "${workspaceFolder}"
         },
         {
             "name": "Launch Edge",
             "request": "launch",
             "type": "msedge",
-            "url": "http://192.168.1.238:5173",
+            "url": "http://192.168.1.49:5173",
             "webRoot": "${workspaceFolder}"
         },
         
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against 192.168.1.238",
-            "url": "http://192.168.1.238:5173",
+            "name": "Launch Chrome against 192.168.1.49",
+            "url": "http://192.168.1.49:5173",
             "webRoot": "${workspaceFolder}"
         }
     ]

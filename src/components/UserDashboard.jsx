@@ -11,16 +11,66 @@ import { useState,useEffect } from "react";
 import {motion} from 'framer-motion';
 import { useAuth } from "../context/AuthContext/AuthContext";
 import Loader from "./Loader";
+import InvertersData  from "./Inverters";
+import axios from "axios";
+import Lottie from 'react-lottie';
+import SolarGif from '../asset/round_solar.json'
 const UserDashBoard = () => {
   const {token,user,loading}=useAuth();
   console.log('on UserDashBoard user',user?._id);
     const [inverterData, setInverterData] = useState({});
     const [sensorsData, setSensorsData] = useState({ humidity: "NA", temperature: "NA" });
+    const [userPlantDetail,setUserPlantDetail]= useState({})
+    const [invertersLength,setInvertersLength] = useState(0);
+
+    const fetchPlants =async()=>{
+      const requestBody= {
+        customer_id:user?._id
+      }
+      console.log('request body userdashboard',requestBody)
+      try {
+    const response= await axios.post('http://localhost:3000/api/user/get-plant',requestBody);
+    if(response.status===200){
+      console.log('response is ',response.data.data[0])
+      if (response.data.data  && response.data.data.length > 0) {
+        fetchPlantsInverter(response.data.data[0]['plant_id']);
+        setUserPlantDetail(response.data.data[0]); // Set the first plant data into the state
+        console.log(userPlantDetail)
+      } else {
+        console.log('No plants found for the customer');
+      }
+      
+    }
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+
+    const fetchPlantsInverter =async(plantId)=>{
+      const requestBody= {
+        plant_id:plantId
+      }
+      console.log('request body userdashboard for inverters of plants',requestBody)
+      try {
+    const response= await axios.post('http://localhost:3000/api/inverters/get-all-inverter',requestBody);
+    if(response.status===200){
+      console.log('response of inverters for plants',response.data.data[0])
+      if (response.data.data  && response.data.data.length > 0) {
+       setInvertersLength(response.data.data.length)
+      } else {
+        console.log('No Inverters found for the plant');
+      }
+      
+    }
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
    
 console.log('on UserDashBoard token',token);
    
     useEffect(() => {
-
+      fetchPlants();
       // Initialize socket only if it hasn't been initialized yet
       if (!getSocket()) {
         initializeSocket();
@@ -57,7 +107,11 @@ console.log('on UserDashBoard token',token);
       };
     }, [user]);
     
-   
+    useEffect(() => {
+      
+      console.log('Updated userPlantDetail:', userPlantDetail.plant_name); // Log state after it updates
+      console.log('inverters length',invertersLength)
+    }, [userPlantDetail,invertersLength]); // 
   
 
     const animation = {
@@ -113,7 +167,7 @@ console.log('on UserDashBoard token',token);
                     </div>
                     <div className="flex flex-col rounded-lg justify-center items-center py-2 w-1/2 border border-gray-200 bg-white">
                         <span className="text-xs font-semibold">Total Inverters</span>
-                        <span className="text-xs font-semibold">1</span>
+                        <span className="text-xs font-semibold">{invertersLength}</span>
                     </div>
                     </motion.div>
                     
@@ -125,30 +179,48 @@ console.log('on UserDashBoard token',token);
                 transition={{ duration: 2.5 }}
                 className="flex flex-1 flex-col gap-2 border border-gray-200 rounded-lg ">
                    <div className="flex flex-row justify-between items-center p-4 ">
-                    <span className="text-sm font-semibold">Generation<FontAwesomeIcon icon={faChevronDown} className="text-[8px] ml-1 mb-[1.6px]"/></span>
+                    <span className="text-sm font-semibold">Plant Details<FontAwesomeIcon icon={faChevronDown} className="text-[8px] ml-1 mb-[1.6px]"/></span>
                     <span className="text-xs font-semibold text-gray-500">June 25-12:30 Pm<FontAwesomeIcon icon={faChevronDown} className="text-[6px] ml-1 mb-[1.6px]"/></span>
                    </div>
-                   <div className="flex flex-row gap-2 p-4">
+                   <div className="flex flex-row items-center gap-4 justify-between  p-4">
                     <div className="flex flex-col gap-2">
                         <div className="flex flex-col">
-                        <span className="text-md font-semibold text-gray-500">This month</span>
-                        <span className="text-lg font-semibold text-gray-500">254</span>
+                        <span className="text-sm font-semibold text-gray-500">Plant Name</span>
+                        <span className="text-sm font-medium text-gray-400">{userPlantDetail.plant_name}</span>
 
                         </div>
                         <div className="flex flex-col">
-                        <span className="text-md font-semibold text-gray-500">This year</span>
-                        <span className="text-lg font-semibold text-gray-500">3000</span>
+                        <span className="text-sm font-semibold text-gray-500">Plant Capacity</span>
+                        <span className="text-sm font-medium text-gray-400">{userPlantDetail.capacity_kw}</span>
 
                         </div>
 
                         <div className="flex flex-col">
-                        <span className="text-md font-semibold text-gray-500">Total</span>
-                        <span className="text-lg font-semibold text-gray-500">3000</span>
+                        <span className="text-sm font-semibold text-gray-500">Installed date</span>
+                        <span className="text-sm font-medium text-gray-400">{new Date(userPlantDetail.installation_date).toLocaleString()}</span>
 
                         </div>
                         
                       
                     </div>
+
+                    {/*gif solar*/}
+                   
+                    {/* <Lottie
+              options={{
+                loop: true,
+                autoplay: true,
+                animationData: SolarGif,
+                rendererSettings: {
+                  preserveAspectRatio: 'xMidYMid slice',
+                },
+               
+              }}
+              height={150}
+              width={150} className="mb-10"
+            /> */}
+                    
+                  
                    </div>
                     
                 </motion.div>
@@ -223,6 +295,7 @@ console.log('on UserDashBoard token',token);
 </div>
   
  {/* Inverter Data Section */}
+ <InvertersData/>
  
  <div className="w-full border border-gray-200 rounded-lg mt-4 p-4">
         <h2 className="text-lg font-semibold">Inverter Data Dashboard</h2>
