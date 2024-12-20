@@ -138,109 +138,132 @@ console.log('on UserDashBoard token',token);
     return (
         <div className="min-w-full bg-white h-screen flex flex-col">
             <MobileNavbar/>
-            <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-2 mt-4 p-4">
-                <div className="flex flex-1 flex-col gap-2 h-[42vh] ">
-                    <motion.div 
-                      initial={{ opacity: 0}}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 2 }}
-                    className="h-full object-cover  rounded-lg p-2 bg-cover"  style={{ backgroundImage: `url(${backgroundImage})` }} >
-                        <div className="flex flex-row gap-2  justify-center">
-                            <span>
-                                <FontAwesomeIcon icon={faMapMarkerAlt} className="text-lg text-white" />
-                            </span>
-                            {/* Apply overflow-auto and max-width to handle overflow properly */}
-                            <span className="text-xs font-semibold overflow-auto max-w-full text-white">
-                                Bijnore Road, Royal City, Lucknow, Uttar Pradesh 226022
-                            </span>
-                        </div>
-                    </motion.div>
-                    {/*Item-1 col part */}
-                    <motion.div 
-                      initial={{ opacity: 0 ,x: -100}}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{duration: 0.7  }}
-                    className="flex flex-row justify-center items-center gap-2 min-w-64">
-                    <div className="flex flex-col rounded-lg justify-center items-center py-2 w-1/2 border border-gray-200 bg-white ">
-                        <span className="text-xs font-semibold">Total Panels</span>
-                        <span className="text-xs font-semibold">2</span>
-                    </div>
-                    <div className="flex flex-col rounded-lg justify-center items-center py-2 w-1/2 border border-gray-200 bg-white">
-                        <span className="text-xs font-semibold">Total Inverters</span>
-                        <span className="text-xs font-semibold">{invertersLength}</span>
-                    </div>
-                    </motion.div>
-                    
-                </div>
 
-                <motion.div 
-                initial={{ opacity: 0}}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 2.5 }}
-                className="flex flex-1 flex-col gap-2 border border-gray-200 rounded-lg ">
-                   <div className="flex flex-row justify-between items-center p-4 ">
-                    <span className="text-sm font-semibold">Plant Details<FontAwesomeIcon icon={faChevronDown} className="text-[8px] ml-1 mb-[1.6px]"/></span>
-                    <span className="text-xs font-semibold text-gray-500">June 25-12:30 Pm<FontAwesomeIcon icon={faChevronDown} className="text-[6px] ml-1 mb-[1.6px]"/></span>
-                   </div>
-                   <div className="flex flex-row items-center gap-4 justify-between  p-4">
-                    <div className="flex flex-col gap-2">
-                        <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-500">Plant Name</span>
-                        <span className="text-sm font-medium text-gray-400">{userPlantDetail.plant_name}</span>
+<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 mt-4 p-4">
+  {/* First Grid Item */}
+  <div className="flex flex-1 flex-col gap-2 h-full min-h-full">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2 }}
+      className="h-full object-cover rounded-lg p-2 bg-cover"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+      <div className="flex flex-row gap-2 justify-center">
+        <span>
+          <FontAwesomeIcon icon={faMapMarkerAlt} className="text-lg text-white" />
+        </span>
+        <span className="text-xs font-semibold overflow-auto max-w-full text-white">
+          Bijnore Road, Royal City, Lucknow, Uttar Pradesh 226022
+        </span>
+      </div>
+    </motion.div>
 
-                        </div>
-                        <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-500">Plant Capacity</span>
-                        <span className="text-sm font-medium text-gray-400">{userPlantDetail.capacity_kw}</span>
+    <motion.div
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.7 }}
+      className="flex flex-row justify-center items-center gap-2 min-w-64"
+    >
+      <div className="flex flex-col rounded-lg justify-center items-center py-2 w-1/2 border border-gray-200 bg-white">
+        <span className="text-xs font-semibold">Total Panels</span>
+        <span className="text-xs font-semibold">2</span>
+      </div>
+      <div className="flex flex-col rounded-lg justify-center items-center py-2 w-1/2 border border-gray-200 bg-white">
+        <span className="text-xs font-semibold">Total Inverters</span>
+        <span className="text-xs font-semibold">{invertersLength}</span>
+      </div>
+    </motion.div>
+  </div>
 
-                        </div>
+  {/* Second Grid Item with Lottie animation */}
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 2.5 }}
+    className="flex flex-col gap-2 border border-gray-200 rounded-lg h-full min-h-full"
+  >
+    <div className="flex flex-row justify-between items-center p-4">
+      <span className="text-sm font-semibold">
+        Plant Details
+        <FontAwesomeIcon icon={faChevronDown} className="text-[8px] ml-1 mb-[1.6px]" />
+      </span>
+      <span className="text-xs font-semibold text-gray-500">
+        June 25-12:30 Pm
+        <FontAwesomeIcon icon={faChevronDown} className="text-[6px] ml-1 mb-[1.6px]" />
+      </span>
+    </div>
 
-                        <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-500">Installed date</span>
-                        <span className="text-sm font-medium text-gray-400">{new Date(userPlantDetail.installation_date).toLocaleString()}</span>
+    <div className="flex flex-row items-center gap-8 justify-between p-4">
+      {/* Plant Details on the left side */}
+      <div className="flex flex-col gap-2 w-2/3">
+        <div className="flex flex-col">
+          <span className="text-sm font-semibold text-gray-500">Plant Name</span>
+          <span className="text-sm font-medium text-gray-400">{userPlantDetail.plant_name}</span>
+        </div>
+        <div className="flex flex-col">
+          <span className="text-sm font-semibold text-gray-500">Plant Capacity</span>
+          <span className="text-sm font-medium text-gray-400">{userPlantDetail.capacity_kw}</span>
+        </div>
+        <div className="flex flex-col">
+          <span className="text-sm font-semibold text-gray-500">Installed date</span>
+          <span className="text-sm font-medium text-gray-400">
+            {new Date(userPlantDetail.installation_date).toLocaleString()}
+          </span>
+        </div>
+      </div>
 
-                        </div>
-                        
-                      
-                    </div>
-     
-                  
-                   </div>
-                    
-                </motion.div>
-                 {/*Sensors reading*/}
-                <div className="flex flex-1 flex-col gap-[14px] md:col-span-2 xl:col-span-1">
-                   <motion.div 
-                     initial={{ opacity: 0 ,y: -100}}
-                     animate={{ opacity: 1, y: 0 }}
-                     transition={{duration: 0.4, delay:  0.1  }}
-                   className="flex border justify-center border-gray-200 rounded-lg py-2 ">
-                    <span className="text-sm font-semibold">
-                        Current weather
-                    </span>
-                   </motion.div>
-                   
-                   <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-2 gap-2">
-                   {data.map((item, index) => (
-                <motion.div
-                    key={index}
-                    initial={{ opacity: 0 ,y: -100}}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{duration: 0.6, delay: index * 0.15  }}
-                    className="flex flex-row gap-4 items-center justify-center border border-gray-200 rounded-lg py-2 px-4"
-                >
-                    <FontAwesomeIcon icon={item.icon} className="text-[20px]" />
-                    <div className="flex flex-col">
-                        <span className="text-sm font-semibold">
-                          {item.label==="Humidity"?sensorsData.humidity+"%":item.label==="Temperature"?sensorsData.temperature+"°C":item.value}
-                          </span>
-                        <span className="text-xs font-semibold text-gray-200">{item.label}</span>
-                    </div>
-                </motion.div>
-            ))}
-                 </div>            
-                </div>
-            </div>
+      {/* Lottie Animation on the right side */}
+      <div className="flex  justify-center items-center">
+        <Lottie options={{
+          loop: true,
+          autoplay: true,
+          animationData: SolarGif,
+          rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+          }
+        }} height={150} width={150} />
+      </div>
+    </div>
+  </motion.div>
+
+  {/* Third Grid Item */}
+  <div className="flex flex-1 flex-col gap-[14px] md:col-span-2 xl:col-span-1 h-full min-h-full">
+    <motion.div
+      initial={{ opacity: 0, y: -100 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.1 }}
+      className="flex border justify-center border-gray-200 rounded-lg py-2"
+    >
+      <span className="text-sm font-semibold">Current weather</span>
+    </motion.div>
+
+    <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-2 gap-2 mt-1">
+      {data.map((item, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: index * 0.15 }}
+          className="flex flex-row gap-4 items-center justify-center border border-gray-200 rounded-lg py-2 px-4"
+        >
+          <FontAwesomeIcon icon={item.icon} className="text-[20px]" />
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold">
+              {item.label === "Humidity"
+                ? sensorsData.humidity + "%"
+                : item.label === "Temperature"
+                ? sensorsData.temperature + "°C"
+                : item.value}
+            </span>
+            <span className="text-xs font-semibold text-gray-200">{item.label}</span>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</div>
+
 
             {/* Efficiency and yield section */}
             <div className="border border-gray-200 rounded-lg mx-4">
