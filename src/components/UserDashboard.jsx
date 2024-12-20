@@ -1,6 +1,7 @@
 import React from "react";
+import {  useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faCloud, faGauge, faMapMarkerAlt, faSolarPanel, faSun, faThermometerFull, faThunderstorm, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown,faCalendarAlt,faClock, faCloud, faGauge, faMapMarkerAlt, faSolarPanel, faSun, faThermometerFull, faThunderstorm, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import backgroundImage from "../asset/images/solar-panel-dashboard.jpg";
 import { faWater } from "@fortawesome/free-solid-svg-icons/faWater";
 import MobileNavbar from "./MobileNavBar";
@@ -9,6 +10,7 @@ import DashboardGraphs from "./UserDashboardGraph";
 import {initializeSocket, getSocket } from '../socket';
 import { useState,useEffect } from "react";
 import {motion} from 'framer-motion';
+import {useActiveTab} from '../context/ActiveTab/ActiveTab'
 import { useAuth } from "../context/AuthContext/AuthContext";
 import Loader from "./Loader";
 import InvertersData  from "./Inverters";
@@ -16,6 +18,8 @@ import axios from "axios";
 import Lottie from 'react-lottie';
 import SolarGif from '../asset/round_solar.json'
 const UserDashBoard = () => {
+  const navigate = useNavigate();
+  const { activeTab, setActiveTab } =useActiveTab();
   const {token,user,loading}=useAuth();
   console.log('on UserDashBoard user',user?._id);
     const [inverterData, setInverterData] = useState({});
@@ -23,13 +27,17 @@ const UserDashBoard = () => {
     const [userPlantDetail,setUserPlantDetail]= useState({})
     const [invertersLength,setInvertersLength] = useState(0);
 
+    const handleNavigation=()=>{
+      setActiveTab('inverters');
+      navigate('/inverters',{replace:true});
+    }
     const fetchPlants =async()=>{
       const requestBody= {
         customer_id:user?._id
       }
       console.log('request body userdashboard',requestBody)
       try {
-    const response= await axios.post('http://localhost:3000/api/user/get-plant',requestBody);
+    const response= await axios.post('http://192.168.1.49:3000/api/user/get-plant',requestBody);
     if(response.status===200){
       console.log('response is ',response.data.data[0])
       if (response.data.data  && response.data.data.length > 0) {
@@ -52,11 +60,12 @@ const UserDashBoard = () => {
       }
       console.log('request body userdashboard for inverters of plants',requestBody)
       try {
-    const response= await axios.post('http://localhost:3000/api/inverters/get-all-inverter',requestBody);
+    const response= await axios.post('http://192.168.1.49:3000/api/inverters/get-all-inverter',requestBody);
     if(response.status===200){
       console.log('response of inverters for plants',response.data.data[0])
       if (response.data.data  && response.data.data.length > 0) {
        setInvertersLength(response.data.data.length)
+       console.log(response.data.data[0]['inverter_id'])
       } else {
         console.log('No Inverters found for the plant');
       }
@@ -169,7 +178,7 @@ console.log('on UserDashBoard token',token);
         <span className="text-xs font-semibold">Total Panels</span>
         <span className="text-xs font-semibold">2</span>
       </div>
-      <div className="flex flex-col rounded-lg justify-center items-center py-2 w-1/2 border border-gray-200 bg-white">
+      <div className="flex flex-col rounded-lg justify-center items-center py-2 w-1/2 border border-gray-200 bg-white" onClick={handleNavigation}>
         <span className="text-xs font-semibold">Total Inverters</span>
         <span className="text-xs font-semibold">{invertersLength}</span>
       </div>
@@ -183,16 +192,31 @@ console.log('on UserDashBoard token',token);
     transition={{ duration: 2.5 }}
     className="flex flex-col gap-2 border border-gray-200 rounded-lg h-full min-h-full"
   >
-    <div className="flex flex-row justify-between items-center p-4">
-      <span className="text-sm font-semibold">
-        Plant Details
-        <FontAwesomeIcon icon={faChevronDown} className="text-[8px] ml-1 mb-[1.6px]" />
-      </span>
-      <span className="text-xs font-semibold text-gray-500">
-        June 25-12:30 Pm
-        <FontAwesomeIcon icon={faChevronDown} className="text-[6px] ml-1 mb-[1.6px]" />
+    <div className="flex flex-row justify-between  p-4">
+  <span className="text-sm font-semibold">
+    Plant Details
+    <FontAwesomeIcon icon={faChevronDown} className="text-[8px] ml-1 mb-[1.6px]" />
+  </span>
+  
+  <div className="flex flex-col gap-1 items-end">
+    {/* Date with Calendar Icon */}
+    <div className="flex items-center gap-2">
+      <FontAwesomeIcon icon={faCalendarAlt} className="text-sm text-gray-500" />
+      <span className="text-sm text-center font-semibold text-gray-400">
+        {new Date().toLocaleDateString()}
       </span>
     </div>
+
+    {/* Time with Clock Icon */}
+    {/* <div className="flex items-center gap-1">
+      <FontAwesomeIcon icon={faClock} className="text-[12px] text-gray-500" />
+      <span className="text-xs font-semibold text-gray-400">
+        {new Date().toLocaleTimeString()}
+      </span>
+    </div> */}
+  </div>
+</div>
+
 
     <div className="flex flex-row items-center gap-8 justify-between p-4">
       {/* Plant Details on the left side */}

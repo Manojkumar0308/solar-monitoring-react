@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {useActiveTab} from '../context/ActiveTab/ActiveTab'
 import {useDialog} from '../context/DialogContext/DialogContext';
 import {  faTelegramPlane, faWindows } from '@fortawesome/free-brands-svg-icons';
-import { faBell, faCake, faChevronDown, faGear,  faSolarPanel, faClose, faUser, faUsers, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faCake, faChevronDown, faGear,  faSolarPanel, faClose, faUser, faUsers, faRightFromBracket, faIndustry } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './Dropdown';
 const Sidebar = () => {
   const { user,logout } = useAuth();
@@ -41,7 +41,7 @@ const Sidebar = () => {
    
   };
  
-  const tabs =user && user.role === 'admin' ? ['dashboard', 'users', 'settings', 'profile','sendnotification','logout'] : ['userDashboard', 'settings', 'profile', ,'notifications','support','logout'];
+  const tabs =user && user.role === 'admin' ? ['dashboard', 'users', 'settings', 'profile','sendnotification','logout'] : ['userDashboard', 'settings', 'profile', ,'notifications','inverters','support','logout'];
  
 return (
   <div
@@ -164,6 +164,8 @@ const getIcon = (tab) => {
         return faTelegramPlane;
         case 'notifications':
           return faBell;
+          case 'inverters':
+            return faIndustry
           case 'support':
           return faCake;
           case 'logout':

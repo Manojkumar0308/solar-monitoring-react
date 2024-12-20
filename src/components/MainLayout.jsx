@@ -20,6 +20,7 @@ const Tables = lazy(() => import("../components/Table"));
 const Loader = lazy(() => import("../components/Loader"));
 const AuthContainer = lazy(() => import("../components/AuthContainer"));
 const ForGotPassword = lazy(() => import("../components/ForgotPassword"));
+const Inverters = lazy(()=> import('../components/Inverters'));
 export const MainLayout = () => {
   const { isSidebarOpen } = useSidebarToggle();
 
@@ -87,6 +88,7 @@ export const MainLayout = () => {
               <Route path="support" element={<UserDashBoard />} />
               <Route path="/" element={<AuthContainer />} /> {/* Default route */}
               <Route path="/forgotPassword" element ={<ForGotPassword />}/>
+              <Route path = "/inverters" element={<Inverters/>}/>
             </Routes>
           </Suspense>
         </div>
