@@ -139,7 +139,7 @@ console.log('on UserDashBoard token',token);
         <div className="min-w-full bg-white h-screen flex flex-col">
             <MobileNavbar/>
             <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-2 mt-4 p-4">
-                <div className="flex flex-1 flex-col gap-2 h-[32vh] ">
+                <div className="flex flex-1 flex-col gap-2 h-[42vh] ">
                     <motion.div 
                       initial={{ opacity: 0}}
                       animate={{ opacity: 1 }}
@@ -203,23 +203,7 @@ console.log('on UserDashBoard token',token);
                         
                       
                     </div>
-
-                    {/*gif solar*/}
-                   
-                    {/* <Lottie
-              options={{
-                loop: true,
-                autoplay: true,
-                animationData: SolarGif,
-                rendererSettings: {
-                  preserveAspectRatio: 'xMidYMid slice',
-                },
-               
-              }}
-              height={150}
-              width={150} className="mb-10"
-            /> */}
-                    
+     
                   
                    </div>
                     
