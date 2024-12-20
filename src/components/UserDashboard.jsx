@@ -277,7 +277,7 @@ console.log('on UserDashBoard token',token);
     </div>
   </div>
 </div>
-  
+  <div></div>
  {/* Inverter Data Section */}
  <InvertersData/>
  
