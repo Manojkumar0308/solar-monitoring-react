@@ -324,23 +324,7 @@ console.log('on UserDashBoard token',token);
     </div>
   </div>
 </div>
-  <div></div>
- {/* Inverter Data Section */}
- <InvertersData/>
- 
- <div className="w-full border border-gray-200 rounded-lg mt-4 p-4">
-        <h2 className="text-lg font-semibold">Inverter Data Dashboard</h2>
-        {console.log('Inverter data:', inverterData)}
-        {console.log('Inverter data:', inverterData.customer_id)}
-        
-       
-     <div className="p-2">
-        <p>Inverter ID: {inverterData.inverter_id}</p>
-            <p>Power Output: {inverterData.power_output} kW</p>
-            <p>Total Energy Generated: {inverterData.total_energy_generated} kWh</p> 
-     </div>
-      
-      </div>
+  
 
 
 

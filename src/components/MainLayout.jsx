@@ -6,6 +6,7 @@ import { UserPlantProvider } from "../context/UserPlantContext/UserPlantContext"
 import { UserProvider } from "../context/AllUserContext/AllUserContext";
 import { NotificationProvider } from "../context/NotificationContext";
 import { SendNotificationProvider } from '../context/SendNotificationContext/SendNotificationContext';
+import { InvertersDataProvider } from "../context/InvertersDataContext/InvertersDataContext";
 
 
 // Lazily load components
@@ -88,7 +89,11 @@ export const MainLayout = () => {
               <Route path="support" element={<UserDashBoard />} />
               <Route path="/" element={<AuthContainer />} /> {/* Default route */}
               <Route path="/forgotPassword" element ={<ForGotPassword />}/>
-              <Route path = "/inverters" element={<Inverters/>}/>
+              <Route path = "/inverters" element={
+                <InvertersDataProvider>
+                   <Inverters/>
+                </InvertersDataProvider>
+               }/>
             </Routes>
           </Suspense>
         </div>
