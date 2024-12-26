@@ -1,18 +1,33 @@
-import * as React from 'react';
+import  React,{useState} from 'react';
 import '@mui/material';
 import { useUserPlant } from '../context/UserPlantContext/UserPlantContext';
 import { useActiveTab } from '../context/ActiveTab/ActiveTab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 import Loader from './Loader';
 import MobNavBar from './MobileNavBar';
 import { div } from 'framer-motion/client';
 export default function DataGridDemo({  showMobNavBar }) {
  const { activeTab } = useActiveTab();
+ const navigate = useNavigate();
  console.log('activeTab:', activeTab);
-  const { plantData, loading,currentPage, totalPages, handlePageChange } = useUserPlant();
+    // const [selectedData, setSelectedData] = useState(null);
+    const { plantData, loading,currentPage, totalPages, handlePageChange } = useUserPlant();
 
  const [isPlantDataFetched,setIsPlantDataFetched] = React.useState(false);
+
+
+    const handleRowClick = (userId, plantId) => {
+        // Save userId and plantId when the row is clicked
+        sessionStorage.setItem('userId', userId);
+        sessionStorage.setItem('plantId', plantId);
+        console.log(`User ID: ${userId}, Plant ID: ${plantId}`);
+       
+          navigate('/userDashboard',{replace:true});
+        
+        // You can perform other actions here, like sending the data to an API.
+    };
 
  React.useEffect(() => {
  if(!loading && plantData.length > 0) {
@@ -41,6 +56,7 @@ export default function DataGridDemo({  showMobNavBar }) {
 
 if(plantData.length > 0) {
      // Render table
+     console.log('plantdata is ',plantData)
   return (
     <div>
           {showMobNavBar && (
@@ -68,7 +84,7 @@ if(plantData.length > 0) {
                        
                           {plantData.map((user) => (
                               user.plant_details.map((plant) => (
-                                  <tr key={plant._id} className="border-b">
+                                  <tr key={plant._id} className="border-b" onClick={() => handleRowClick(user._id, plant.plant_id)}>
                                       
                                       <td className="px-6 py-4 text-sm text-gray-900">{plant.plant_name}</td>
                                       <td className="px-6 py-4 text-sm text-gray-900">{plant.plant_id}</td>

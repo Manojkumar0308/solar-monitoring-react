@@ -11,6 +11,7 @@ import { DialogProvider } from '../src/context/DialogContext/DialogContext';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Router>
     <DialogProvider>
+
     <ActiveTabProvider>
         <AuthProvider>
           <PasswordVisibilityProvider>

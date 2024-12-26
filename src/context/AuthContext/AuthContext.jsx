@@ -1,11 +1,13 @@
 // AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useActiveTab } from '../ActiveTab/ActiveTab';
+
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {useDialog} from '../DialogContext/DialogContext'
 import {initializeSocket} from '../../socket'
 const AuthContext = createContext();
+
 
 export const AuthProvider = ({ children }) => {
   // const { setLoading } = useLoading(); // Import loading context'
@@ -13,6 +15,7 @@ export const AuthProvider = ({ children }) => {
    const { showDialog, hideDialog } = useDialog();
   const [user, setUser] = useState([]);
   const {setActiveTab} = useActiveTab();
+  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null); // New state for token
   const [loading, setLoading] = useState(false); // Add loading state
@@ -126,6 +129,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoggedIn(false);
     setToken(null);
     setActiveTab('')
+   
     sessionStorage.clear(); // Remove token from sessionStorage
     navigate('/',{replace:true});
   };

@@ -12,16 +12,22 @@ import { useState,useEffect } from "react";
 import {motion} from 'framer-motion';
 import {useActiveTab} from '../context/ActiveTab/ActiveTab'
 import { useAuth } from "../context/AuthContext/AuthContext";
+import { useUserPlant } from "../context/UserPlantContext/UserPlantContext";
 import Loader from "./Loader";
 import InvertersData  from "./Inverters";
 import axios from "axios";
 import Lottie from 'react-lottie';
 import SolarGif from '../asset/round_solar.json'
 const UserDashBoard = () => {
+const userId =  sessionStorage.getItem('userId');
+const plantId = sessionStorage.getItem('plantId');
   const navigate = useNavigate();
   const { activeTab, setActiveTab } =useActiveTab();
   const {token,user,loading}=useAuth();
+  // const {selectedData} = useUserPlant();
+  // console.log('selectedData',selectedData);
   console.log('on UserDashBoard user',user?._id);
+  console.log('user role :',user.role);
     const [inverterData, setInverterData] = useState({});
     const [sensorsData, setSensorsData] = useState({ humidity: "NA", temperature: "NA" });
     const [userPlantDetail,setUserPlantDetail]= useState({})
@@ -32,8 +38,10 @@ const UserDashBoard = () => {
       navigate('/inverters',{replace:true});
     }
     const fetchPlants =async()=>{
+      console.log('userId',userId);
       const requestBody= {
-        customer_id:user?._id
+
+        customer_id:userId===null?user?._id:userId
       }
       console.log('request body userdashboard',requestBody)
       try {

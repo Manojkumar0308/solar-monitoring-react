@@ -9,7 +9,9 @@ import 'react-toastify/dist/ReactToastify.css'; // Import Toastify styles
 import { useActiveTab } from "./context/ActiveTab/ActiveTab";
 import { useDialog } from "./context/DialogContext/DialogContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import { UserPlantProvider } from "./context/UserPlantContext/UserPlantContext";
 import { AuthProvider } from "./context/AuthContext/AuthContext";
+
 const App = () => {
   const {loading,logout } = useAuth();
 const {setActiveTab} = useActiveTab();
@@ -41,17 +43,20 @@ setActiveTab('')
 
   return (
     <SidebarToggleProvider>
+      
      
           <div className={`h-screen `}>
             {(!isLogedIn || isTokenExpired )? 
             <AuthContainer /> :
           
             <NotificationProvider>
+              
               <MainLayout />
               </NotificationProvider> 
              
               }
-          </div>     
+          </div>
+            
     </SidebarToggleProvider>
   );
 };
