@@ -6,8 +6,10 @@ const Settings =()=>{
         <div className="max-w-full bg-gray-100">
                {/* Use MobileNavbar component */}
       <MobNavBar/>
-
-      <h1 className="justify-center text-3xl font-bold items-center">Settings</h1>
+<div className="flex  items-center justify-center">
+<h1 className=" text-3xl font-bold ">Settings</h1>
+</div>
+     
         </div>
     );
 }

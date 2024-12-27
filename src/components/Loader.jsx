@@ -1,7 +1,7 @@
 import React from 'react';
 import {Blocks} from 'react-loader-spinner';
 import { Dialog,  Box, CircularProgress } from '@mui/material';
-const Loader = ({open}) => {
+const Loader = ({open=true}) => {
     
     return (
         <Dialog

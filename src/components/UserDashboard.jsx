@@ -20,7 +20,6 @@ import Lottie from 'react-lottie';
 import SolarGif from '../asset/round_solar.json'
 const UserDashBoard = () => {
 const userId =  sessionStorage.getItem('userId');
-const plantId = sessionStorage.getItem('plantId');
   const navigate = useNavigate();
   const { activeTab, setActiveTab } =useActiveTab();
   const {token,user,loading}=useAuth();
@@ -34,8 +33,17 @@ const plantId = sessionStorage.getItem('plantId');
     const [invertersLength,setInvertersLength] = useState(0);
 
     const handleNavigation=()=>{
-      setActiveTab('inverters');
-      navigate('/inverters',{replace:true});
+      
+      if(invertersLength > 0 && userId===null){
+        setActiveTab('inverters');
+        navigate('/inverters',-1);
+      }else if(invertersLength > 0 && userId!==null){
+        navigate('/inverters',-1);
+        
+      }else{
+        console.log('No inverters there');
+      }
+      
     }
     const fetchPlants =async()=>{
       console.log('userId',userId);
@@ -56,6 +64,8 @@ const plantId = sessionStorage.getItem('plantId');
         console.log('No plants found for the customer');
       }
       
+    }else{
+      console.log('response',response);
     }
       } catch (error) {
         console.log(error.message);
@@ -70,14 +80,14 @@ const plantId = sessionStorage.getItem('plantId');
       try {
     const response= await axios.post('http://192.168.1.49:3000/api/inverters/get-all-inverter',requestBody);
     if(response.status===200){
-      console.log('response of inverters for plants',response.data.data[0])
-      if (response.data.data  && response.data.data.length > 0) {
+      console.log('response of inverters length for plants',response.data.data.length)
+     
        setInvertersLength(response.data.data.length)
        console.log(response.data.data[0]['inverter_id'])
-      } else {
-        console.log('No Inverters found for the plant');
-      }
       
+      
+    }else{
+      console.log('response status',response.status);
     }
       } catch (error) {
         console.log(error.message);
@@ -98,13 +108,13 @@ console.log('on UserDashBoard token',token);
       // Ensure socket is defined before setting up listeners
       if (socket) {
         // Listen for real-time data from server
-        socket.on("sendInvertersData", (data) => {
-          console.log("Received inverter data:", data);
-          if (user?._id === data.customer_id) {
-            console.log("Data matches customer:", data);
-            setInverterData(data);
-          }
-        });
+        // socket.on("sendInvertersData", (data) => {
+        //   console.log("Received inverter data:", data);
+        //   if (user?._id === data.customer_id) {
+        //     console.log("Data matches customer:", data);
+        //     setInverterData(data);
+        //   }
+        // });
     
         socket.on("sendSensorData", (data) => {
           console.log("Received sensors data:", data);

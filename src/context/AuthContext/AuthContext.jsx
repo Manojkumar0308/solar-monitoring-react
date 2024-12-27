@@ -131,7 +131,7 @@ export const AuthProvider = ({ children }) => {
     setActiveTab('')
    
     sessionStorage.clear(); // Remove token from sessionStorage
-    navigate('/',{replace:true});
+    navigate('/',-1);
   };
 
 
@@ -156,7 +156,7 @@ export const AuthProvider = ({ children }) => {
       console.log('response',response);
       if(response.status===200){
         hideDialog();
-        navigate('/forgotPassword',{replace:true})
+        navigate('/forgotPassword',-1)
       }else{
         console.log('else part',response)
         showDialog({ type: 'message',

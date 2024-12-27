@@ -6,20 +6,25 @@ import { initializeSocket, getSocket } from "../../socket";
 const InvertersDataContext = createContext();
 
 export const InvertersDataProvider = ({ children }) => {
+  const userId =  sessionStorage.getItem('userId');
+const plantId = sessionStorage.getItem('plantId');
   const { user } = useAuth();
   const [inverterDetail, setInverterDetail] = useState([]);
-  const [inverterData, setInverterData] = useState({});
+  const [inverterData, setInverterData] = useState(() => {
+    const savedInverterData = sessionStorage.getItem('inverterData');
+    return savedInverterData ? JSON.parse(savedInverterData) : {};
+  });
 
   // Fetch plants
   const fetchPlants = async () => {
     const requestBody = {
-      customer_id: user?._id,
+      customer_id:userId===null? user?._id:userId,
     };
     try {
       const response = await axios.post("http://192.168.1.49:3000/api/user/get-plant", requestBody);
       if (response.status === 200) {
         if (response.data.data && response.data.data.length > 0) {
-          fetchPlantsInverter(response.data.data[0]["plant_id"]);
+          fetchPlantsInverter(plantId===null?response.data.data[0]["plant_id"]:plantId);
         } else {
           console.log("No plants found for the customer");
         }
@@ -30,9 +35,9 @@ export const InvertersDataProvider = ({ children }) => {
   };
 
   // Fetch inverters based on plant id
-  const fetchPlantsInverter = async (plantId) => {
+  const fetchPlantsInverter = async (plant_id) => {
     const requestBody = {
-      plant_id: plantId,
+      plant_id: plant_id,
     };
     try {
       const response = await axios.post("http://192.168.1.49:3000/api/inverters/get-all-inverter", requestBody);
@@ -56,9 +61,12 @@ export const InvertersDataProvider = ({ children }) => {
 
     const socket = getSocket();
     if (socket) {
+      const userId =  sessionStorage.getItem('userId');
       socket.on("sendInvertersData", (data) => {
-        if (user?._id === data.customer_id) {
+        if (userId===null?user?._id:userId === data.customer_id) {
           setInverterData(data);
+            // Store the updated inverterData in sessionStorage
+            sessionStorage.setItem('inverterData', JSON.stringify(data));
         }
       });
     }

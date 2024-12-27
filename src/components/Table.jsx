@@ -3,7 +3,7 @@ import '@mui/material';
 import { useUserPlant } from '../context/UserPlantContext/UserPlantContext';
 import { useActiveTab } from '../context/ActiveTab/ActiveTab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight,faUsers } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import Loader from './Loader';
 import MobNavBar from './MobileNavBar';
@@ -24,7 +24,7 @@ export default function DataGridDemo({  showMobNavBar }) {
         sessionStorage.setItem('plantId', plantId);
         console.log(`User ID: ${userId}, Plant ID: ${plantId}`);
        
-          navigate('/userDashboard',{replace:true});
+          navigate('/userDashboard',-1);
         
         // You can perform other actions here, like sending the data to an API.
     };
@@ -63,8 +63,11 @@ if(plantData.length > 0) {
             <MobNavBar />
           )}
         <div className=" mx-auto px-4 py-8">
-            
-            <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
+        {activeTab === 'users'&&  (<div className="flex items-center mb-4">
+            <FontAwesomeIcon icon={faUsers} className="text-3xl text-gray-400 mr-2" />
+            <h2 className="text-xl font-bold ml-2">All Sites</h2>
+          </div>)}
+            <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200 mt-10">
                   <table className="min-w-full table-auto">
                       <thead>
                           <tr className="bg-gray-100 border-b">
@@ -83,6 +86,7 @@ if(plantData.length > 0) {
                         
                        
                           {plantData.map((user) => (
+                            
                               user.plant_details.map((plant) => (
                                   <tr key={plant._id} className="border-b" onClick={() => handleRowClick(user._id, plant.plant_id)}>
                                       
@@ -90,7 +94,7 @@ if(plantData.length > 0) {
                                       <td className="px-6 py-4 text-sm text-gray-900">{plant.plant_id}</td>
                                       <td className="px-6 py-4 text-sm text-gray-900">{plant.capacity_kw}</td>
                                       <td className="px-6 py-4 text-sm text-gray-900">{plant.location}</td>
-                                      <td className="px-6 py-4 text-sm text-gray-900">{user.first_name} {user.last_name}</td>
+                                      <td className="px-6 py-4 text-sm text-gray-900">{user.first_name} {user.last_name}{plant.length}</td>
                                       <td className="px-6 py-4 text-sm text-gray-900">
                                           <span className={`px-2 py-1 rounded-full text-xs ${plant.status === 'active' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-800'}`}>
                                               {plant.status}
