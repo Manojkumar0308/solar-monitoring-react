@@ -43,7 +43,7 @@ export const NotificationProvider = ({ children }) => {
   }]);
 
   const limit = 10; // Records per page
-  const API_URL = "http://192.168.1.49:3000/api/admin/get-notification";
+  const API_URL = "http://192.168.1.238:3000/api/admin/get-notification";
   const fetchNotifications = async (stDate = "", enDate = "") => {
     try {
       showDialog({ type: 'loading', message: 'Loading....' });

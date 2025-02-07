@@ -18,7 +18,7 @@ const {showDialog,hideDialog  }=    useDialog();
             try {
                 showDialog({ type: 'loading', message: 'Loading...' });
                
-                const response = await fetch('http://192.168.1.49:3000/api/user/get-user');
+                const response = await fetch('http://192.168.1.238:3000/api/user/get-user');
                
                 console.log('response:', response);
                 const data = await response.json();

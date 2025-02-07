@@ -21,7 +21,7 @@ const plantId = sessionStorage.getItem('plantId');
       customer_id:userId===null? user?._id:userId,
     };
     try {
-      const response = await axios.post("http://192.168.1.49:3000/api/user/get-plant", requestBody);
+      const response = await axios.post("http://192.168.1.238:3000/api/user/get-plant", requestBody);
       if (response.status === 200) {
         if (response.data.data && response.data.data.length > 0) {
           fetchPlantsInverter(plantId===null?response.data.data[0]["plant_id"]:plantId);
@@ -40,7 +40,7 @@ const plantId = sessionStorage.getItem('plantId');
       plant_id: plant_id,
     };
     try {
-      const response = await axios.post("http://192.168.1.49:3000/api/inverters/get-all-inverter", requestBody);
+      const response = await axios.post("http://192.168.1.238:3000/api/inverters/get-all-inverter", requestBody);
       if (response.status === 200) {
         setInverterDetail(response.data.data || []);
       }
