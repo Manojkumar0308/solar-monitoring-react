@@ -39,7 +39,7 @@ export const SendNotificationProvider = ({ children }) => {
       message: message
      }
      console.log('Request Body:', requestBody);
-      const response = await axios.post('http://192.168.1.238:3000/api/admin/send-notification', requestBody, {
+      const response = await axios.post('https://solar-monitoring-api.onrender.com/api/admin/send-notification', requestBody, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -20,7 +20,7 @@ export const SignupProvider = ({children})=>{
         try {
             showDialog({ type: 'loading', message: 'Signing up...' });
     
-            const response = await axios.post('http://192.168.1.238:3000/api/user/send-verification', {
+            const response = await axios.post('https://solar-monitoring-api.onrender.com/api/user/send-verification', {
                 first_name: firstName,
                 last_name: lastName,
                 email: regEmail,

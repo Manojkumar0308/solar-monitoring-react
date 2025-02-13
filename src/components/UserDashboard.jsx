@@ -53,7 +53,7 @@ const userId =  sessionStorage.getItem('userId');
       }
       console.log('request body userdashboard',requestBody)
       try {
-    const response= await axios.post('http://192.168.1.238:3000/api/plants/get-plant',requestBody);
+    const response= await axios.post('https://solar-monitoring-api.onrender.com/api/plants/get-plant',requestBody);
     if(response.status===200){
       console.log('response is ',response.data.data[0])
       if (response.data.data  && response.data.data.length > 0) {
@@ -78,7 +78,7 @@ const userId =  sessionStorage.getItem('userId');
       }
       console.log('request body userdashboard for inverters of plants',requestBody)
       try {
-    const response= await axios.post('http://192.168.1.238:3000/api/inverters/get-all-inverter',requestBody);
+    const response= await axios.post('https://solar-monitoring-api.onrender.com/api/inverters/get-all-inverter',requestBody);
     if(response.status===200){
       console.log('response of inverters length for plants',response.data.data.length)
      

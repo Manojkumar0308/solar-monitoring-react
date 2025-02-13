@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }) => {
       showDialog({ type: 'loading', message: 'Logging in...' });
 
       const response = await axios.post(
-        'http://192.168.1.238:3000/api/user/login',
+        'https://solar-monitoring-api.onrender.com/api/user/login',
         { email, password },
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -152,7 +152,7 @@ export const AuthProvider = ({ children }) => {
         email
       }
       console.log('Request Body',requestBody);
-      const response = await axios.post(  'http://192.168.1.238:3000/api/user/get-verify-user', requestBody,{ headers: { 'Content-Type': 'application/json' } })
+      const response = await axios.post(  'https://solar-monitoring-api.onrender.com/api/user/get-verify-user', requestBody,{ headers: { 'Content-Type': 'application/json' } })
       console.log('response',response);
       if(response.status===200){
         hideDialog();

@@ -6,7 +6,7 @@ let socket;
 export const initializeSocket = () => {
   console.log('Initializing socket connection...');
   if (!socket || !socket.disconnected) {
-    socket = io('http://192.168.1.238:3000', {
+    socket = io('https://solar-monitoring-api.onrender.com', {
   
       // transports: ['websocket'],
      
