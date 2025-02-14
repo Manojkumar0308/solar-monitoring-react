@@ -12,7 +12,7 @@ const ForGotPassword =()=>{
      const handleSubmit =async ()=>{
         console.log('handle submit button clicked');
         // e.preventDefault(); // Prevent the default form submission behavior
-    await changePassword(password, confirmPassword); // Call the changePassword function
+    await changePassword(); // Call the changePassword function
      }
     return (
         <div className='flex flex-col items-center bg-transparent md:w-full w-full justify-center min-h-screen '>

@@ -175,8 +175,8 @@ console.log('password',password);
     }
   }
   
-  const changePassword = async (e) => {
-    e.preventDefault();
+  const changePassword = async () => {
+   
     const storedEmail = sessionStorage.getItem('user-email'); // Get email from sessionStorage
 console.log('storedEmail',storedEmail);
     if (!newPassword || !confirmPassword) {
@@ -230,7 +230,7 @@ console.log('requestBody',requestBody);
         // Navigate to the root path after 3 seconds
         setTimeout(() => {
             // Assuming you are using React Router
-            navigate('/',-1); // Replace with your navigation method
+            navigate('/',{replace:true}); // Replace with your navigation method
         }, 3000);
       } else {
         showDialog({
