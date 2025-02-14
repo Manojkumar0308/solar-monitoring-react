@@ -225,10 +225,7 @@ console.log('requestBody',requestBody);
        
         setNewPassword('');
         setConfirmPassword('');
-        // setTimeout(() => {
-        //   hideDialog();
-        //   navigate('/login', { replace: true });
-        // }, 3000);
+       
       
       } else {
         showDialog({
