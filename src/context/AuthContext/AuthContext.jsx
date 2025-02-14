@@ -231,8 +231,9 @@ console.log('requestBody',requestBody);
           setNewPassword('');
           setConfirmPassword('');
           // Navigate to the root route.
-          navigate('/', -1);
-        }, 3000); // 2-second delay
+          
+        }, 3000); // 3-second delay
+        navigate('/', -1);
       }
     } catch (error) {
       hideDialog();
