@@ -233,7 +233,7 @@ console.log('requestBody',requestBody);
           // Navigate to the root route.
           
         }, 3000); // 3-second delay
-        navigate('/', -1);
+        navigate('/', { replace: true });
       }
     } catch (error) {
       hideDialog();
