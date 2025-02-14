@@ -175,8 +175,8 @@ console.log('password',password);
     }
   }
   
-  const changePassword = async () => {
-   
+  const changePassword = async (e) => {
+   e.preventDefault();
     const storedEmail = sessionStorage.getItem('user-email'); // Get email from sessionStorage
 console.log('storedEmail',storedEmail);
     if (!newPassword || !confirmPassword) {
