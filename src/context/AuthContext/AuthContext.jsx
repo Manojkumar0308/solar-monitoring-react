@@ -175,8 +175,7 @@ console.log('password',password);
     }
   }
   
-  const changePassword = async () => {
-   
+  const changePassword = async (newPassword, confirmPassword) => {
     const storedEmail = sessionStorage.getItem('user-email'); // Get email from sessionStorage
 console.log('storedEmail',storedEmail);
     if (!newPassword || !confirmPassword) {
@@ -227,11 +226,7 @@ console.log('requestBody',requestBody);
         setNewPassword('');
         setConfirmPassword('');
 
-        // Navigate to the root path after 3 seconds
-        setTimeout(() => {
-            // Assuming you are using React Router
-            navigate('/',{replace:true}); // Replace with your navigation method
-        }, 3000);
+      
       } else {
         showDialog({
           type: 'message',
@@ -258,7 +253,7 @@ console.log('requestBody',requestBody);
   };
   
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,email,password,setLoading, login, logout,handleLoginClick,verifyUseremail,changePassword,newPassword, confirmPassword,setEmail,setPassword,setNewPassword,setConfirmPassword }}>
+    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,email,password,setLoading, login, logout,handleLoginClick,verifyUseremail,changePassword,setEmail,setPassword,setNewPassword,setConfirmPassword }}>
       {children}
     </AuthContext.Provider>
   );

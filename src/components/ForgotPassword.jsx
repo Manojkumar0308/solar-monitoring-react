@@ -5,14 +5,13 @@ import { usePasswordVisibility } from '../context/PasswordVisibilityContext/Pass
 import {  faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from "../context/AuthContext/AuthContext";
 const ForGotPassword =()=>{
-    //  const [password, setPassword] = useState('');
-    //  const [confirmPassword, setConfirmPassword] = useState('');
+     const [password, setPassword] = useState('');
+     const [confirmPassword, setConfirmPassword] = useState('');
      const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
-     const { newPassword,confirmPassword,setNewPassword,setConfirmPassword,changePassword } = useAuth();
+      const { changePassword } = useAuth();
      const handleSubmit =async ()=>{
         console.log('handle submit button clicked');
-        
-    await changePassword(); // Call the changePassword function
+      await changePassword(password,confirmPassword);
      }
     return (
         <div className='flex flex-col items-center bg-transparent md:w-full w-full justify-center min-h-screen '>
@@ -24,8 +23,8 @@ const ForGotPassword =()=>{
         label="New Password"
         autoComplete='off'
         placeholder="Enter new password"
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         icon={isPasswordVisible ? faEye: faEyeSlash }
         onIconClick={togglePasswordVisibility}
        
