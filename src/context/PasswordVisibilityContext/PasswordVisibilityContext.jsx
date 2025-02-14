@@ -1,4 +1,5 @@
 // PasswordVisibilityContext.js
+import { set } from 'date-fns';
 import React, { createContext, useContext, useState } from 'react';
 
 // Create context
@@ -16,7 +17,7 @@ export const PasswordVisibilityProvider = ({ children }) => {
   };
 
   return (
-    <PasswordVisibilityContext.Provider value={{ isPasswordVisible, togglePasswordVisibility }}>
+    <PasswordVisibilityContext.Provider value={{ isPasswordVisible, togglePasswordVisibility,setIsPasswordVisible }}>
       {children}
     </PasswordVisibilityContext.Provider>
   );

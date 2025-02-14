@@ -5,7 +5,8 @@ import { useActiveTab } from '../ActiveTab/ActiveTab';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {useDialog} from '../DialogContext/DialogContext'
-import {initializeSocket} from '../../socket'
+import {initializeSocket} from '../../socket';
+import { usePasswordVisibility } from '../PasswordVisibilityContext/PasswordVisibilityContext';
 const AuthContext = createContext();
 
 
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }) => {
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const { setIsPasswordVisible} = usePasswordVisibility();
   useEffect(() => {
   
     const fetchData = async () => {
@@ -175,7 +177,8 @@ console.log('password',password);
     }
   }
   
-  const changePassword = async (newPassword, confirmPassword) => {
+  const changePassword = async (e) => {
+    e.preventDefault();
     const storedEmail = sessionStorage.getItem('user-email'); // Get email from sessionStorage
 console.log('storedEmail',storedEmail);
     if (!newPassword || !confirmPassword) {
@@ -222,18 +225,23 @@ console.log('requestBody',requestBody);
           message: 'Password changed successfully.',
           // actions: [{ label: 'Close', onClick: hideDialog }],
         });
+       
         setNewPassword('');
         setConfirmPassword('');
-      } else {
+        setIsPasswordVisible(false);
+
+        // Navigate to the root path after 3 seconds
         setTimeout(() => {
-          hideDialog();
-          // Reset all password-related state variables.
-          setNewPassword('');
-          setConfirmPassword('');
-          // Navigate to the root route.
-          
-        }, 3000); // 3-second delay
-        navigate('/', { replace: true });
+            // Assuming you are using React Router
+            navigate('/',-1); // Replace with your navigation method
+        }, 3000);
+      } else {
+        showDialog({
+          type: 'message',
+          title: 'Error',
+          message: response.message,
+          actions: [{ label: 'Close', onClick: hideDialog }],
+        });
       }
     } catch (error) {
       hideDialog();
@@ -253,7 +261,7 @@ console.log('requestBody',requestBody);
   };
   
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,email,password,setLoading, login, logout,handleLoginClick,verifyUseremail,changePassword,setEmail,setPassword,setNewPassword,setConfirmPassword }}>
+    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,email,password,setLoading, login, logout,handleLoginClick,verifyUseremail,changePassword,newPassword, confirmPassword,setEmail,setPassword,setNewPassword,setConfirmPassword }}>
       {children}
     </AuthContext.Provider>
   );
