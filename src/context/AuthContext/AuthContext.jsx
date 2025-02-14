@@ -220,7 +220,10 @@ console.log('requestBody',requestBody);
           type: 'message',
           title: 'Success',
           message: 'Password changed successfully.',
-          actions: [{ label: 'Close', onClick: hideDialog }],
+          actions: [{ label: 'Close',  onClick: () => {
+            hideDialog();
+            navigate('/'); // Change the route to '/'
+          }, }],
         });
        
         setNewPassword('');
