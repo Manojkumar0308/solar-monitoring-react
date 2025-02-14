@@ -175,7 +175,7 @@ console.log('password',password);
     }
   }
   
-  const changePassword = async (newPassword, confirmPassword) => {
+  const changePassword = async () => {
     const storedEmail = sessionStorage.getItem('user-email'); // Get email from sessionStorage
 console.log('storedEmail',storedEmail);
     if (!newPassword || !confirmPassword) {
@@ -253,7 +253,7 @@ console.log('requestBody',requestBody);
   };
   
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,email,password,setLoading, login, logout,handleLoginClick,verifyUseremail,changePassword,setEmail,setPassword,setNewPassword,setConfirmPassword }}>
+    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,email,password,newPassword, confirmPassword,setLoading, login, logout,handleLoginClick,verifyUseremail,changePassword,setEmail,setPassword,setNewPassword,setConfirmPassword }}>
       {children}
     </AuthContext.Provider>
   );
