@@ -93,7 +93,7 @@ export const AuthProvider = ({ children }) => {
         { email, password },
         { headers: { 'Content-Type': 'application/json' } }
       );
-
+console.log('password',password);
       hideDialog(); // Hide loading dialog
       if (response.status === 200) {
         const { user, token } = response.data;
@@ -156,7 +156,7 @@ export const AuthProvider = ({ children }) => {
       console.log('response',response);
       if(response.status===200){
          // Save user in sessionStorage
-      sessionStorage.setItem('user-email', response.user);
+      sessionStorage.setItem('user-email', response.data.user);
         hideDialog();
         navigate('/forgotPassword',-1)
       }else{
@@ -177,7 +177,7 @@ export const AuthProvider = ({ children }) => {
   
   const changePassword = async (newPassword, confirmPassword) => {
     const storedEmail = sessionStorage.getItem('user-email'); // Get email from sessionStorage
-
+console.log('storedEmail',storedEmail);
     if (!newPassword || !confirmPassword) {
       showDialog({
         type: 'message',
@@ -207,12 +207,12 @@ export const AuthProvider = ({ children }) => {
         confirmPassword: confirmPassword,
       };
 
-      const response = await axios.post(
+      const response = await axios.put(
         'https://solar-monitoring-api.onrender.com/api/user/change-password',
         requestBody,
         { headers: { 'Content-Type': 'application/json' } }
       );
-
+console.log('requestBody',requestBody);
       hideDialog();
 
       if (response.status === 200) {
@@ -220,26 +220,34 @@ export const AuthProvider = ({ children }) => {
           type: 'message',
           title: 'Success',
           message: 'Password changed successfully.',
-          actions: [{ label: 'Close', onClick: hideDialog }],
+          // actions: [{ label: 'Close', onClick: hideDialog }],
         });
         setNewPassword('');
         setConfirmPassword('');
       } else {
-        showDialog({
-          type: 'message',
-          title: 'Error',
-          message: response.data.message,
-          actions: [{ label: 'Close', onClick: hideDialog }],
-        });
+        setTimeout(() => {
+          hideDialog();
+          // Reset all password-related state variables.
+          setNewPassword('');
+          setConfirmPassword('');
+          // Navigate to the root route.
+          navigate('/', -1);
+        }, 3000); // 2-second delay
       }
     } catch (error) {
       hideDialog();
-      showDialog({
-        type: 'message',
-        title: 'Error',
-        message: 'Failed to change password. Please try again later.',
-        actions: [{ label: 'Close', onClick: hideDialog }],
-      });
+      // Extract the error message from Axios error object.
+    const errorMessage =
+    error.response && error.response.data && error.response.data.message
+      ? error.response.data.message
+      : error.message || 'An unknown error occurred';
+
+  showDialog({
+    type: 'message',
+    title: 'Error',
+    message: errorMessage,
+    actions: [{ label: 'Close', onClick: hideDialog }],
+  });
     }
   };
   
