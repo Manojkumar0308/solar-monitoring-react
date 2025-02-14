@@ -9,8 +9,8 @@ const ForGotPassword =()=>{
     //  const [confirmPassword, setConfirmPassword] = useState('');
      const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
       const {newPassword, confirmPassword, changePassword,setNewPassword,setConfirmPassword } = useAuth();
-     const handleSubmit =async ()=>{
-      // e.preventDefault();
+     const handleSubmit =async (e)=>{
+      e.preventDefault();
         console.log('handle submit button clicked');
       await changePassword(password,confirmPassword);
      }
