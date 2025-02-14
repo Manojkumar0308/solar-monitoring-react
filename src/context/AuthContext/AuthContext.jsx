@@ -227,7 +227,7 @@ console.log('requestBody',requestBody);
         setConfirmPassword('');
         setTimeout(() => {
           hideDialog();
-          navigate('/', { replace: true });
+          navigate('/login', { replace: true });
         }, 3000);
       
       } else {

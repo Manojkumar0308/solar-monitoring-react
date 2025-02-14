@@ -23,6 +23,7 @@ const Loader = lazy(() => import("../components/Loader"));
 const AuthContainer = lazy(() => import("../components/AuthContainer"));
 const ForGotPassword = lazy(() => import("../components/ForgotPassword"));
 const Inverters = lazy(()=> import('../components/Inverters'));
+const LoginForm = lazy(()=> import('../components/LoginForm'));
 export const MainLayout = () => {
   const { isSidebarOpen } = useSidebarToggle();
   const location = useLocation();
@@ -100,6 +101,7 @@ const {setActiveTab} = useActiveTab();
               <Route path="/settings" element={<Settings />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/userDashboard" element={<UserDashBoard />} />
+              <Route path="/login" element={<LoginForm />} />  {/* New route for LoginForm */}
               <Route
                 path="/sendnotification"
                 element={
