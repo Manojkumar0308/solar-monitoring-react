@@ -3,12 +3,16 @@ import FormInput from "./FormInput";
 import {Link } from 'react-router-dom';
 import { usePasswordVisibility } from '../context/PasswordVisibilityContext/PasswordVisibilityContext';
 import {  faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from "../context/AuthContext/AuthContext";
 const ForGotPassword =()=>{
      const [password, setPassword] = useState('');
      const [confirmPassword, setConfirmPassword] = useState('');
      const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
-     const handleSubmit =()=>{
+     const { changePassword } = useAuth();
+     const handleSubmit =async (e)=>{
         console.log('handle submit button clicked');
+        e.preventDefault(); // Prevent the default form submission behavior
+    await changePassword(password, confirmPassword); // Call the changePassword function
      }
     return (
         <div className='flex flex-col items-center bg-transparent md:w-full w-full justify-center min-h-screen '>

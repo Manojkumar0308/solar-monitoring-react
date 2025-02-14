@@ -155,6 +155,8 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post(  'https://solar-monitoring-api.onrender.com/api/user/get-verify-user', requestBody,{ headers: { 'Content-Type': 'application/json' } })
       console.log('response',response);
       if(response.status===200){
+         // Save user in sessionStorage
+      sessionStorage.setItem('user-email', response.user);
         hideDialog();
         navigate('/forgotPassword',-1)
       }else{
@@ -173,8 +175,76 @@ export const AuthProvider = ({ children }) => {
     }
   }
   
+  const changePassword = async (newPassword, confirmPassword) => {
+    const storedEmail = sessionStorage.getItem('user-email'); // Get email from sessionStorage
+
+    if (!newPassword || !confirmPassword) {
+      showDialog({
+        type: 'message',
+        title: 'Error',
+        message: 'Please fill both password and confirm password fields.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      showDialog({
+        type: 'message',
+        title: 'Error',
+        message: 'Password and confirm password do not match.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
+      return;
+    }
+
+    try {
+      showDialog({ type: 'loading', message: 'Changing password...' });
+
+      const requestBody = {
+        email: storedEmail,
+        password: newPassword,
+        confirmPassword: confirmPassword,
+      };
+
+      const response = await axios.post(
+        'https://solar-monitoring-api.onrender.com/api/user/change-password',
+        requestBody,
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+
+      hideDialog();
+
+      if (response.status === 200) {
+        showDialog({
+          type: 'message',
+          title: 'Success',
+          message: 'Password changed successfully.',
+          actions: [{ label: 'Close', onClick: hideDialog }],
+        });
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        showDialog({
+          type: 'message',
+          title: 'Error',
+          message: response.data.message,
+          actions: [{ label: 'Close', onClick: hideDialog }],
+        });
+      }
+    } catch (error) {
+      hideDialog();
+      showDialog({
+        type: 'message',
+        title: 'Error',
+        message: 'Failed to change password. Please try again later.',
+        actions: [{ label: 'Close', onClick: hideDialog }],
+      });
+    }
+  };
+  
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,email,password,setLoading, login, logout,handleLoginClick,verifyUseremail,setEmail,setPassword,setNewPassword,setConfirmPassword }}>
+    <AuthContext.Provider value={{ user, isLoggedIn,token,loading,email,password,setLoading, login, logout,handleLoginClick,verifyUseremail,changePassword,setEmail,setPassword,setNewPassword,setConfirmPassword }}>
       {children}
     </AuthContext.Provider>
   );
