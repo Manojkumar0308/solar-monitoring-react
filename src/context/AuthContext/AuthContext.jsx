@@ -225,7 +225,10 @@ console.log('requestBody',requestBody);
        
         setNewPassword('');
         setConfirmPassword('');
-
+        setTimeout(() => {
+          hideDialog();
+          navigate('/', { replace: true });
+        }, 3000);
       
       } else {
         showDialog({
