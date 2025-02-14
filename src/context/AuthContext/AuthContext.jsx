@@ -5,8 +5,7 @@ import { useActiveTab } from '../ActiveTab/ActiveTab';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {useDialog} from '../DialogContext/DialogContext'
-import {initializeSocket} from '../../socket';
-import { usePasswordVisibility } from '../PasswordVisibilityContext/PasswordVisibilityContext';
+import {initializeSocket} from '../../socket'
 const AuthContext = createContext();
 
 
@@ -24,7 +23,6 @@ export const AuthProvider = ({ children }) => {
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  // const { setIsPasswordVisible} = usePasswordVisibility();
   useEffect(() => {
   
     const fetchData = async () => {
@@ -177,8 +175,8 @@ console.log('password',password);
     }
   }
   
-  const changePassword = async () => {
-  
+  const changePassword = async (e) => {
+    e.preventDefault();
     const storedEmail = sessionStorage.getItem('user-email'); // Get email from sessionStorage
 console.log('storedEmail',storedEmail);
     if (!newPassword || !confirmPassword) {
@@ -228,7 +226,6 @@ console.log('requestBody',requestBody);
        
         setNewPassword('');
         setConfirmPassword('');
-       
 
         // Navigate to the root path after 3 seconds
         setTimeout(() => {
