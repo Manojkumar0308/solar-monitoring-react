@@ -11,7 +11,20 @@ const LoginForm = () => {
   const { email,password ,handleLoginClick,verifyUseremail,setEmail,setPassword} = useAuth();
  
   const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
-  const passwordRef = useRef("");
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();  // Prevent page reload
+
+    const email = emailRef.current?.value.trim();
+    const password = passwordRef.current?.value.trim();
+
+    if (email && password) {
+      handleLoginClick(email, password); // Call login function
+    }
+  };
+ 
   return (
     <div className='flex flex-col items-center bg-transparent md:w-full w-full justify-center min-h-screen '>
 
@@ -21,7 +34,12 @@ const LoginForm = () => {
       <p className="text-sm text-gray-600 mb-4">Welcome back! Please login to your account.</p>
 
       <form className="w-full max-w-sm px-4" autoComplete='off'>
-        <FormInput type="email" autoComplete='off' label="Email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} icon={faEnvelope} />
+        <FormInput type="email" autoComplete='off' label="Email" placeholder="Enter your email" 
+        ref={emailRef} 
+        defaultValue={emailRef.current?.value}
+        // value={email} 
+        // onChange={(e) => setEmail(e.target.value)} 
+        icon={faEnvelope} />
         
        
           <FormInput
@@ -29,8 +47,10 @@ const LoginForm = () => {
             label="Password"
             autoComplete='Password'
             placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            ref={passwordRef}
+            defaultValue={passwordRef.current?.value}
+            // value={password}
+            // onChange={(e) => setPassword(e.target.value)}
             // defaultValue="" 
             // ref={passwordRef}
             // onChange={(e) => (passwordRef.current = e.target.value)}
@@ -43,7 +63,7 @@ const LoginForm = () => {
         
         
         
-        <button type="submit" onClick={handleLoginClick} className="w-full bg-blue-500 text-white font-semibold py-2 text-sm mt-4 rounded-lg hover:bg-blue-700 transition duration-300">
+        <button type="submit" onClick={handleSubmit} className="w-full bg-blue-500 text-white font-semibold py-2 text-sm mt-4 rounded-lg hover:bg-blue-700 transition duration-300">
          
           Login
         </button>
