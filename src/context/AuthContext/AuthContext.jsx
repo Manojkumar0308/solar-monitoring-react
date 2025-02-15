@@ -86,60 +86,9 @@ export const AuthProvider = ({ children }) => {
   };
 
 
-  // const handleLoginClick = async (e) => {
-  //   e.preventDefault();
+  const handleLoginClick = async (e) => {
+    e.preventDefault();
 
-  //   if (!email || !password) {
-  //     showDialog({
-  //       type: 'message',
-  //       title: 'Error',
-  //       message: 'Please fill in all fields.',
-  //       actions: [{ label: 'Close', onClick: hideDialog }],
-  //     });
-  //     return;
-  //   }
-
-  //   try {
-  //     showDialog({ type: 'loading', message: 'Logging in...' });
-
-  //     const response = await axios.post(
-  //       'https://solar-monitoring-api.onrender.com/api/user/login',
-  //       { email, password },
-  //       { headers: { 'Content-Type': 'application/json' } }
-  //     );
-
-  //     hideDialog(); // Hide loading dialog
-  //     if (response.status === 200) {
-  //       const { user, token } = response.data;
-
-  //       login(user, token);
-  //       initializeSocket();
-
-  //       setActiveTab(user.role === 'admin' ? 'dashboard' : 'userDashboard');
-  //       navigate(user.role === 'admin' ? '/dashboard' : '/userDashboard', { replace: true });
-  //       setEmail('');
-  //       setPassword('');
-  //     } else {
-  //       showDialog({
-  //         type: 'message',
-  //         title: 'Error',
-  //         message: 'Invalid credentials.',
-  //         actions: [{ label: 'Close', onClick: hideDialog }],
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error('Error logging in:', error.message);
-  //     showDialog({
-  //       type: 'message',
-  //       title: 'Error',
-  //       message: error.response?.data?.message || 'An unexpected error occurred.',
-  //       actions: [{ label: 'Close', onClick: hideDialog }],
-  //     });
-  //   }
-  // };
-
-
-  const handleLoginClick = async (email, password) => {
     if (!email || !password) {
       showDialog({
         type: 'message',
@@ -149,23 +98,27 @@ export const AuthProvider = ({ children }) => {
       });
       return;
     }
-  
+
     try {
       showDialog({ type: 'loading', message: 'Logging in...' });
-  
+
       const response = await axios.post(
         'https://solar-monitoring-api.onrender.com/api/user/login',
         { email, password },
         { headers: { 'Content-Type': 'application/json' } }
       );
-  
-      hideDialog();
+
+      hideDialog(); // Hide loading dialog
       if (response.status === 200) {
         const { user, token } = response.data;
+
         login(user, token);
         initializeSocket();
+
         setActiveTab(user.role === 'admin' ? 'dashboard' : 'userDashboard');
         navigate(user.role === 'admin' ? '/dashboard' : '/userDashboard', { replace: true });
+        setEmail('');
+        setPassword('');
       } else {
         showDialog({
           type: 'message',
@@ -184,6 +137,53 @@ export const AuthProvider = ({ children }) => {
       });
     }
   };
+
+
+  // const handleLoginClick = async (email, password) => {
+  //   if (!email || !password) {
+  //     showDialog({
+  //       type: 'message',
+  //       title: 'Error',
+  //       message: 'Please fill in all fields.',
+  //       actions: [{ label: 'Close', onClick: hideDialog }],
+  //     });
+  //     return;
+  //   }
+  
+  //   try {
+  //     showDialog({ type: 'loading', message: 'Logging in...' });
+  
+  //     const response = await axios.post(
+  //       'https://solar-monitoring-api.onrender.com/api/user/login',
+  //       { email, password },
+  //       { headers: { 'Content-Type': 'application/json' } }
+  //     );
+  
+  //     hideDialog();
+  //     if (response.status === 200) {
+  //       const { user, token } = response.data;
+  //       login(user, token);
+  //       initializeSocket();
+  //       setActiveTab(user.role === 'admin' ? 'dashboard' : 'userDashboard');
+  //       navigate(user.role === 'admin' ? '/dashboard' : '/userDashboard', { replace: true });
+  //     } else {
+  //       showDialog({
+  //         type: 'message',
+  //         title: 'Error',
+  //         message: 'Invalid credentials.',
+  //         actions: [{ label: 'Close', onClick: hideDialog }],
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error logging in:', error.message);
+  //     showDialog({
+  //       type: 'message',
+  //       title: 'Error',
+  //       message: error.response?.data?.message || 'An unexpected error occurred.',
+  //       actions: [{ label: 'Close', onClick: hideDialog }],
+  //     });
+  //   }
+  // };
   
 
   const logout = () => {
