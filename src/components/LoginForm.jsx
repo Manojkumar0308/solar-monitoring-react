@@ -29,11 +29,11 @@ const LoginForm = () => {
             label="Password"
             autoComplete='Password'
             placeholder="Enter your password"
-            // value={password}
-            // onChange={(e) => setPassword(e.target.value)}
-            defaultValue="" 
-            ref={passwordRef}
-            onChange={(e) => (passwordRef.current = e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            // defaultValue="" 
+            // ref={passwordRef}
+            // onChange={(e) => (passwordRef.current = e.target.value)}
             icon={isPasswordVisible ? faEye: faEyeSlash }
             onIconClick={togglePasswordVisibility}
            
