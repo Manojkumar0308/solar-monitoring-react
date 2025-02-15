@@ -27,7 +27,7 @@ const LoginForm = () => {
           <FormInput
             type={isPasswordVisible ? 'text' : 'password'}
             label="Password"
-            autoComplete='off'
+            autoComplete='Password'
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
