@@ -57,7 +57,9 @@ export const AuthProvider = ({ children }) => {
   
     fetchData();
   }, []);
-
+  const getTokenSizeInBytes = (token) => {
+    return new TextEncoder().encode(token).length;
+  };
   const login = (userData,userToken) => {
 
      // Exclude password and created_at
@@ -66,6 +68,7 @@ export const AuthProvider = ({ children }) => {
      setUser(filteredUserData);
      setIsLoggedIn(true);
      setToken(userToken);
+     console.log(`Token size in bytes: ${getTokenSizeInBytes(token)}`);
  
     // Store only required details in sessionStorage
     sessionStorage.setItem('user', JSON.stringify(filteredUserData));
