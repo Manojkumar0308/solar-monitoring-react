@@ -67,8 +67,8 @@ export const AuthProvider = ({ children }) => {
      setIsLoggedIn(true);
      setToken(userToken);
  
-     // Store only required details in sessionStorage
-     sessionStorage.setItem('user', JSON.stringify(filteredUserData));
+    // Store only required details in sessionStorage
+    sessionStorage.setItem('user', JSON.stringify(filteredUserData));
     // setUser(userData);
     // setIsLoggedIn(true);
     // setToken(userToken);
