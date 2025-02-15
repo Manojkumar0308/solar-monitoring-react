@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
         { email, password },
         { headers: { 'Content-Type': 'application/json' } }
       );
-console.log('password',password);
+
       hideDialog(); // Hide loading dialog
       if (response.status === 200) {
         const { user, token } = response.data;
