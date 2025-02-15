@@ -68,9 +68,9 @@ export const AuthProvider = ({ children }) => {
      setUser(filteredUserData);
      setIsLoggedIn(true);
      setToken(userToken);
-     console.log(`Token size in bytes: ${getTokenSizeInBytes(token)}`);
  
-    // Store only required details in sessionStorage
+   
+  // Store only required details in sessionStorage
     sessionStorage.setItem('user', JSON.stringify(filteredUserData));
     // setUser(userData);
     // setIsLoggedIn(true);
@@ -79,6 +79,7 @@ export const AuthProvider = ({ children }) => {
     // sessionStorage.setItem('user', JSON.stringify(userData));
     sessionStorage.setItem('logedIn', true);
     sessionStorage.setItem('token', userToken); // Save token in sessionStorage
+    console.log(`Token size in bytes: ${getTokenSizeInBytes(sessionStorage.getItem('token'))}`);
         // Set token expiry time to 2 minutes from now
         const expiryTime = new Date().getTime() + 24 * 60 * 60 * 1000; // Token expires in 24 hours
         sessionStorage.setItem('tokenExpiry', expiryTime); // Store token expiry time
