@@ -59,11 +59,21 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData,userToken) => {
-    setUser(userData);
-    setIsLoggedIn(true);
-    setToken(userToken);
+
+     // Exclude password and created_at
+     const { password, created_at, ...filteredUserData } = userData;
+
+     setUser(filteredUserData);
+     setIsLoggedIn(true);
+     setToken(userToken);
+ 
+     // Store only required details in sessionStorage
+     sessionStorage.setItem('user', JSON.stringify(filteredUserData));
+    // setUser(userData);
+    // setIsLoggedIn(true);
+    // setToken(userToken);
     
-    sessionStorage.setItem('user', JSON.stringify(userData));
+    // sessionStorage.setItem('user', JSON.stringify(userData));
     sessionStorage.setItem('logedIn', true);
     sessionStorage.setItem('token', userToken); // Save token in sessionStorage
         // Set token expiry time to 2 minutes from now
