@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useRef } from 'react';
 import {Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext/AuthContext';
 import { usePasswordVisibility } from '../context/PasswordVisibilityContext/PasswordVisibilityContext';
@@ -11,7 +11,7 @@ const LoginForm = () => {
   const { email,password ,handleLoginClick,verifyUseremail,setEmail,setPassword} = useAuth();
  
   const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
- 
+  const passwordRef = useRef("");
   return (
     <div className='flex flex-col items-center bg-transparent md:w-full w-full justify-center min-h-screen '>
 
@@ -29,8 +29,11 @@ const LoginForm = () => {
             label="Password"
             autoComplete='Password'
             placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            // value={password}
+            // onChange={(e) => setPassword(e.target.value)}
+            defaultValue="" 
+            ref={passwordRef}
+            onChange={(e) => (passwordRef.current = e.target.value)}
             icon={isPasswordVisible ? faEye: faEyeSlash }
             onIconClick={togglePasswordVisibility}
            
